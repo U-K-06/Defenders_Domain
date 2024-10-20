@@ -4,67 +4,95 @@
 #include <windows.h>
 
 #include "Game.h"
-
-#define GRID_SIZE 5
-#define EMPTY ' ' 
-#define PLAYER 'X'
-
-#define UP_ARROW 72
-#define DOWN_ARROW 80
-#define LEFT_ARROW 75
-#define RIGHT_ARROW 77
-#define ESC 27
+#include "constants.h"
 
 int Game::Run() {
-    int playerX = 0;
-    int playerY = 0;
-    char input;
-
-    while (1) {
-        clearScreen();
-        drawGrid(playerX, playerY);
+  int GRID_SIZE = calculateGrid();
+  int playerX = 0;
+  int playerY = 0;
+  char input;
+  
+  while (1) {
+    clearScreen();
+    drawGrid(playerX, playerY, GRID_SIZE);
         
-        if (_kbhit()) {
-            input = _getch();
-
-            switch (input) {
-            case UP_ARROW:
-                if (playerY > 0) playerY--;
-                break;
-            case DOWN_ARROW:
-                if (playerY < GRID_SIZE - 1) playerY++;
-                break;
-            case LEFT_ARROW:
-                if (playerX > 0) playerX--;
-                break;
-            case RIGHT_ARROW: 
-                if (playerX < GRID_SIZE - 1) playerX++;
-                break;
-            case ESC:
-                return 0;
-            }
-        }
-        Sleep(60);
+    if (_kbhit()) {
+      input = _getch();
+      switch (input) {
+      case ESC:
+        return 0;
+      }
     }
-
-    return 0;
+    Sleep(60);
+  }
+  return 0;
 }
 
 void Game::clearScreen() {
-    system("cls");
+  system("cls");
 }
 
-void Game::drawGrid(int playerX, int playerY) {
-    for (int y = 0; y < GRID_SIZE; y++) {
-        for (int x = 0; x < GRID_SIZE; x++) {
-            if (x == playerX && y == playerY) {
-                std::cout << PLAYER;
-            }
-            else {
-                std::cout << EMPTY;
-            }
+int Game::calculateGrid()
+{
+  int choice;
+  int GRID_SIZE;
+  std::cout << "ENTER THE GRID SIDE \n\t(0 -> 2x2)\n(1 -> 3x3)\n(2 -> 4x4)\n(3 -> 5x5)\n(4 -> 6x6)\n(5 -> 8x8)\n(6 -> 10x10)\n(7 -> CUSTOM GRID SIZE)\n(8 -> EXIT)\n";
+  std::cout << "Enter Your Choice: ";
+  std::cin >> choice;
+
+  int gridOptions[] = {2,3,4,5,6,8,10};
+
+  if (choice >= 0 && choice <= 6) GRID_SIZE = gridOptions[choice];
+  
+  else if (choice == 7) {
+    int size;
+    std::cout << "Enter Grid Size: ";
+    std::cin >> size;
+    GRID_SIZE = size;
+    delete &size;
+  }
+
+  else return 0;
+  
+  return GRID_SIZE;
+}
+
+void Game::drawGrid(int playerX, int playerY, int GRID_SIZE) {  
+  for (int j = 0; j <= 2 * GRID_SIZE; j++) {
+    if (j % 2 == 0)
+      std::cout << BORDER_CORNER;
+    else
+      std::cout << BORDER_WALL_X;
+  }
+  std::cout << std::endl;
+
+  for (int i = 0; i <= 2 * GRID_SIZE; i++) {
+    if (i % 2 != 0) {
+      for (int j = 0; j <= 2 * GRID_SIZE; j++) {
+        if (j % 2 == 0)
+          std::cout << BORDER_WALL_Y;
+        else
+          std::cout << EMPTY;
+      }
+    } else {
+        for (int j = 0; j <= 2 * GRID_SIZE; j++) {
+          if (j == 0)
+            std::cout << BORDER_CORNER;
+          if (j % 2 == 0)
+            std::cout << BORDER_CORNER;
+          else
+            std::cout << BORDER_WALL_X;
         }
-        printf("\n");
     }
+    std::cout << std::endl;
+  }
+
+  for (int j = 0; j <= 2 * GRID_SIZE; j++) {
+    if (j % 2 == 0)
+      std::cout << BORDER_CORNER;
+    else
+      std::cout << BORDER_WALL_X;
+  }
+  std::cout << std::endl;
 }
 
