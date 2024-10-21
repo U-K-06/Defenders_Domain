@@ -4,19 +4,20 @@
 #include <windows.h>
 
 #include "Game.h"
-#include "constants.h"
 #include "draw.h"
+#include "constants.h"
 
 int Game::Run() {
   int GRID_SIZE = calculateGrid();
   int playerX = 0;
   int playerY = 0;
   char input;
-  
+ 
+  Draw draw;
+
   while (1) {
     clearScreen();
-    drawGrid(playerX, playerY, GRID_SIZE);
-        
+    draw.grid(GRID_SIZE);
     if (_kbhit()) {
       input = _getch();
       switch (input) {
