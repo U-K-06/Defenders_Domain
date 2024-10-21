@@ -5,9 +5,10 @@
 
 #include "Game.h"
 #include "constants.h"
+#include "draw.h"
 
 int Game::Run() {
-  int GRID_SIZE = calculateGrid();
+  int GRID_SIZE =int calculateGrid();
   int playerX = 0;
   int playerY = 0;
   char input;
@@ -36,14 +37,14 @@ int Game::calculateGrid()
 {
   int choice;
   int GRID_SIZE;
-  std::cout << "ENTER THE GRID SIDE \n\t(0 -> 2x2)\n(1 -> 3x3)\n(2 -> 4x4)\n(3 -> 5x5)\n(4 -> 6x6)\n(5 -> 8x8)\n(6 -> 10x10)\n(7 -> CUSTOM GRID SIZE)\n(8 -> EXIT)\n";
+  std::cout << "ENTER THE GRID SIDE \n\t(0 -> 2x2)\n\t(1 -> 3x3)\n\t(2 -> 4x4)\n\t(3 -> 5x5)\n\t(4 -> 6x6)\n\t(5 -> 8x8)\n\t(6 -> 10x10)\n\t(7 -> CUSTOM GRID SIZE)\n\t(8 -> EXIT)\n";
   std::cout << "Enter Your Choice: ";
   std::cin >> choice;
 
   int gridOptions[] = {2,3,4,5,6,8,10};
 
   if (choice >= 0 && choice <= 6) GRID_SIZE = gridOptions[choice];
-  
+ 
   else if (choice == 7) {
     int size;
     std::cout << "Enter Grid Size: ";
@@ -56,43 +57,3 @@ int Game::calculateGrid()
   
   return GRID_SIZE;
 }
-
-void Game::drawGrid(int playerX, int playerY, int GRID_SIZE) {  
-  for (int j = 0; j <= 2 * GRID_SIZE; j++) {
-    if (j % 2 == 0)
-      std::cout << BORDER_CORNER;
-    else
-      std::cout << BORDER_WALL_X;
-  }
-  std::cout << std::endl;
-
-  for (int i = 0; i <= 2 * GRID_SIZE; i++) {
-    if (i % 2 != 0) {
-      for (int j = 0; j <= 2 * GRID_SIZE; j++) {
-        if (j % 2 == 0)
-          std::cout << BORDER_WALL_Y;
-        else
-          std::cout << EMPTY;
-      }
-    } else {
-        for (int j = 0; j <= 2 * GRID_SIZE; j++) {
-          if (j == 0)
-            std::cout << BORDER_CORNER;
-          if (j % 2 == 0)
-            std::cout << BORDER_CORNER;
-          else
-            std::cout << BORDER_WALL_X;
-        }
-    }
-    std::cout << std::endl;
-  }
-
-  for (int j = 0; j <= 2 * GRID_SIZE; j++) {
-    if (j % 2 == 0)
-      std::cout << BORDER_CORNER;
-    else
-      std::cout << BORDER_WALL_X;
-  }
-  std::cout << std::endl;
-}
-
