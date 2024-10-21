@@ -23,7 +23,7 @@ int Game::Run() {
         return 0;
       }
     }
-    Sleep(60);
+    Sleep(1000);
   }
   return 0;
 }
