@@ -4,67 +4,56 @@
 #include <windows.h>
 
 #include "Game.h"
-
-#define GRID_SIZE 5
-#define EMPTY ' ' 
-#define PLAYER 'X'
-
-#define UP_ARROW 72
-#define DOWN_ARROW 80
-#define LEFT_ARROW 75
-#define RIGHT_ARROW 77
-#define ESC 27
+#include "constants.h"
+#include "draw.h"
 
 int Game::Run() {
-    int playerX = 0;
-    int playerY = 0;
-    char input;
-
-    while (1) {
-        clearScreen();
-        drawGrid(playerX, playerY);
+  int GRID_SIZE = calculateGrid();
+  int playerX = 0;
+  int playerY = 0;
+  char input;
+  
+  while (1) {
+    clearScreen();
+    drawGrid(playerX, playerY, GRID_SIZE);
         
-        if (_kbhit()) {
-            input = _getch();
-
-            switch (input) {
-            case UP_ARROW:
-                if (playerY > 0) playerY--;
-                break;
-            case DOWN_ARROW:
-                if (playerY < GRID_SIZE - 1) playerY++;
-                break;
-            case LEFT_ARROW:
-                if (playerX > 0) playerX--;
-                break;
-            case RIGHT_ARROW: 
-                if (playerX < GRID_SIZE - 1) playerX++;
-                break;
-            case ESC:
-                return 0;
-            }
-        }
-        Sleep(60);
+    if (_kbhit()) {
+      input = _getch();
+      switch (input) {
+      case ESC:
+        return 0;
+      }
     }
-
-    return 0;
+    Sleep(1000);
+  }
+  return 0;
 }
 
 void Game::clearScreen() {
-    system("cls");
+  system("cls");
 }
 
-void Game::drawGrid(int playerX, int playerY) {
-    for (int y = 0; y < GRID_SIZE; y++) {
-        for (int x = 0; x < GRID_SIZE; x++) {
-            if (x == playerX && y == playerY) {
-                std::cout << PLAYER;
-            }
-            else {
-                std::cout << EMPTY;
-            }
-        }
-        printf("\n");
-    }
-}
+int Game::calculateGrid()
+{
+  int choice;
+  int GRID_SIZE;
+  std::cout << "ENTER THE GRID SIDE \n\t(0 -> 2x2)\n\t(1 -> 3x3)\n\t(2 -> 4x4)\n\t(3 -> 5x5)\n\t(4 -> 6x6)\n\t(5 -> 8x8)\n\t(6 -> 10x10)\n\t(7 -> CUSTOM GRID SIZE)\n\t(8 -> EXIT)\n";
+  std::cout << "Enter Your Choice: ";
+  std::cin >> choice;
 
+  int gridOptions[] = {2,3,4,5,6,8,10};
+
+  if (choice >= 0 && choice <= 6) GRID_SIZE = gridOptions[choice];
+ 
+  else if (choice == 7) {
+    int size;
+    std::cout << "Enter Grid Size: ";
+    std::cin >> size;
+    GRID_SIZE = size;
+    delete &size;
+  }
+
+  else return 0;
+  
+  return GRID_SIZE;
+}
