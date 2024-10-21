@@ -8,7 +8,7 @@
 #include "draw.h"
 
 int Game::Run() {
-  int GRID_SIZE =int calculateGrid();
+  int GRID_SIZE = calculateGrid();
   int playerX = 0;
   int playerY = 0;
   char input;
