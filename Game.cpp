@@ -33,8 +33,9 @@ int Game::Run() {
 void Game::clearScreen(int GRID_SIZE) {
   for (int i=-1; i < 2 * GRID_SIZE; i++)
   {
-    std::cout << "\033[F" << '\r';
+    std::cout << "\033[F";
   }
+  std::cout << '\r';
 }
 
 int Game::calculateGrid()
