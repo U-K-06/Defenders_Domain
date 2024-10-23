@@ -16,7 +16,7 @@ int Game::Run() {
   Draw draw;
 
   while (1) {
-    clearScreen();
+    clearScreen(GRID_SIZE);
     draw.grid(GRID_SIZE);
     if (_kbhit()) {
       input = _getch();
@@ -30,8 +30,11 @@ int Game::Run() {
   return 0;
 }
 
-void Game::clearScreen() {
-  system("cls");
+void Game::clearScreen(int GRID_SIZE) {
+  for (int i=-1; i < 2 * GRID_SIZE; i++)
+  {
+    std::cout << "\033[F" << '\r';
+  }
 }
 
 int Game::calculateGrid()
@@ -56,5 +59,8 @@ int Game::calculateGrid()
 
   else return 0;
   
+  system("cls");
+
   return GRID_SIZE;
 }
+

@@ -6,7 +6,7 @@
 class Game {
 public:
     int Run(); 
-    void clearScreen();
+    void clearScreen(int GRID_SIZE);
     int calculateGrid();
 };
 
