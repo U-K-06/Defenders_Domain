@@ -8,6 +8,7 @@ public:
     int Run(); 
     void clearScreen(int GRID_SIZE);
     int calculateGrid();
+    int** calculateTowerPositions(int** grid);
 };
 
 #endif

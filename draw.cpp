@@ -5,6 +5,7 @@
 
 void Draw::grid(int GRID_SIZE)
 {
+  // TODO: We will get 2D array (calculateTowerPositions) and draw grid based on it;
   for (int i = 0; i <= 2 * GRID_SIZE; i++) {
     if (i % 2 != 0) {
       for (int j = 0; j <= 2 * GRID_SIZE; j++) {

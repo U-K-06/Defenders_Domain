@@ -7,11 +7,8 @@
 #include "constants.h"
 
 int Game::Run() {
-  int GRID_SIZE = calculateGrid();
-  int playerX = 0;
-  int playerY = 0;
   char input;
- 
+  int GRID_SIZE = calculateGrid();
   Draw draw;
 
   while (1) {
@@ -64,3 +61,8 @@ int Game::calculateGrid()
   return GRID_SIZE;
 }
 
+int** Game::calculateTowerPositions(int** grid)
+{
+  // TODO: We will determin the positions where we have to render the towers and then return that 2D array;
+  return nullptr;
+}
