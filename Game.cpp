@@ -1,6 +1,5 @@
 #include <conio.h>
 #include <iostream>
-#include <stdlib.h>
 #include <windows.h>
 
 #include "Game.h"
