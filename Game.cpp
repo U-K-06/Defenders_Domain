@@ -6,6 +6,8 @@
 #include "draw.h"
 #include "constants.h"
 
+std::string towerNames[] = { "Electric Tower", "Fire Tower", "Poison Tower" };
+
 int Game::Run() {
   char input;
   int GRID_SIZE = calculateGrid();
@@ -13,12 +15,27 @@ int Game::Run() {
 
   while (1) {
     clearScreen(GRID_SIZE);
-    draw.grid(GRID_SIZE);
+    draw.grid(GRID_SIZE, towerNames);
     if (_kbhit()) {
       input = _getch();
       switch (input) {
-      case ESC:
-        return 0;
+        case Q_KEY:
+          std::cout << "Q\n";
+          break;
+        case UP_ARROW:
+          std::cout << "UA\n";
+          break;
+        case DOWN_ARROW:
+          std::cout << "DA\n";
+          break;
+        case LEFT_ARROW:
+          std::cout << "LA\n"; 
+          break;
+        case RIGHT_ARROW:
+          std::cout << "RA\n";
+          break;
+        case ESC:
+          return 0;
       }
     }
     Sleep(1000);
@@ -27,8 +44,11 @@ int Game::Run() {
 }
 
 void Game::clearScreen(int GRID_SIZE) {
-  for (int i=-1; i < 2 * GRID_SIZE; i++)
-  {
+  for (int blank = 0; blank <= 2; blank++) {
+    std::cout << "\033[F";
+  }
+
+  for (int i=-1; i < 2 * GRID_SIZE; i++) {
     std::cout << "\033[F";
   }
   std::cout << '\r';
