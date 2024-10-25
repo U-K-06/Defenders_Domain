@@ -6,7 +6,7 @@
 #include "draw.h"
 #include "constants.h"
 
-std::string towerNames[] = { "Electric Tower", "Fire Tower", "Poison Tower" };
+std::string towerNames[] = { "Electric Tower", "Fire Tower", "Poison Tower", "Water Tower" };
 
 int Game::Run() {
   char input;
@@ -20,25 +20,22 @@ int Game::Run() {
       input = _getch();
       switch (input) {
         case Q_KEY:
-          std::cout << "Q\n";
           break;
         case UP_ARROW:
-          std::cout << "UA\n";
           break;
         case DOWN_ARROW:
-          std::cout << "DA\n";
           break;
         case LEFT_ARROW:
-          std::cout << "LA\n"; 
           break;
         case RIGHT_ARROW:
-          std::cout << "RA\n";
+          break;
+        case ENTER:
           break;
         case ESC:
           return 0;
       }
     }
-    Sleep(1000);
+    Sleep(250);
   }
   return 0;
 }
@@ -71,7 +68,6 @@ int Game::calculateGrid()
     std::cout << "Enter Grid Size: ";
     std::cin >> size;
     GRID_SIZE = size;
-    delete &size;
   }
 
   else return 0;

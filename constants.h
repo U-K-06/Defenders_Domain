@@ -7,6 +7,7 @@
 #define LEFT_ARROW 75
 #define RIGHT_ARROW 77
 #define ESC 23
+#define ENTER 13
 #define Q_KEY 113
 
 // GAME PLAY CONSTANTS
