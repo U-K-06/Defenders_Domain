@@ -44,7 +44,7 @@ int Game::Run() {
 }
 
 void Game::clearScreen(int GRID_SIZE) {
-  for (int blank = 0; blank <= 2; blank++) {
+  for (int blank = 0; blank <= 4; blank++) {
     std::cout << "\033[F";
   }
 
