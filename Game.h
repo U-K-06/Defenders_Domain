@@ -5,7 +5,8 @@
 
 class Game {
 public:
-    int Run(); 
+    int Run();
+    void hide_cursor();
     void clear_screen(int GRID_SIZE);
     int calculate_grid();
     int** calculate_tower_positions(int** grid);

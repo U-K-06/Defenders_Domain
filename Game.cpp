@@ -11,6 +11,9 @@ std::string tower_names[] = { "Electric Tower", "Fire Tower", "Poison Tower", "W
 int number_of_towers = sizeof(tower_names) / sizeof(tower_names[0]);
 
 int Game::Run() {
+
+  hide_cursor();
+
   int active_tower = 0, selection_tower = 0;
   bool is_place_mode_active = false;
 
@@ -61,9 +64,19 @@ int Game::Run() {
           return 0;
       }
     }
-    Sleep(250);
   }
   return 0;
+}
+
+void Game::hide_cursor()
+{
+  HANDLE out = GetStdHandle(STD_OUTPUT_HANDLE);
+
+  CONSOLE_CURSOR_INFO cursor_info;
+
+  GetConsoleCursorInfo(out, &cursor_info);
+  cursor_info.bVisible = false;
+  SetConsoleCursorInfo(out, &cursor_info);
 }
 
 void Game::clear_screen(int GRID_SIZE) {
