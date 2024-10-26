@@ -6,9 +6,9 @@
 class Game {
 public:
     int Run(); 
-    void clearScreen(int GRID_SIZE);
-    int calculateGrid();
-    int** calculateTowerPositions(int** grid);
+    void clear_screen(int GRID_SIZE);
+    int calculate_grid();
+    int** calculate_tower_positions(int** grid);
 };
 
 #endif
