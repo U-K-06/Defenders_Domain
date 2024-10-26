@@ -6,11 +6,13 @@
 #include "draw.h"
 #include "constants.h"
 
-std::string tower_names[] = { "Electric Tower", "Fire Tower", "Poison Tower", "Water Tower" };
+std::string tower_names[] = { "Electric Tower", "Fire Tower", "Poison Tower", "Water Tower", "Ice Tower" };
+
+int number_of_towers = sizeof(tower_names) / sizeof(tower_names[0]);
 
 int Game::Run() {
   int active_tower = 0, selection_tower = 0;
-  bool is_place_mode_activate = false;
+  bool is_place_mode_active = false;
 
   char input;
   int GRID_SIZE = calculate_grid();
@@ -23,38 +25,38 @@ int Game::Run() {
       input = _getch();
       switch (input) {
         case Q_KEY:
-          if (!is_place_mode_activate) is_place_mode_activate = true;
-          else is_place_mode_activate = false;
+          if (!is_place_mode_active) is_place_mode_active = true;
+          else is_place_mode_active = false;
+          break;
         case UP_ARROW:
-          if (is_place_mode_activate) {
+          if (is_place_mode_active) {
 
           } else {
-
+            selection_tower = selection_tower % number_of_towers;
+            (selection_tower > 0) ? selection_tower-- : selection_tower = number_of_towers-1;
           }
           break;
         case DOWN_ARROW:
-          if (is_place_mode_activate) {
+          if (is_place_mode_active) {
 
           } else {
-
+            selection_tower++;
+            selection_tower = selection_tower % number_of_towers;
           }
           break;
         case LEFT_ARROW:
-          if (is_place_mode_activate) {
-
-          } else {
+          if (is_place_mode_active) {
 
           }
           break;
         case RIGHT_ARROW:
-          if (is_place_mode_activate) {
-
-          } else {
+          if (is_place_mode_active) {
 
           }
           break;
         case ENTER:
           active_tower = selection_tower;
+          break;
         case ESC:
           return 0;
       }
