@@ -16,6 +16,7 @@ int Game::Run() {
 
   int active_tower = 0, selection_tower = 0;
   bool is_place_mode_active = false;
+  int active_grid_x = 0, active_grid_y = 0;
 
   char input;
   int GRID_SIZE = calculate_grid();
@@ -23,7 +24,7 @@ int Game::Run() {
 
   while (1) {
     clear_screen(GRID_SIZE);
-    draw.grid(GRID_SIZE, tower_names, active_tower, selection_tower);
+    draw.grid(GRID_SIZE, tower_names, active_tower, selection_tower, active_grid_x, active_grid_y, is_place_mode_active);
     if (_kbhit()) {
       input = _getch();
       switch (input) {
@@ -33,7 +34,7 @@ int Game::Run() {
           break;
         case UP_ARROW:
           if (is_place_mode_active) {
-
+           (active_grid_y > 0) ? active_grid_y-- : active_grid_y = GRID_SIZE; 
           } else {
             selection_tower = selection_tower % number_of_towers;
             (selection_tower > 0) ? selection_tower-- : selection_tower = number_of_towers-1;
@@ -41,7 +42,8 @@ int Game::Run() {
           break;
         case DOWN_ARROW:
           if (is_place_mode_active) {
-
+            active_grid_y++;
+            active_grid_y = active_grid_y % GRID_SIZE;
           } else {
             selection_tower++;
             selection_tower = selection_tower % number_of_towers;
@@ -49,12 +51,13 @@ int Game::Run() {
           break;
         case LEFT_ARROW:
           if (is_place_mode_active) {
-
+            (active_grid_x > 0) ? active_grid_x-- : active_grid_x = GRID_SIZE;
           }
           break;
         case RIGHT_ARROW:
           if (is_place_mode_active) {
-
+            active_grid_x++;
+            active_grid_x = active_grid_x % GRID_SIZE;
           }
           break;
         case ENTER:
