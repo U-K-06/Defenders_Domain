@@ -3,8 +3,6 @@
 #include "draw.h"
 #include "constants.h"
 
-// TODO: Convert this code into more smaller functions;
-
 void Draw::grid(int GRID_SIZE, std::string tower_names[], int active_tower, int selection_tower, int active_grid_x, int active_grid_y, bool is_place_mode_active)
 {
   int name_index = 0;
