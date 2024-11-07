@@ -34,7 +34,7 @@ int Game::Run() {
           break;
         case UP_ARROW:
           if (is_place_mode_active) {
-           (active_grid_y > 0) ? active_grid_y-- : active_grid_y = GRID_SIZE; 
+           (active_grid_y > 0) ? active_grid_y-- : active_grid_y = GRID_SIZE - 1; 
           } else {
             selection_tower = selection_tower % number_of_towers;
             (selection_tower > 0) ? selection_tower-- : selection_tower = number_of_towers-1;
@@ -51,7 +51,7 @@ int Game::Run() {
           break;
         case LEFT_ARROW:
           if (is_place_mode_active) {
-            (active_grid_x > 0) ? active_grid_x-- : active_grid_x = GRID_SIZE;
+            (active_grid_x > 0) ? active_grid_x-- : active_grid_x = GRID_SIZE - 1;
           }
           break;
         case RIGHT_ARROW:
