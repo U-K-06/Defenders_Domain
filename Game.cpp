@@ -28,10 +28,16 @@ int Game::Run() {
     if (_kbhit()) {
       input = _getch();
       switch (input) {
+        case COL_KEY:
         case Q_KEY:
+        case q_KEY:
           if (!is_place_mode_active) is_place_mode_active = true;
           else is_place_mode_active = false;
           break;
+        case J_KEY:
+        case j_KEY:
+        case W_KEY:
+        case w_KEY:
         case UP_ARROW:
           if (is_place_mode_active) {
            (active_grid_y > 0) ? active_grid_y-- : active_grid_y = GRID_SIZE - 1; 
@@ -40,6 +46,9 @@ int Game::Run() {
             (selection_tower > 0) ? selection_tower-- : selection_tower = number_of_towers-1;
           }
           break;
+        case K_KEY:
+        case S_KEY:
+        case s_KEY:
         case DOWN_ARROW:
           if (is_place_mode_active) {
             active_grid_y++;
@@ -49,11 +58,18 @@ int Game::Run() {
             selection_tower = selection_tower % number_of_towers;
           }
           break;
+        case H_KEY:
+        case h_KEY:
+        case a_KEY:
+        case A_KEY:
         case LEFT_ARROW:
           if (is_place_mode_active) {
             (active_grid_x > 0) ? active_grid_x-- : active_grid_x = GRID_SIZE - 1;
           }
           break;
+        case L_KEY:
+        case D_KEY:
+        case d_KEY:
         case RIGHT_ARROW:
           if (is_place_mode_active) {
             active_grid_x++;
