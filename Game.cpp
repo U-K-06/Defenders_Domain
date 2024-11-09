@@ -28,41 +28,41 @@ int Game::Run() {
     if (_kbhit()) {
       input = _getch();
       switch (input) {
-        case COL_KEY:
-        case Q_KEY:
-        case q_KEY:
+        case KeyBindings::COL_KEY:
+        case KeyBindings::Q_KEY:
+        case KeyBindings::q_KEY:
           toggle_state(is_place_mode_active);
           break;
-        case J_KEY:
-        case j_KEY:
-        case W_KEY:
-        case w_KEY:
-        case UP_ARROW:
+        case KeyBindings::J_KEY:
+        case KeyBindings::j_KEY:
+        case KeyBindings::W_KEY:
+        case KeyBindings::w_KEY:
+        case KeyBindings::UP_ARROW:
           Move(is_place_mode_active, "UP", active_grid_y, active_grid_x, selection_tower, number_of_towers, GRID_SIZE);
           break;
-        case K_KEY:
-        case S_KEY:
-        case s_KEY:
-        case DOWN_ARROW:
+        case KeyBindings::K_KEY:
+        case KeyBindings::S_KEY:
+        case KeyBindings::s_KEY:
+        case KeyBindings::DOWN_ARROW:
           Move(is_place_mode_active, "DOWN", active_grid_y, active_grid_x, selection_tower, number_of_towers, GRID_SIZE);
           break;
-        case H_KEY:
-        case h_KEY:
-        case a_KEY:
-        case A_KEY:
-        case LEFT_ARROW:
+        case KeyBindings::H_KEY:
+        case KeyBindings::h_KEY:
+        case KeyBindings::a_KEY:
+        case KeyBindings::A_KEY:
+        case KeyBindings::LEFT_ARROW:
           Move(is_place_mode_active, "LEFT", active_grid_y, active_grid_x, selection_tower, number_of_towers, GRID_SIZE);
           break;
-        case L_KEY:
-        case D_KEY:
-        case d_KEY:
-        case RIGHT_ARROW:
+        case KeyBindings::L_KEY:
+        case KeyBindings::D_KEY:
+        case KeyBindings::d_KEY:
+        case KeyBindings::RIGHT_ARROW:
             Move(is_place_mode_active, "RIGHT", active_grid_y, active_grid_x, selection_tower, number_of_towers, GRID_SIZE);
           break;
-        case ENTER:
+        case KeyBindings::ENTER:
           active_tower = selection_tower;
           break;
-        case ESC:
+        case KeyBindings::ESC:
           return 0;
       }
     }

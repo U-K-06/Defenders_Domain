@@ -22,13 +22,13 @@ void Draw::grid(int GRID_SIZE, std::string tower_names[], int active_tower, int 
                 for (int j = 0; j <= 2 * GRID_SIZE; j++) {
                     if (j % 2 == 0) {
                         if (is_place_mode_active && ((j / 2 == active_grid_x && i / 2 == active_grid_y) || (j / 2 == active_grid_x + 1 && i / 2 == active_grid_y))) {
-                            std::cout << "\033[31m" << BORDER_WALL_Y << "\033[37m";
+                            std::cout << "\033[31m" << GameConstants::BORDER_WALL_Y << "\033[37m";
                         } else {
-                            std::cout << BORDER_WALL_Y;
+                            std::cout << GameConstants::BORDER_WALL_Y;
                         }
                     }
                     else {
-                        std::cout << EMPTY;
+                        std::cout << GameConstants::EMPTY;
                     }
                 }
             }
@@ -47,27 +47,27 @@ void Draw::top_grid(int i, int GRID_SIZE, bool is_place_mode_active, int active_
         for (int j = 0; j <= 2 * GRID_SIZE; j++) {
             if (j % 2 == 0) {
                 if (is_place_mode_active && ((j / 2 == active_grid_x && i / 2 == active_grid_y) || (j / 2 == active_grid_x + 1 && i / 2 == active_grid_y))) {
-                    std::cout << "\033[31m" << BORDER_WALL_Y << "\033[37m"; 
+                    std::cout << "\033[31m" << GameConstants::BORDER_WALL_Y << "\033[37m"; 
                 } else {
-                    std::cout << BORDER_WALL_Y;
+                    std::cout << GameConstants::BORDER_WALL_Y;
                 }
             } else {
-                std::cout << EMPTY;
+                std::cout << GameConstants::EMPTY;
             }
         }
     } else {
         for (int j = 0; j <= 2 * GRID_SIZE; j++) {
             if (j % 2 == 0) {
                 if (is_place_mode_active && ((j / 2 == active_grid_x && i / 2 == active_grid_y) || (j / 2 == active_grid_x + 1 && i / 2 == active_grid_y + 1) || (j / 2 == active_grid_x && i / 2 == active_grid_y + 1) || (j / 2 == active_grid_x + 1 && i / 2 == active_grid_y))) {
-                    std::cout << "\033[31m" << BORDER_CORNER << "\033[37m";
+                    std::cout << "\033[31m" << GameConstants::BORDER_CORNER << "\033[37m";
                 } else {
-                    std::cout << BORDER_CORNER;
+                    std::cout << GameConstants::BORDER_CORNER;
                 }
             } else {
                 if (is_place_mode_active && ((j / 2 == active_grid_x && i / 2 == active_grid_y) || (j / 2 == active_grid_x && i / 2 == active_grid_y + 1))) {
-                    std::cout << "\033[31m" << BORDER_WALL_X << "\033[37m";
+                    std::cout << "\033[31m" << GameConstants::BORDER_WALL_X << "\033[37m";
                 } else {
-                    std::cout << BORDER_WALL_X;
+                    std::cout << GameConstants::BORDER_WALL_X;
                 }
             }
         }
@@ -96,15 +96,15 @@ void Draw::bottom_grid(int i, int GRID_SIZE, bool is_place_mode_active, int acti
     for (int j = 0; j <= 2 * GRID_SIZE; j++) {
         if (j % 2 == 0) {
             if (is_place_mode_active && ((j / 2 == active_grid_x && i / 2 == active_grid_y) || (j / 2 == active_grid_x + 1 && i / 2 == active_grid_y + 1) || (j / 2 == active_grid_x && i / 2 == active_grid_y + 1) || (j / 2 == active_grid_x + 1 && i / 2 == active_grid_y))) {
-                std::cout << "\033[31m" << BORDER_CORNER << "\033[37m"; 
+                std::cout << "\033[31m" << GameConstants::BORDER_CORNER << "\033[37m"; 
             } else {
-                std::cout << BORDER_CORNER;
+                std::cout << GameConstants::BORDER_CORNER;
             }
         } else {
             if (is_place_mode_active && ((j / 2 == active_grid_x && i / 2 == active_grid_y) || (j / 2 == active_grid_x && i / 2 == active_grid_y + 1))) {
-                std::cout << "\033[31m" << BORDER_WALL_X << "\033[37m"; 
+                std::cout << "\033[31m" << GameConstants::BORDER_WALL_X << "\033[37m"; 
             } else {
-                std::cout << BORDER_WALL_X;
+                std::cout << GameConstants::BORDER_WALL_X;
             }
         }
     }
