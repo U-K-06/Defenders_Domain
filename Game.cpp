@@ -31,50 +31,33 @@ int Game::Run() {
         case COL_KEY:
         case Q_KEY:
         case q_KEY:
-          if (!is_place_mode_active) is_place_mode_active = true;
-          else is_place_mode_active = false;
+          toggle_state(is_place_mode_active);
           break;
         case J_KEY:
         case j_KEY:
         case W_KEY:
         case w_KEY:
         case UP_ARROW:
-          if (is_place_mode_active) {
-           (active_grid_y > 0) ? active_grid_y-- : active_grid_y = GRID_SIZE - 1; 
-          } else {
-            selection_tower = selection_tower % number_of_towers;
-            (selection_tower > 0) ? selection_tower-- : selection_tower = number_of_towers-1;
-          }
+          Move(is_place_mode_active, "UP", active_grid_y, active_grid_x, selection_tower, number_of_towers, GRID_SIZE);
           break;
         case K_KEY:
         case S_KEY:
         case s_KEY:
         case DOWN_ARROW:
-          if (is_place_mode_active) {
-            active_grid_y++;
-            active_grid_y = active_grid_y % GRID_SIZE;
-          } else {
-            selection_tower++;
-            selection_tower = selection_tower % number_of_towers;
-          }
+          Move(is_place_mode_active, "DOWN", active_grid_y, active_grid_x, selection_tower, number_of_towers, GRID_SIZE);
           break;
         case H_KEY:
         case h_KEY:
         case a_KEY:
         case A_KEY:
         case LEFT_ARROW:
-          if (is_place_mode_active) {
-            (active_grid_x > 0) ? active_grid_x-- : active_grid_x = GRID_SIZE - 1;
-          }
+          Move(is_place_mode_active, "LEFT", active_grid_y, active_grid_x, selection_tower, number_of_towers, GRID_SIZE);
           break;
         case L_KEY:
         case D_KEY:
         case d_KEY:
         case RIGHT_ARROW:
-          if (is_place_mode_active) {
-            active_grid_x++;
-            active_grid_x = active_grid_x % GRID_SIZE;
-          }
+            Move(is_place_mode_active, "RIGHT", active_grid_y, active_grid_x, selection_tower, number_of_towers, GRID_SIZE);
           break;
         case ENTER:
           active_tower = selection_tower;
@@ -85,6 +68,48 @@ int Game::Run() {
     }
   }
   return 0;
+}
+
+void Game::toggle_state(bool& is_place_mode_active)
+{
+  if (!is_place_mode_active) is_place_mode_active = true;
+  else is_place_mode_active = false;
+}
+
+void Game::Move(bool is_place_mode_active, std::string direction, int& active_grid_y, int& active_grid_x, int& selection_tower, int number_of_towers, int GRID_SIZE)
+{
+  if (is_place_mode_active)
+  {
+    if (direction == "UP")
+    {
+      (active_grid_y > 0) ? active_grid_y-- : active_grid_y = GRID_SIZE - 1;
+    }
+    if (direction == "DOWN")
+    {
+      active_grid_y++;
+      active_grid_y = active_grid_y % GRID_SIZE;
+    }
+    if (direction == "LEFT")
+    {
+      (active_grid_x > 0) ? active_grid_x-- : active_grid_x = GRID_SIZE - 1;
+    }
+    if (direction == "RIGHT")
+    {
+      active_grid_x++;
+      active_grid_x = active_grid_x % GRID_SIZE;
+    }
+  } else {
+    if (direction == "UP")
+    {
+      selection_tower = selection_tower % number_of_towers;
+      (selection_tower > 0) ? selection_tower-- : selection_tower = number_of_towers-1;
+    }
+    if (direction == "DOWN")
+    {
+      selection_tower++;
+      selection_tower = selection_tower % number_of_towers;
+    }
+  }
 }
 
 void Game::hide_cursor()
@@ -134,6 +159,8 @@ int Game::calculate_grid()
 
   return GRID_SIZE;
 }
+
+
 
 int** Game::calculate_tower_positions(int** grid)
 {
