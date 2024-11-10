@@ -6,7 +6,7 @@
 #include "draw.h"
 #include "constants.h"
 
-std::string tower_names[] = { "Electric Tower", "Fire Tower", "Poison Tower", "Water Tower", "Ice Tower" };
+std::string tower_names[] = { "Electric Tower", "Fire Tower", "Poison Tower", "Water Tower", "Ice Tower", "Wind Tower", "Shadow Tower" };
 
 int number_of_towers = sizeof(tower_names) / sizeof(tower_names[0]);
 
@@ -22,13 +22,14 @@ int Game::Run() {
   int GRID_SIZE = calculate_grid();
   Draw draw;
 
+  TowerPositionData TowerPosition;
+
   while (1) {
     clear_screen(GRID_SIZE);
-    draw.grid(GRID_SIZE, tower_names, active_tower, selection_tower, active_grid_x, active_grid_y, is_place_mode_active);
+    draw.grid(GRID_SIZE, tower_names, active_tower, selection_tower, active_grid_x, active_grid_y, is_place_mode_active, TowerPosition);
     if (_kbhit()) {
       input = _getch();
       switch (input) {
-        case KeyBindings::COL_KEY:
         case KeyBindings::Q_KEY:
         case KeyBindings::q_KEY:
           toggle_state(is_place_mode_active);
@@ -60,9 +61,15 @@ int Game::Run() {
             Move(is_place_mode_active, "RIGHT", active_grid_y, active_grid_x, selection_tower, number_of_towers, GRID_SIZE);
           break;
         case KeyBindings::ENTER:
-          active_tower = selection_tower;
+        case KeyBindings::COL_KEY:
+          if (!is_place_mode_active) {
+            active_tower = selection_tower;
+          } else {
+            calculate_tower_positions(GRID_SIZE, active_tower, active_grid_x, active_grid_y, TowerPosition);
+          }
           break;
         case KeyBindings::ESC:
+          //display_tower_positions(TowerPosition);
           return 0;
       }
     }
@@ -70,11 +77,7 @@ int Game::Run() {
   return 0;
 }
 
-void Game::toggle_state(bool& is_place_mode_active)
-{
-  if (!is_place_mode_active) is_place_mode_active = true;
-  else is_place_mode_active = false;
-}
+void Game::toggle_state(bool& is_place_mode_active) { is_place_mode_active = !is_place_mode_active; }
 
 void Game::Move(bool is_place_mode_active, std::string direction, int& active_grid_y, int& active_grid_x, int& selection_tower, int number_of_towers, int GRID_SIZE)
 {
@@ -160,10 +163,22 @@ int Game::calculate_grid()
   return GRID_SIZE;
 }
 
-
-
-int** Game::calculate_tower_positions(int** grid)
+void Game::calculate_tower_positions(int GRID_SIZE, int active_tower, int active_grid_x, int active_grid_y, TowerPositionData& TowerPosition)
 {
-  // TODO: We will determin the positions where we have to render the towers and then return that 2D array;
-  return nullptr; 
+  TowerPositionDataStruct newTowerPosition;
+  newTowerPosition.index = active_tower;
+  newTowerPosition.x     = active_grid_x;
+  newTowerPosition.y     = active_grid_y;
+
+  TowerPosition.push_back(newTowerPosition);
+  placed_towers_list.push_back(newTowerPosition);
 }
+
+void Game::display_tower_positions(const TowerPositionData& TowerPosition)
+{
+  std::cout << "Tower Posistions: \n";
+  for (const auto& tower : TowerPosition) {
+    std::cout << "Tower: " << tower.index << ", Coord: [" << tower.x << ", " << tower.y << "]" << std::endl;
+  }
+}
+
