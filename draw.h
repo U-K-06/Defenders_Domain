@@ -4,8 +4,11 @@
 
 class Draw {
 public:
-  void grid(int GRID_SIZE, std::string tower_names[], int active_tower, int selection_tower, int active_grid_x, int active_grid_y, bool is_place_mode_active, TowerPositionData TowerPosition);
+  void grid(int GRID_SIZE, Game::Enemy& enemy, std::string tower_names[], int active_tower, int selection_tower, int active_grid_x, int active_grid_y, bool is_place_mode_active, TowerPositionData TowerPosition);
+  static std::string color;
+  static int type;
 private:
+  bool isPrinted = false;
   std::string place_tower(int index);
   bool check_tower_position(int x, int y, TowerPositionData& TowerPosition);
   int get_tower_index(int x, int y, TowerPositionData& TowerPosition);

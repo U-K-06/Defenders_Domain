@@ -26,8 +26,8 @@ namespace KeyBindings {
     constexpr int D_KEY                 = 68;
 }
 
-
 namespace GameConstants {
+    constexpr const int MAX_ENEMIES       = 90;
     constexpr const char* EMPTY           = "     ";
     constexpr char BORDER_CORNER          = '+';
     constexpr char BORDER_WALL_Y          = '|';
@@ -38,5 +38,6 @@ namespace GameConstants {
     constexpr const char* WATER_TOWER     = "\033[38;5;39m Λ  \033[37m";
     constexpr const char* ICE_TOWER       = "\033[38;5;81m Λ  \033[37m";
     constexpr const char* WIND_TOWER      = "\033[38;5;159m Λ  \033[37m";
-    constexpr const char* SHADOW_TOWER    = "\033[38;5;23m Λ  \033[37m";;
+    constexpr const char* SHADOW_TOWER    = "\033[38;5;23m Λ  \033[37m";
 }
+

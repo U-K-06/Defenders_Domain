@@ -1,12 +1,17 @@
 #include <iostream>
+#include <random>
 
 #include "draw.h"
 #include "constants.h"
 #include "Game.h"
 
-void Draw::grid(int GRID_SIZE, std::string tower_names[], int active_tower, int selection_tower, int active_grid_x, int active_grid_y, bool is_place_mode_active, TowerPositionData TowerPosition) {
+void Draw::grid(int GRID_SIZE, Game::Enemy& enemy, std::string tower_names[], int active_tower, int selection_tower, int active_grid_x, int active_grid_y, bool is_place_mode_active, TowerPositionData TowerPosition)
+{
+    color = enemy.color;
+    type  = enemy.type;
     int name_index = 0;
-    std::cout << "\n\n\n\n\n";
+    std::cout << "Enemies are like: (" << color << static_cast<char>(type) << "\033[37m)\n--> The color indicates the type of tower that is the enemy's weakness.\n" << "The ASCII code represents the enemy's health (HP): " << type << std::endl;
+    std::cout << "\n";
     for (int i = 0; i <= 2 * GRID_SIZE; i++) {
         if (i <= 1) {
             top_grid(i, GRID_SIZE, is_place_mode_active, active_grid_x, active_grid_y, TowerPosition);

@@ -1,12 +1,15 @@
 #include <conio.h>
 #include <iostream>
 #include <windows.h>
+#include <random>
 
 #include "Game.h"
 #include "draw.h"
 #include "constants.h"
 
 std::string tower_names[] = { "Electric Tower", "Fire Tower", "Poison Tower", "Water Tower", "Ice Tower", "Wind Tower", "Shadow Tower" };
+
+std::string colors[] = { "\033[38;5;214m", "\033[38;5;196m", "\033[38;5;93m", "\033[38;5;39m", "\033[38;5;81m", "\033[38;5;159m", "\033[38;5;23m" };
 
 int number_of_towers = sizeof(tower_names) / sizeof(tower_names[0]);
 
@@ -24,9 +27,16 @@ int Game::Run() {
 
   TowerPositionData TowerPosition;
 
+  std::random_device rd;
+  std::mt19937 gen(rd());
+  std::uniform_int_distribution<> distrandomtype(64, GameConstants::MAX_ENEMIES);
+  std::uniform_int_distribution<> distrandomcolor(0, 7);
+
   while (1) {
     clear_screen(GRID_SIZE);
-    draw.grid(GRID_SIZE, tower_names, active_tower, selection_tower, active_grid_x, active_grid_y, is_place_mode_active, TowerPosition);
+    enemy.type = distrandomtype(gen);
+    enemy.color = colors[distrandomcolor(gen)];
+    draw.grid(GRID_SIZE, enemy, tower_names, active_tower, selection_tower, active_grid_x, active_grid_y, is_place_mode_active, TowerPosition);
     if (_kbhit()) {
       input = _getch();
       switch (input) {
@@ -70,6 +80,9 @@ int Game::Run() {
           break;
         case KeyBindings::ESC:
           //display_tower_positions(TowerPosition);
+          delete Draw::color;
+          delete Draw::type;
+          clear_screen(GRID_SIZE);
           return 0;
       }
     }
