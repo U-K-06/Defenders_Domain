@@ -15,17 +15,12 @@ using TowerPositionData = std::vector<TowerPositionDataStruct>;
 
 class Game {
 public:
-  struct Enemy {
-    int type;
-    std::string color;
-  } enemy;
-
   int Run();
   void toggle_state(bool& is_place_mode_active);
   void Move(bool is_place_mode_active, std::string direction, int& active_grid_y, int &active_grid_x, int &selection_tower, int number_of_towers, int GRID_SIZE);
   void hide_cursor();
   void clear_screen(int GRID_SIZE);
-  int calculate_grid();
+  std::tuple<int, int> calculate_grid();
   void calculate_tower_positions(int GRID_SIZE, int active_tower, int active_grid_x, int active_grid_y, TowerPositionData& TowerPosition);
   void display_tower_positions(const TowerPositionData& TowerPosition);
 

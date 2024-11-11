@@ -4,9 +4,10 @@
 
 class Draw {
 public:
-  void grid(int GRID_SIZE, Game::Enemy& enemy, std::string tower_names[], int active_tower, int selection_tower, int active_grid_x, int active_grid_y, bool is_place_mode_active, TowerPositionData TowerPosition);
-  static std::string color;
-  static int type;
+  void grid(int GRID_SIZE, std::string tower_names[], int active_tower, int selection_tower, int active_grid_x, int active_grid_y, bool is_place_mode_active, TowerPositionData TowerPosition);
+  static std::string enemy_color;
+  static int enemy_type;
+
 private:
   bool isPrinted = false;
   std::string place_tower(int index);

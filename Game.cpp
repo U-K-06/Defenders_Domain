@@ -1,7 +1,8 @@
 #include <conio.h>
 #include <iostream>
 #include <windows.h>
-#include <random>
+#include <time.h>
+#include <tuple>
 
 #include "Game.h"
 #include "draw.h"
@@ -22,21 +23,20 @@ int Game::Run() {
   int active_grid_x = 0, active_grid_y = 0;
 
   char input;
-  int GRID_SIZE = calculate_grid();
+  int GRID_SIZE, choice;
+  std::tie(GRID_SIZE, choice) = calculate_grid();
   Draw draw;
 
   TowerPositionData TowerPosition;
 
-  std::random_device rd;
-  std::mt19937 gen(rd());
-  std::uniform_int_distribution<> distrandomtype(64, GameConstants::MAX_ENEMIES);
-  std::uniform_int_distribution<> distrandomcolor(0, 7);
+  std::srand(time(0));
+
+  Draw::enemy_type = (rand() % (GameConstants::MAX_ENEMIES - 63)+64);
+  Draw::enemy_color = (choice > 5) ? colors[rand() % sizeof(colors) / sizeof(colors[0])] : colors[rand() % (choice-1)];
 
   while (1) {
     clear_screen(GRID_SIZE);
-    enemy.type = distrandomtype(gen);
-    enemy.color = colors[distrandomcolor(gen)];
-    draw.grid(GRID_SIZE, enemy, tower_names, active_tower, selection_tower, active_grid_x, active_grid_y, is_place_mode_active, TowerPosition);
+    draw.grid(GRID_SIZE, tower_names, active_tower, selection_tower, active_grid_x, active_grid_y, is_place_mode_active, TowerPosition);
     if (_kbhit()) {
       input = _getch();
       switch (input) {
@@ -80,8 +80,6 @@ int Game::Run() {
           break;
         case KeyBindings::ESC:
           //display_tower_positions(TowerPosition);
-          delete Draw::color;
-          delete Draw::type;
           clear_screen(GRID_SIZE);
           return 0;
       }
@@ -150,7 +148,7 @@ void Game::clear_screen(int GRID_SIZE) {
   std::cout << '\r';
 }
 
-int Game::calculate_grid()
+std::tuple<int, int> Game::calculate_grid()
 {
   int choice;
   int GRID_SIZE;
@@ -169,11 +167,11 @@ int Game::calculate_grid()
     GRID_SIZE = size;
   }
 
-  else return 0;
-  
+  else return std::make_tuple(0, choice);
+
   system("cls");
 
-  return GRID_SIZE;
+  return std::make_tuple(GRID_SIZE, choice);
 }
 
 void Game::calculate_tower_positions(int GRID_SIZE, int active_tower, int active_grid_x, int active_grid_y, TowerPositionData& TowerPosition)
