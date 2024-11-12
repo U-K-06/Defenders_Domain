@@ -70,8 +70,8 @@ int Game::Run() {
         case KeyBindings::RIGHT_ARROW:
             Move(is_place_mode_active, "RIGHT", active_grid_y, active_grid_x, selection_tower, number_of_towers, GRID_SIZE);
           break;
-        case KeyBindings::ENTER:
         case KeyBindings::COL_KEY:
+        case KeyBindings::SPACE:
           if (!is_place_mode_active) {
             active_tower = selection_tower;
           } else {

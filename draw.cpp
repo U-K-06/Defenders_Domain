@@ -49,21 +49,24 @@ void Draw::grid(int GRID_SIZE, std::string tower_names[], int active_tower, int 
 
 std::string Draw::place_tower(int index)
 {
+  int level = 0;
   switch(index) {
     case 0:
-      return GameConstants::ELECTRIC_TOWER;
+      return GameConstants::ELECTRIC_TOWERS[level];
     case 1:
-      return GameConstants::FIRE_TOWER;
+      return GameConstants::FIRE_TOWERS[level];
     case 2:
-      return GameConstants::POISON_TOWER;
+      return GameConstants::POISON_TOWERS[level];
     case 3:
-      return GameConstants::WATER_TOWER;
+      return GameConstants::WATER_TOWERS[level];
     case 4:
-      return GameConstants::ICE_TOWER;
+      return GameConstants::ICE_TOWERS[level];
     case 5:
-      return GameConstants::WIND_TOWER;
+      return GameConstants::WIND_TOWERS[level];
     case 6:
-      return GameConstants::SHADOW_TOWER;
+      return GameConstants::SHADOW_TOWERS[level];
+    default:
+      return GameConstants::EMPTY;
   }
 }
 
