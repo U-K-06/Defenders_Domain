@@ -1,5 +1,7 @@
 #include <iostream>
 #include <random>
+#include <vector>
+#include <thread>
 
 #include "draw.h"
 #include "constants.h"
@@ -50,24 +52,35 @@ void Draw::grid(int GRID_SIZE, std::string tower_names[], int active_tower, int 
 std::string Draw::place_tower(int index)
 {
   int level = 0;
+  std::string tower;
+
   switch(index) {
     case 0:
-      return GameConstants::ELECTRIC_TOWERS[level];
+     tower = GameConstants::ELECTRIC_TOWERS[level];
+     break;
     case 1:
-      return GameConstants::FIRE_TOWERS[level];
+     tower = GameConstants::FIRE_TOWERS[level];
+     break;
     case 2:
-      return GameConstants::POISON_TOWERS[level];
+     tower = GameConstants::POISON_TOWERS[level];
+     break;
     case 3:
-      return GameConstants::WATER_TOWERS[level];
+     tower = GameConstants::WATER_TOWERS[level];
+     break;
     case 4:
-      return GameConstants::ICE_TOWERS[level];
+      tower = GameConstants::ICE_TOWERS[level];
+      break;
     case 5:
-      return GameConstants::WIND_TOWERS[level];
+      tower = GameConstants::WIND_TOWERS[level];
+      break;
     case 6:
-      return GameConstants::SHADOW_TOWERS[level];
+      tower = GameConstants::SHADOW_TOWERS[level];
+      break;
     default:
-      return GameConstants::EMPTY;
+      return GameConstants::EMPTY;  
   }
+
+  return tower;
 }
 
 bool Draw::check_tower_position(int x, int y, TowerPositionData& TowerPosition)
