@@ -26,13 +26,12 @@ int Game::Run() {
   int GRID_SIZE, choice;
   std::tie(GRID_SIZE, choice) = calculate_grid();
   Draw draw;
-
   TowerPositionData TowerPosition;
 
   std::srand(time(0));
 
   Draw::enemy_type = (rand() % (GameConstants::MAX_ENEMIES - 63)+64);
-  Draw::enemy_color = (choice > 5) ? colors[rand() % sizeof(colors) / sizeof(colors[0])] : colors[rand() % (choice-1)];
+  Draw::enemy_color = (choice > 5) ? colors[rand() % sizeof(colors) / sizeof(colors[0])] : (choice > 1) ? colors[rand() % (choice-1)] : colors[0];
 
   while (1) {
     clear_screen(GRID_SIZE);
@@ -170,7 +169,6 @@ std::tuple<int, int> Game::calculate_grid()
   else return std::make_tuple(0, choice);
 
   system("cls");
-
   return std::make_tuple(GRID_SIZE, choice);
 }
 
