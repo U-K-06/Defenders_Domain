@@ -37,7 +37,7 @@ void Draw::grid(int GRID_SIZE, std::string tower_names[], int active_tower, int 
                         }
                     }
                     else {
-                        (check_tower_position(j, i, TowerPosition)) ? std::cout << place_tower(get_tower_index(j, i, TowerPosition), get_tower_level(j, i, TowerPosition)) : std::cout << GameConstants::EMPTY;
+                        (is_tower_placed(j, i, TowerPosition)) ? std::cout << place_tower(get_tower_index(j, i, TowerPosition), get_tower_level(j, i, TowerPosition)) : std::cout << GameConstants::EMPTY;
                     }
                 }
             }
@@ -81,8 +81,8 @@ std::string Draw::place_tower(int index, int level)
 
   return tower;
 }
-// REFACTOR THIS CODE AS FOREACH LOOP AND CONDITION IS REPETING ITSELF;
-bool Draw::check_tower_position(int x, int y, TowerPositionData& TowerPosition)
+
+bool Draw::is_tower_placed(int x, int y, TowerPositionData& TowerPosition)
 {
   for (const auto& tower : TowerPosition)
   {
@@ -106,7 +106,7 @@ int Draw::get_tower_level(int x, int y, TowerPositionData& TowerPosition)
   {
     if (tower.x == x / 2 && tower.y == y / 2) return tower.level;
   }
-  return -1; 
+  return -1;
 }
 
 void Draw::top_grid(int i, int GRID_SIZE, bool is_place_mode_active, int active_grid_x, int active_grid_y, TowerPositionData TowerPosition) {
@@ -121,7 +121,7 @@ void Draw::top_grid(int i, int GRID_SIZE, bool is_place_mode_active, int active_
                     std::cout << GameConstants::BORDER_WALL_Y;
                 }
             } else {
-              (check_tower_position(j, i, TowerPosition)) ? std::cout << place_tower(get_tower_index(j, i, TowerPosition), get_tower_level(j, i, TowerPosition)) : std::cout << GameConstants::EMPTY;
+              (is_tower_placed(j, i, TowerPosition)) ? std::cout << place_tower(get_tower_index(j, i, TowerPosition), get_tower_level(j, i, TowerPosition)) : std::cout << GameConstants::EMPTY;
             }
         }
     } else {

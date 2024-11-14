@@ -1,5 +1,8 @@
 #pragma once
 
+#ifndef DRAW_H
+#define DRAW_H
+
 #include "Game.h"
 
 class Draw {
@@ -11,7 +14,7 @@ public:
 private:
   bool isPrinted = false;
   std::string place_tower(int index, int level);
-  bool check_tower_position(int x, int y, TowerPositionData& TowerPosition);
+  bool is_tower_placed(int x, int y, TowerPositionData& TowerPosition);
   int get_tower_index(int x, int y, TowerPositionData& TowerPosition);
   int get_tower_level(int x, int y, TowerPositionData& TowerPosition);
   void top_grid(int i, int GRID_SIZE, bool is_place_mode_active, int active_grid_x, int active_grid_y, TowerPositionData TowerPosition);
@@ -19,3 +22,4 @@ private:
   void bottom_grid(int i, int GRID_SIZE, bool is_place_mode_active, int active_grid_x, int active_grid_y, TowerPositionData TowerPosition);
 };
 
+#endif
