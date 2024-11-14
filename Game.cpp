@@ -3,6 +3,7 @@
 #include <windows.h>
 #include <time.h>
 #include <tuple>
+#include <ctime>
 
 #include "Game.h"
 #include "draw.h"
@@ -36,6 +37,17 @@ int Game::Run() {
   while (1) {
     clear_screen(GRID_SIZE);
     draw.grid(GRID_SIZE, tower_names, active_tower, selection_tower, active_grid_x, active_grid_y, is_place_mode_active, TowerPosition);
+
+    for (auto& tower : TowerPosition)
+    {
+      time_t current_time = time(0);
+      if (tower.level < 4 && (current_time - tower.last_upgrade_time) >= GameConstants::UPGRADE_TIMES[tower.index][tower.level]) 
+      { 
+        tower.level++; 
+        tower.last_upgrade_time = current_time;
+      }
+    }
+
     if (_kbhit()) {
       input = _getch();
       switch (input) {
@@ -52,7 +64,7 @@ int Game::Run() {
           break;
         case KeyBindings::K_KEY:
         case KeyBindings::S_KEY:
-        case KeyBindings::s_KEY:
+        case KeyBindings::s_KEY:  
         case KeyBindings::DOWN_ARROW:
           Move(is_place_mode_active, "DOWN", active_grid_y, active_grid_x, selection_tower, number_of_towers, GRID_SIZE);
           break;
@@ -175,9 +187,11 @@ std::tuple<int, int> Game::calculate_grid()
 void Game::calculate_tower_positions(int GRID_SIZE, int active_tower, int active_grid_x, int active_grid_y, TowerPositionData& TowerPosition)
 {
   TowerPositionDataStruct newTowerPosition;
-  newTowerPosition.index = active_tower;
-  newTowerPosition.x     = active_grid_x;
-  newTowerPosition.y     = active_grid_y;
+  newTowerPosition.index             = active_tower;
+  newTowerPosition.x                 = active_grid_x;
+  newTowerPosition.y                 = active_grid_y;
+  newTowerPosition.last_upgrade_time = time(0);
+
 
   TowerPosition.push_back(newTowerPosition);
   placed_towers_list.push_back(newTowerPosition);

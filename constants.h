@@ -33,6 +33,16 @@ namespace GameConstants {
     constexpr const char BORDER_WALL_Y     = '|';
     constexpr const char* BORDER_WALL_X    = "-----";
 
+    const int UPGRADE_TIMES[7][5] = {
+                                      {2000, 3500, 4500, 5000, 7000}, // Electric Tower
+                                      {1500, 2500, 3500, 4500, 6500}, // Fire Tower
+                                      {2500, 3800, 4250, 6500, 9000}, // Poison Tower
+                                      {1400, 2400, 3400, 4400, 5400}, // Water Tower
+                                      {1800, 2800, 3800, 5000, 6000}, // Ice Tower
+                                      {1600, 3600, 4600, 5500, 7400}, // Wind Tower
+                                      {2600, 3800, 5000, 6800, 9500}  // Shadow Tower
+                                    };
+
     constexpr const char* ICE_TOWERS[] = {
         "\033[38;5;81m  *  \033[37m",
         "\033[38;5;81m  *> \033[37m",

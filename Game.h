@@ -10,6 +10,7 @@ struct TowerPositionDataStruct {
   int x;
   int y;
   int level = 0;
+  time_t last_upgrade_time = 0;
 };
 
 using TowerPositionData = std::vector<TowerPositionDataStruct>;
