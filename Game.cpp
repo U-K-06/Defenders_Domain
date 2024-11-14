@@ -31,12 +31,12 @@ int Game::Run() {
 
   std::srand(time(0));
 
-  Draw::enemy_type = (rand() % (GameConstants::MAX_ENEMIES - 63)+64);
-  Draw::enemy_color = (choice > 5) ? colors[rand() % sizeof(colors) / sizeof(colors[0])] : (choice > 1) ? colors[rand() % (choice-1)] : colors[0];
+  Draw::m_enemy_type = enemy_type();
+  Draw::m_enemy_color = enemy_color(choice);
 
   while (1) {
     clear_screen(GRID_SIZE);
-    draw.grid(GRID_SIZE, tower_names, active_tower, selection_tower, active_grid_x, active_grid_y, is_place_mode_active, TowerPosition);
+    draw.grid(GRID_SIZE, tower_names, active_tower, selection_tower, active_grid_x, active_grid_y, is_place_mode_active, TowerPosition, enemy_type(), enemy_color(choice));
 
     for (auto& tower : TowerPosition)
     {
@@ -135,6 +135,16 @@ void Game::Move(bool is_place_mode_active, std::string direction, int& active_gr
       selection_tower = selection_tower % number_of_towers;
     }
   }
+}
+
+int Game::enemy_type()
+{
+  return (rand() % (GameConstants::MAX_ENEMIES - 63)+64); 
+}
+
+std::string Game::enemy_color(int choice)
+{
+  return  (choice > 5) ? colors[rand() % sizeof(colors) / sizeof(colors[0])] : (choice > 1) ? colors[rand() % (choice-1)] : colors[0];
 }
 
 void Game::hide_cursor()

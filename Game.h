@@ -28,6 +28,9 @@ public:
 
 private:
   std::vector<TowerPositionDataStruct> placed_towers_list;
+  int enemy_type();
+  std::string enemy_color(int choice);
+
 };
 
 #endif
