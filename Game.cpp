@@ -34,9 +34,18 @@ int Game::Run() {
   Draw::m_enemy_type = enemy_type();
   Draw::m_enemy_color = enemy_color(choice);
 
+  Enemy new_enemy;
+
+  new_enemy.type  = enemy_type();
+  new_enemy.color = enemy_color(choice);
+  new_enemy.x     = rand() % (2 * GRID_SIZE + 1);
+  new_enemy.y     = rand() % (2 * GRID_SIZE + 1);
+  
+  enemies.push_back(new_enemy);
+
   while (1) {
     clear_screen(GRID_SIZE);
-    draw.grid(GRID_SIZE, tower_names, active_tower, selection_tower, active_grid_x, active_grid_y, is_place_mode_active, TowerPosition, enemy_type(), enemy_color(choice));
+    draw.grid(GRID_SIZE, tower_names, active_tower, selection_tower, active_grid_x, active_grid_y, is_place_mode_active, TowerPosition, enemies);
 
     for (auto& tower : TowerPosition)
     {

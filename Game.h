@@ -5,6 +5,13 @@
 
 #include <vector>
 
+struct Enemy {
+  int type;
+  std::string color;
+  int x;
+  int y;
+};
+
 struct TowerPositionDataStruct {
   int index;
   int x;
@@ -28,9 +35,9 @@ public:
 
 private:
   std::vector<TowerPositionDataStruct> placed_towers_list;
+  std::vector<Enemy> enemies;
   int enemy_type();
   std::string enemy_color(int choice);
-
 };
 
 #endif

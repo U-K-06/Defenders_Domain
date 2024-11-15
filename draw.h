@@ -7,7 +7,7 @@
 
 class Draw {
 public:
-  void grid(int GRID_SIZE, std::string tower_names[], int active_tower, int selection_tower, int active_grid_x, int active_grid_y, bool is_place_mode_active, TowerPositionData TowerPosition, int enemy_type, std::string enemy_color);
+  void grid(int GRID_SIZE, std::string tower_names[], int active_tower, int selection_tower, int active_grid_x, int active_grid_y, bool is_place_mode_active, TowerPositionData TowerPosition, std::vector<Enemy>& enemies);
   static std::string m_enemy_color;
   static int m_enemy_type;
 
