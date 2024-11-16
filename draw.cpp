@@ -17,7 +17,7 @@ void Draw::grid(int GRID_SIZE, std::string tower_names[], int active_tower, int 
     std::cout << "\n";
     for (int i = 0; i <= 2 * GRID_SIZE; i++) {
         if (i <= 1) {
-            top_grid(i, GRID_SIZE, is_place_mode_active, active_grid_x, active_grid_y, TowerPosition);
+            top_grid(i, GRID_SIZE, is_place_mode_active, active_grid_x, active_grid_y, TowerPosition, enemies);
         }
         else {
             if (i % 2 != 0) {
@@ -33,16 +33,16 @@ void Draw::grid(int GRID_SIZE, std::string tower_names[], int active_tower, int 
                         if (is_place_mode_active && ((j / 2 == active_grid_x && i / 2 == active_grid_y) || (j / 2 == active_grid_x + 1 && i / 2 == active_grid_y))) {
                             std::cout << "\033[31m" << GameConstants::BORDER_WALL_Y << "\033[37m";
                         } else {
-                            std::cout << GameConstants::BORDER_WALL_Y;
+                          std::cout << GameConstants::BORDER_WALL_Y;
                         }
                     }
                     else {
-                        (is_tower_placed(j, i, TowerPosition)) ? std::cout << place_tower(get_tower_index(j, i, TowerPosition), get_tower_level(j, i, TowerPosition)) : std::cout << GameConstants::EMPTY;
+                      (is_tower_placed(j, i, TowerPosition)) ? std::cout << place_tower(get_tower_index(j, i, TowerPosition), get_tower_level(j, i, TowerPosition)) : std::cout << GameConstants::EMPTY;
                     }
                 }
             }
             else {
-                bottom_grid(i, GRID_SIZE, is_place_mode_active, active_grid_x, active_grid_y, TowerPosition);
+                bottom_grid(i, GRID_SIZE, is_place_mode_active, active_grid_x, active_grid_y, TowerPosition, enemies);
             }
         }
         std::cout << '\n';
@@ -109,7 +109,7 @@ int Draw::get_tower_level(int x, int y, TowerPositionData& TowerPosition)
   return -1;
 }
 
-void Draw::top_grid(int i, int GRID_SIZE, bool is_place_mode_active, int active_grid_x, int active_grid_y, TowerPositionData TowerPosition) {
+void Draw::top_grid(int i, int GRID_SIZE, bool is_place_mode_active, int active_grid_x, int active_grid_y, TowerPositionData TowerPosition, std::vector<Enemy>& enemies) {
     std::cout << "\t\t\t\t\t\t\t\t";
 
     if (i % 2 != 0) {
@@ -118,7 +118,7 @@ void Draw::top_grid(int i, int GRID_SIZE, bool is_place_mode_active, int active_
                 if (is_place_mode_active && ((j / 2 == active_grid_x && i / 2 == active_grid_y) || (j / 2 == active_grid_x + 1 && i / 2 == active_grid_y))) {
                     std::cout << "\033[31m" << GameConstants::BORDER_WALL_Y << "\033[37m"; 
                 } else {
-                    std::cout << GameConstants::BORDER_WALL_Y;
+                  std::cout << GameConstants::BORDER_WALL_Y;
                 }
             } else {
               (is_tower_placed(j, i, TowerPosition)) ? std::cout << place_tower(get_tower_index(j, i, TowerPosition), get_tower_level(j, i, TowerPosition)) : std::cout << GameConstants::EMPTY;
@@ -159,7 +159,7 @@ void Draw::render_tower_names(int& name_index, int selection_tower, int active_t
   }
 }
 
-void Draw::bottom_grid(int i, int GRID_SIZE, bool is_place_mode_active, int active_grid_x, int active_grid_y, TowerPositionData TowerPosition) {
+void Draw::bottom_grid(int i, int GRID_SIZE, bool is_place_mode_active, int active_grid_x, int active_grid_y, TowerPositionData TowerPosition, std::vector<Enemy>& enemies) {
     std::cout << "\t\t\t\t\t\t\t\t";
 
     for (int j = 0; j <= 2 * GRID_SIZE; j++) {
