@@ -31,9 +31,6 @@ namespace KeyBindings {
 
 namespace Audio {
   constexpr const char* BGM             = "./audio/background.wav";
-  constexpr const char* TOWER_SELECTION = "./audio/towerselect.wav";
-  constexpr const char* TOWER_UPGRADE   = "./audio/towerupgrade.wav";
-  constexpr const char* TOWER_PLACEMENT = "./audio/towerplacement.wav";
 } 
 
 #endif

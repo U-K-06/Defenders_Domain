@@ -39,7 +39,6 @@ private:
   std::vector<Enemy> enemies;
   int enemy_type();
   std::string enemy_color(int choice);
-  void play_background_music();
 };
 
 #endif

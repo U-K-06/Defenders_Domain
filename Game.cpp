@@ -17,7 +17,7 @@ std::string colors[] = { "\033[38;5;214m", "\033[38;5;196m", "\033[38;5;93m", "\
 int number_of_towers = sizeof(tower_names) / sizeof(tower_names[0]);
 
 int Game::Run() {
-  play_background_music();
+  PlaySound(Audio::BGM, NULL, SND_FILENAME | SND_ASYNC | SND_LOOP);
 
   hide_cursor();
 
@@ -58,7 +58,6 @@ int Game::Run() {
       time_t current_time = time(0);
       if (tower.level < 4 && (current_time - tower.last_upgrade_time) >= GameConstants::UPGRADE_TIMES[tower.index][tower.level]) 
       {
-        PlaySound(Audio::TOWER_UPGRADE, NULL, SND_FILENAME | SND_ASYNC);
         tower.level++; 
         tower.last_upgrade_time = current_time;
       }
@@ -100,11 +99,9 @@ int Game::Run() {
         case KeyBindings::COL_KEY:
         case KeyBindings::SPACE:
           if (!is_place_mode_active) {
-            (active_tower != selection_tower) ? PlaySound(Audio::TOWER_SELECTION, NULL, SND_FILENAME | SND_ASYNC) : NULL;
             active_tower = selection_tower;
           } else {
             if (!Draw::is_tower_placed(active_grid_x * 2, active_grid_y * 2, TowerPosition)) {
-              PlaySound(Audio::TOWER_PLACEMENT, NULL, SND_FILENAME | SND_ASYNC);
               calculate_tower_positions(GRID_SIZE, active_tower, active_grid_x, active_grid_y, TowerPosition);
             }
           }
@@ -234,10 +231,5 @@ void Game::display_tower_positions(const TowerPositionData& TowerPosition)
   for (const auto& tower : TowerPosition) {
     std::cout << "Tower: " << tower.index << ", Coord: [" << tower.x << ", " << tower.y << "]" << std::endl;
   }
-}
-
-void Game::play_background_music()
-{
-  PlaySound(Audio::BGM, NULL, SND_FILENAME | SND_ASYNC | SND_LOOP);
 }
 
