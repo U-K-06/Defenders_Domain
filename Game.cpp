@@ -1,5 +1,6 @@
 #include <conio.h>
 #include <iostream>
+#include <future>
 #include <windows.h>
 #include <time.h>
 #include <tuple>
@@ -16,7 +17,7 @@ std::string colors[] = { "\033[38;5;214m", "\033[38;5;196m", "\033[38;5;93m", "\
 int number_of_towers = sizeof(tower_names) / sizeof(tower_names[0]);
 
 int Game::Run() {
-  PlaySound(Audio::BGM, NULL, SND_FILENAME | SND_ASYNC | SND_LOOP);
+  play_background_music();
 
   hide_cursor();
 
@@ -233,5 +234,10 @@ void Game::display_tower_positions(const TowerPositionData& TowerPosition)
   for (const auto& tower : TowerPosition) {
     std::cout << "Tower: " << tower.index << ", Coord: [" << tower.x << ", " << tower.y << "]" << std::endl;
   }
+}
+
+void Game::play_background_music()
+{
+  PlaySound(Audio::BGM, NULL, SND_FILENAME | SND_ASYNC | SND_LOOP);
 }
 
