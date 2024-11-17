@@ -13,7 +13,7 @@ int Draw::m_enemy_type = 0;
 void Draw::grid(int GRID_SIZE, std::string tower_names[], int active_tower, int selection_tower, int active_grid_x, int active_grid_y, bool is_place_mode_active, TowerPositionData TowerPosition, std::vector<Enemy>& enemies)
 {
     int name_index = 0;
-    std::cout << "Enemies are like: (" << m_enemy_color << static_cast<char>(m_enemy_type) << "\033[37m)\n--> The color indicates the type of tower that is the enemy's weakness.\n" << "The ASCII code represents the enemy's health (HP): " << m_enemy_type << std::endl;
+    std::cout << "Enemies are like: (" << m_enemy_color << static_cast<char>(m_enemy_type) << GameConstants::RESET << ")\n--> The color indicates the type of tower that is the enemy's weakness.\n" << "The ASCII code represents the enemy's health (HP): " << m_enemy_type << std::endl;
     std::cout << "\n";
     for (int i = 0; i <= 2 * GRID_SIZE; i++) {
         if (i <= 1) {
@@ -31,7 +31,7 @@ void Draw::grid(int GRID_SIZE, std::string tower_names[], int active_tower, int 
                 for (int j = 0; j <= 2 * GRID_SIZE; j++) {
                     if (j % 2 == 0) {
                         if (is_place_mode_active && ((j / 2 == active_grid_x && i / 2 == active_grid_y) || (j / 2 == active_grid_x + 1 && i / 2 == active_grid_y))) {
-                            std::cout << "\033[31m" << GameConstants::BORDER_WALL_Y << "\033[37m";
+                            std::cout << "\033[31m" << GameConstants::BORDER_WALL_Y << GameConstants::RESET;
                         } else {
                           std::cout << GameConstants::BORDER_WALL_Y;
                         }
@@ -116,7 +116,7 @@ void Draw::top_grid(int i, int GRID_SIZE, bool is_place_mode_active, int active_
         for (int j = 0; j <= 2 * GRID_SIZE; j++) {
             if (j % 2 == 0) {
                 if (is_place_mode_active && ((j / 2 == active_grid_x && i / 2 == active_grid_y) || (j / 2 == active_grid_x + 1 && i / 2 == active_grid_y))) {
-                    std::cout << "\033[31m" << GameConstants::BORDER_WALL_Y << "\033[37m"; 
+                    std::cout << "\033[31m" << GameConstants::BORDER_WALL_Y << GameConstants::RESET; 
                 } else {
                   std::cout << GameConstants::BORDER_WALL_Y;
                 }
@@ -128,13 +128,13 @@ void Draw::top_grid(int i, int GRID_SIZE, bool is_place_mode_active, int active_
         for (int j = 0; j <= 2 * GRID_SIZE; j++) {
             if (j % 2 == 0) {
                 if (is_place_mode_active && ((j / 2 == active_grid_x && i / 2 == active_grid_y) || (j / 2 == active_grid_x + 1 && i / 2 == active_grid_y + 1) || (j / 2 == active_grid_x && i / 2 == active_grid_y + 1) || (j / 2 == active_grid_x + 1 && i / 2 == active_grid_y))) {
-                    std::cout << "\033[31m" << GameConstants::BORDER_CORNER << "\033[37m";
+                    std::cout << "\033[31m" << GameConstants::BORDER_CORNER << GameConstants::RESET;
                 } else {
                     std::cout << GameConstants::BORDER_CORNER;
                 }
             } else {
                 if (is_place_mode_active && ((j / 2 == active_grid_x && i / 2 == active_grid_y) || (j / 2 == active_grid_x && i / 2 == active_grid_y + 1))) {
-                    std::cout << "\033[31m" << GameConstants::BORDER_WALL_X << "\033[37m";
+                    std::cout << "\033[31m" << GameConstants::BORDER_WALL_X << GameConstants::RESET;
                 } else {
                     std::cout << GameConstants::BORDER_WALL_X;
                 }
@@ -146,11 +146,11 @@ void Draw::top_grid(int i, int GRID_SIZE, bool is_place_mode_active, int active_
 void Draw::render_tower_names(int& name_index, int selection_tower, int active_tower, bool is_place_mode_active, std::string tower_names[])
 {
   if (name_index == selection_tower && !(is_place_mode_active)) {
-      std::cout << "\t\t\t\033[34m" << tower_names[name_index] << "\t\t\t\t\033[37m";
+      std::cout << "\t\t\t\033[34m" << tower_names[name_index] << "\t\t\t\t" << GameConstants::RESET;
       name_index++;
   }
   else if (name_index == active_tower) {
-      std::cout << "\t\t\t\033[32m" << tower_names[name_index] << "\t\t\t\t\033[37m";
+      std::cout << "\t\t\t\033[32m" << tower_names[name_index] << "\t\t\t\t" << GameConstants::RESET;
       name_index++;
   }
   else {
@@ -165,13 +165,13 @@ void Draw::bottom_grid(int i, int GRID_SIZE, bool is_place_mode_active, int acti
     for (int j = 0; j <= 2 * GRID_SIZE; j++) {
         if (j % 2 == 0) {
             if (is_place_mode_active && ((j / 2 == active_grid_x && i / 2 == active_grid_y) || (j / 2 == active_grid_x + 1 && i / 2 == active_grid_y + 1) || (j / 2 == active_grid_x && i / 2 == active_grid_y + 1) || (j / 2 == active_grid_x + 1 && i / 2 == active_grid_y))) {
-                std::cout << "\033[31m" << GameConstants::BORDER_CORNER << "\033[37m"; 
+                std::cout << "\033[31m" << GameConstants::BORDER_CORNER << GameConstants::RESET; 
             } else {
                 std::cout << GameConstants::BORDER_CORNER;
             }
         } else {
             if (is_place_mode_active && ((j / 2 == active_grid_x && i / 2 == active_grid_y) || (j / 2 == active_grid_x && i / 2 == active_grid_y + 1))) {
-                std::cout << "\033[31m" << GameConstants::BORDER_WALL_X << "\033[37m"; 
+                std::cout << "\033[31m" << GameConstants::BORDER_WALL_X << GameConstants::RESET; 
             } else {
                 std::cout << GameConstants::BORDER_WALL_X;
             }

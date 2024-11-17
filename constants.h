@@ -26,6 +26,17 @@ namespace KeyBindings {
     constexpr int D_KEY                 = 68;
 }
 
+#ifndef AUDIO_PATHS_H
+#define AUDIO_PATHS_H
+
+namespace Audio {
+ constexpr const char* TOWER_SELECTION = "./audio/towerselect.wav";
+ constexpr const char* TOWER_UPGRADE   = "./audio/towerupgrade.wav";
+ constexpr const char* TOWER_PLACEMENT = "./audio/towerplacement.wav";
+} 
+
+#endif
+
 namespace GameConstants {
     constexpr const int MAX_ENEMIES        = 90;
     constexpr const char* EMPTY            = "     ";
@@ -42,6 +53,8 @@ namespace GameConstants {
                                       {160, 360, 460, 550, 740}, // Wind Tower
                                       {260, 380, 500, 680, 950}  // Shadow Tower
                                     };
+
+    constexpr const char* RESET = "\033[37m";
 
     constexpr const char* ICE_TOWERS[] = {
         "\033[38;5;81m  *  \033[37m",

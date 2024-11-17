@@ -55,7 +55,8 @@ int Game::Run() {
     {
       time_t current_time = time(0);
       if (tower.level < 4 && (current_time - tower.last_upgrade_time) >= GameConstants::UPGRADE_TIMES[tower.index][tower.level]) 
-      { 
+      {
+        PlaySound(Audio::TOWER_UPGRADE, NULL, SND_FILENAME | SND_ASYNC);
         tower.level++; 
         tower.last_upgrade_time = current_time;
       }
@@ -97,8 +98,10 @@ int Game::Run() {
         case KeyBindings::COL_KEY:
         case KeyBindings::SPACE:
           if (!is_place_mode_active) {
+            PlaySound(Audio::TOWER_SELECTION, NULL, SND_FILENAME | SND_ASYNC);
             active_tower = selection_tower;
           } else {
+            PlaySound(Audio::TOWER_PLACEMENT, NULL, SND_FILENAME | SND_ASYNC);
             calculate_tower_positions(GRID_SIZE, active_tower, active_grid_x, active_grid_y, TowerPosition);
           }
           break;
