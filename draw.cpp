@@ -1,7 +1,7 @@
 #include <iostream>
 #include <random>
 #include <vector>
-#include <thread>
+#include <windows.h>
 
 #include "draw.h"
 #include "constants.h"
