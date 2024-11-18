@@ -2,6 +2,7 @@
 #include <iostream>
 #include <future>
 #include <windows.h>
+#include <cstdlib>
 #include <time.h>
 #include <tuple>
 #include <ctime>
@@ -16,9 +17,11 @@ std::string colors[] = { "\033[38;5;214m", "\033[38;5;196m", "\033[38;5;93m", "\
 
 int number_of_towers = sizeof(tower_names) / sizeof(tower_names[0]);
 
+Draw draw;
+
 int Game::Run() {
   PlaySound(Audio::BGM, NULL, SND_FILENAME | SND_ASYNC | SND_LOOP);
-
+  draw.game_name(true);
   hide_cursor();
 
   int active_tower = 0, selection_tower = 0;
@@ -28,10 +31,9 @@ int Game::Run() {
   char input;
   int GRID_SIZE, choice;
   std::tie(GRID_SIZE, choice) = calculate_grid();
-  Draw draw;
   TowerPositionData TowerPosition;
 
-  std::srand(time(0));
+  std::srand(static_cast<unsigned int>(std::time(0)));
 
   Draw::m_enemy_type = enemy_type();
   Draw::m_enemy_color = enemy_color(choice);
@@ -43,12 +45,14 @@ int Game::Run() {
     new_enemy.color = enemy_color(choice);
 
     if (rand() % 2 == 0) {
-        new_enemy.x = rand() % (2 * GRID_SIZE + 1);
-        new_enemy.y = (rand() % 2 == 0) ? 0 : 2 * GRID_SIZE;
+      new_enemy.x = rand() % (2 * GRID_SIZE + 1);
+      new_enemy.y = (rand() % 2 == 0) ? 0 : 2 * GRID_SIZE;
     } else {
-        new_enemy.x = (rand() % 2 == 0) ? 0 : GRID_SIZE;
-        new_enemy.y = rand() % (2 * GRID_SIZE + 1);
+      new_enemy.x = (rand() % 2 == 0) ? 0 : GRID_SIZE;
+      new_enemy.y = rand() % (2 * GRID_SIZE + 1);
     }
+
+    enemies.push_back(new_enemy);
 
     clear_screen(GRID_SIZE);
     draw.grid(GRID_SIZE, tower_names, active_tower, selection_tower, active_grid_x, active_grid_y, is_place_mode_active, TowerPosition, enemies);
@@ -209,6 +213,7 @@ std::tuple<int, int> Game::calculate_grid()
   else return std::make_tuple(0, choice);
 
   system("cls");
+  draw.game_name(false);
   return std::make_tuple(GRID_SIZE, choice);
 }
 
