@@ -5,6 +5,7 @@
 #include <cstdlib>
 #include <time.h>
 #include <tuple>
+#include <chrono>
 #include <ctime>
 
 #include "Game.h"
@@ -24,6 +25,10 @@ int Game::Run() {
   draw.game_name(true);
   hide_cursor();
 
+  float deltaTime = 0.1f;
+  float currentSpawnInterval = 3.0f;
+  float timeSinceLastSpawn = 0.0f;
+
   int active_tower = 0, selection_tower = 0;
   bool is_place_mode_active = false;
   int active_grid_x = 0, active_grid_y = 0;
@@ -35,25 +40,37 @@ int Game::Run() {
 
   std::srand(static_cast<unsigned int>(std::time(0)));
 
+  auto last_time = std::chrono::steady_clock::now();
+
   Draw::m_enemy_type = enemy_type();
   Draw::m_enemy_color = enemy_color(choice);
 
   while (1) {
-    Enemy new_enemy;
+    auto current_time  = std::chrono::steady_clock::now();
+    float elapsed_time = std::chrono::duration<float>(current_time - last_time).count();
+    last_time = current_time;
+      
+    timeSinceLastSpawn += elapsed_time;
 
-    new_enemy.type = enemy_type();
-    new_enemy.color = enemy_color(choice);
+    if (timeSinceLastSpawn >= currentSpawnInterval) { 
+      Enemy new_enemy;
 
-    if (rand() % 2 == 0) {
-      new_enemy.x = rand() % (2 * GRID_SIZE + 1);
-      new_enemy.y = (rand() % 2 == 0) ? 0 : 2 * GRID_SIZE;
-    } else {
-      new_enemy.x = (rand() % 2 == 0) ? 0 : GRID_SIZE;
-      new_enemy.y = rand() % (2 * GRID_SIZE + 1);
+      new_enemy.type = enemy_type();
+      new_enemy.color = enemy_color(choice);
+
+      if (rand() % 2 == 0) {
+        new_enemy.x = rand() % (2 * GRID_SIZE + 1);
+        new_enemy.y = (rand() % 2 == 0) ? 0 : 2 * GRID_SIZE;
+      } else {
+        new_enemy.x = (rand() % 2 == 0) ? 0 : GRID_SIZE;
+        new_enemy.y = rand() % (2 * GRID_SIZE + 1);
+      }
+
+      enemies.push_back(new_enemy);
+      timeSinceLastSpawn = 0.0f;
+
+      if (currentSpawnInterval > 0.5f) currentSpawnInterval -= 0.1f;
     }
-
-    enemies.push_back(new_enemy);
-
     clear_screen(GRID_SIZE);
     draw.grid(GRID_SIZE, tower_names, active_tower, selection_tower, active_grid_x, active_grid_y, is_place_mode_active, TowerPosition, enemies);
 
