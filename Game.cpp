@@ -8,6 +8,8 @@
 #include <chrono>
 #include <ctime>
 
+// TODO: ONLY PUSH ENEMIES AFTER A WHILE IN THE VECTOR! 
+
 #include "Game.h"
 #include "draw.h"
 #include "constants.h"
