@@ -41,10 +41,10 @@ void Draw::grid(int GRID_SIZE, std::string tower_names[], int active_tower, int 
                           std::cout << GameConstants::BORDER_WALL_Y;
                       }
                   } else {
-                      if (j / 2 != door_x && i / 2 != door_y) {
-                        (is_tower_placed(j, i, TowerPosition)) ? std::cout << place_tower(get_tower_index(j, i, TowerPosition), get_tower_level(j, i, TowerPosition)) : std::cout << GameConstants::EMPTY;
+                      if (j / 2 == door_x && i / 2 == door_y) {
+                        std::cout << GameConstants::DOOR;
                       } else {
-                        (is_tower_placed(j, i, TowerPosition)) ? std::cout << place_tower(get_tower_index(j, i, TowerPosition), get_tower_level(j, i, TowerPosition)) : std::cout << GameConstants::DOOR;
+                        (is_tower_placed(j, i, TowerPosition)) ? std::cout << place_tower(get_tower_index(j, i, TowerPosition), get_tower_level(j, i, TowerPosition)) : std::cout << GameConstants::EMPTY;
                       }
                     }
                 }
@@ -141,11 +141,12 @@ void Draw::top_grid(int i, int GRID_SIZE, bool is_place_mode_active, int active_
                 }
               }
           } else {
-              if (j / 2 != door_x && i / 2 != door_y) {
-                (is_tower_placed(j, i, TowerPosition)) ? std::cout << place_tower(get_tower_index(j, i, TowerPosition), get_tower_level(j, i, TowerPosition)) : std::cout << GameConstants::EMPTY;
-                (is_tower_placed(j, i, TowerPosition)) ? std::cout << place_tower(get_tower_index(j, i, TowerPosition), get_tower_level(j, i, TowerPosition)) : std::cout << GameConstants::DOOR;
-              } 
-            }
+              if (j / 2 == door_x && i / 2 == door_y) {
+                  std::cout << GameConstants::DOOR;
+              } else {
+                  (is_tower_placed(j, i, TowerPosition)) ? std::cout << place_tower(get_tower_index(j, i, TowerPosition), get_tower_level(j, i, TowerPosition)) : std::cout << GameConstants::EMPTY;
+              }
+          }
       }
     } else {
         for (int j = 0; j <= 2 * GRID_SIZE; j++) {

@@ -45,7 +45,7 @@ int Game::Run() {
   Draw::m_enemy_type = enemy_type();
   Draw::m_enemy_color = enemy_color(choice);
 
-  int door_x = (rand() % 2 * GRID_SIZE), door_y = (rand() % 2 * GRID_SIZE);
+  int door_x = 2 + 2 * (rand() % (GRID_SIZE / 2 - 1)), door_y = 2 + 2 * (rand() % (GRID_SIZE / 2 - 1));
 
   while (1) {
     auto current_time  = std::chrono::steady_clock::now();
