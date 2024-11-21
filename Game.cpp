@@ -49,9 +49,15 @@ int Game::Run() {
 
   int door_x = 2 + 2 * (rand() % (GRID_SIZE / 2 - 1)), door_y = 2 + 2 * (rand() % (GRID_SIZE / 2 - 1));
 
+  int color_code = 91 + (rand() % 6);
+
   while (1) {
+
+    ((rand() % 99) % 2 == 0) ? ((rand() % 101) % 2 == 0) ? color_code = 91 + (rand() % 6) : NULL : NULL;
+
     auto current_time  = std::chrono::steady_clock::now();
     float elapsed_time = std::chrono::duration<float>(current_time - last_time).count();
+
     last_time = current_time;
       
     timeSinceLastSpawn += elapsed_time;
@@ -69,15 +75,16 @@ int Game::Run() {
         new_enemy.x = (rand() % 2 == 0) ? 0 : 2 * GRID_SIZE;
         new_enemy.y = rand() % (2 * GRID_SIZE + 1);
       }
-
+    
       enemies.push_back(new_enemy);
+
       timeSinceLastSpawn = 0.0f;
 
       if (currentSpawnInterval > 0.5f) currentSpawnInterval -= 0.1f;
     }
 
     clear_screen(GRID_SIZE);
-    draw.grid(GRID_SIZE, tower_names, active_tower, selection_tower, active_grid_x, active_grid_y, is_place_mode_active, TowerPosition, enemies, door_x, door_y);
+    draw.grid(GRID_SIZE, tower_names, active_tower, selection_tower, active_grid_x, active_grid_y, is_place_mode_active, TowerPosition, enemies, door_x, door_y, color_code);
 
     for (auto& tower : TowerPosition)
     {

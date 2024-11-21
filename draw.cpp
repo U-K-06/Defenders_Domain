@@ -15,15 +15,19 @@ void Draw::game_name(bool animated)
  // TODO:PRINT GAME NAME WIHT AND WITHOUT ANIMATION BOTH;
 }
 
-void Draw::grid(int GRID_SIZE, std::string tower_names[], int active_tower, int selection_tower, int active_grid_x, int active_grid_y, bool is_place_mode_active, TowerPositionData TowerPosition, std::vector<Enemy>& enemies, int door_x, int door_y)
+void Draw::grid(int GRID_SIZE, std::string tower_names[], int active_tower, int selection_tower, int active_grid_x, int active_grid_y, bool is_place_mode_active, TowerPositionData TowerPosition, std::vector<Enemy>& enemies, int door_x, int door_y, int color_code)
 {
   std::cout << enemies.size() << std::endl;
+  for (Enemy& enemy : enemies)
+  {
+      std::cout << enemy.color << static_cast<char>(enemy.type) << GameConstants::RESET;
+  }
     int name_index = 0;
     std::cout << "Enemies are like: (" << m_enemy_color << static_cast<char>(m_enemy_type) << GameConstants::RESET << ")\n--> The color indicates the type of tower that is the enemy's weakness.\n" << "The ASCII code represents the enemy's health (HP): " << m_enemy_type << std::endl;
     std::cout << "\n";
     for (int i = 0; i <= 2 * GRID_SIZE; i++) {
         if (i <= 1) {
-            top_grid(i, GRID_SIZE, is_place_mode_active, active_grid_x, active_grid_y, TowerPosition, enemies, door_x, door_y);
+            top_grid(i, GRID_SIZE, is_place_mode_active, active_grid_x, active_grid_y, TowerPosition, enemies, door_x, door_y, color_code);
         }
         else {
             if (i % 2 != 0) {
@@ -42,7 +46,7 @@ void Draw::grid(int GRID_SIZE, std::string tower_names[], int active_tower, int 
                       }
                   } else {
                       if (j / 2 == door_x && i / 2 == door_y) {
-                        std::cout << GameConstants::DOOR;
+                        std::cout << "\033[" + std::to_string(color_code) + "m" << GameConstants::DOOR << GameConstants::RESET;
                       } else {
                         (is_tower_placed(j, i, TowerPosition)) ? std::cout << place_tower(get_tower_index(j, i, TowerPosition), get_tower_level(j, i, TowerPosition)) : std::cout << GameConstants::EMPTY;
                       }
@@ -117,7 +121,7 @@ int Draw::get_tower_level(int x, int y, TowerPositionData& TowerPosition)
   return -1;
 }
 
-void Draw::top_grid(int i, int GRID_SIZE, bool is_place_mode_active, int active_grid_x, int active_grid_y, TowerPositionData TowerPosition, std::vector<Enemy>& enemies, int door_x, int door_y) {
+void Draw::top_grid(int i, int GRID_SIZE, bool is_place_mode_active, int active_grid_x, int active_grid_y, TowerPositionData TowerPosition, std::vector<Enemy>& enemies, int door_x, int door_y, int color_code) {
     std::cout << "\t\t\t\t\t\t\t\t";
 
     if (i % 2 != 0) {
@@ -142,7 +146,7 @@ void Draw::top_grid(int i, int GRID_SIZE, bool is_place_mode_active, int active_
               }
           } else {
               if (j / 2 == door_x && i / 2 == door_y) {
-                  std::cout << GameConstants::DOOR;
+                  std::cout << "\033[" + std::to_string(color_code) + "m" << GameConstants::DOOR << GameConstants::RESET;
               } else {
                   (is_tower_placed(j, i, TowerPosition)) ? std::cout << place_tower(get_tower_index(j, i, TowerPosition), get_tower_level(j, i, TowerPosition)) : std::cout << GameConstants::EMPTY;
               }
