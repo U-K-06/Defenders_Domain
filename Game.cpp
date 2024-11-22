@@ -69,13 +69,13 @@ int Game::Run() {
       new_enemy.color = enemy_color(choice);
 
       if (rand() % 2 == 0) {
-        new_enemy.x = rand() % (2 * GRID_SIZE + 1);
-        new_enemy.y = (rand() % 2 == 0) ? 0 : 2 * GRID_SIZE;
+        new_enemy.x = rand() % ((2 * GRID_SIZE));
+        new_enemy.y = (rand() % 2 == 0) ? 0 : ((2 * GRID_SIZE));
       } else {
-        new_enemy.x = (rand() % 2 == 0) ? 0 : 2 * GRID_SIZE;
-        new_enemy.y = rand() % (2 * GRID_SIZE + 1);
+        new_enemy.x = (rand() % 2 == 0) ? 0 : ((2 * GRID_SIZE));
+        new_enemy.y = rand() % ((2 * GRID_SIZE));
       }
-    
+
       enemies.push_back(new_enemy);
 
       timeSinceLastSpawn = 0.0f;
@@ -85,6 +85,35 @@ int Game::Run() {
 
     clear_screen(GRID_SIZE);
     draw.grid(GRID_SIZE, tower_names, active_tower, selection_tower, active_grid_x, active_grid_y, is_place_mode_active, TowerPosition, enemies, door_x, door_y, color_code);
+
+    for (Enemy& enemy : enemies) {
+      auto current_time  = std::chrono::steady_clock::now();
+      float elapsed_time = std::chrono::duration<float>(current_time - enemy.last_move_time).count(); 
+
+      int dx = door_x - enemy.x;
+      int dy = door_y - enemy.y;
+
+      if (!enemy.hasMoved) {
+        if (elapsed_time >= 6.0f) {
+          if (abs(dx) > abs(dy)) {
+            (dx > 0) ? enemy.x++ : enemy.x--;
+          } else {
+            (dy > 0) ? enemy.y++ : enemy.y--;
+          }
+          enemy.hasMoved = true;
+          enemy.last_move_time = current_time;
+        }
+      } else {
+        if (elapsed_time >= 5.0f) {
+         if (abs(dx) > abs(dy)) {
+            (dx > 0) ? enemy.x++ : enemy.x--;
+          } else {
+            (dy > 0) ? enemy.y++ : enemy.y--;
+          }
+          enemy.last_move_time = current_time;
+        }
+      }
+    }
 
     for (auto& tower : TowerPosition)
     {

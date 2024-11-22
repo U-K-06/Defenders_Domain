@@ -17,11 +17,6 @@ void Draw::game_name(bool animated)
 
 void Draw::grid(int GRID_SIZE, std::string tower_names[], int active_tower, int selection_tower, int active_grid_x, int active_grid_y, bool is_place_mode_active, TowerPositionData TowerPosition, std::vector<Enemy>& enemies, int door_x, int door_y, int color_code)
 {
-  std::cout << enemies.size() << std::endl;
-  for (Enemy& enemy : enemies)
-  {
-      std::cout << enemy.color << static_cast<char>(enemy.type) << GameConstants::RESET;
-  }
     int name_index = 0;
     std::cout << "Enemies are like: (" << m_enemy_color << static_cast<char>(m_enemy_type) << GameConstants::RESET << ")\n--> The color indicates the type of tower that is the enemy's weakness.\n" << "The ASCII code represents the enemy's health (HP): " << m_enemy_type << std::endl;
     std::cout << "\n";
@@ -127,23 +122,11 @@ void Draw::top_grid(int i, int GRID_SIZE, bool is_place_mode_active, int active_
     if (i % 2 != 0) {
       for (int j = 0; j <= 2 * GRID_SIZE; j++) {
           if (j % 2 == 0) {
-              bool enemyAtPosition = false;
-              for (const Enemy& enemy : enemies) {
-                  if (enemy.x == j / 2 && enemy.y == i / 2) {
-                      enemyAtPosition = true;
-                      std::cout << enemy.color << static_cast<char>(enemy.type) << GameConstants::RESET;
-                      break; 
-                  }
-              }
-              if (!enemyAtPosition) {
-                if (is_place_mode_active && 
-                    ((j / 2 == active_grid_x && i / 2 == active_grid_y) || 
-                     (j / 2 == active_grid_x + 1 && i / 2 == active_grid_y))) {
-                    std::cout << "\033[31m" << GameConstants::BORDER_WALL_Y << GameConstants::RESET; 
-                } else {
-                    std::cout << GameConstants::BORDER_WALL_Y;
-                }
-              }
+            if (is_place_mode_active && ((j / 2 == active_grid_x && i / 2 == active_grid_y) || (j / 2 == active_grid_x + 1 && i / 2 == active_grid_y))) {
+              std::cout << "\033[31m" << GameConstants::BORDER_WALL_Y << GameConstants::RESET; 
+            } else {
+              std::cout << GameConstants::BORDER_WALL_Y;
+            }
           } else {
               if (j / 2 == door_x && i / 2 == door_y) {
                   std::cout << "\033[" + std::to_string(color_code) + "m" << GameConstants::DOOR << GameConstants::RESET;
@@ -171,20 +154,10 @@ void Draw::top_grid(int i, int GRID_SIZE, bool is_place_mode_active, int active_
                     }
                 }
             } else {
-                bool enemyAtPosition = false;
-                for (const Enemy& enemy : enemies) {
-                    if (enemy.x == j / 2 && i / 2 == enemy.y) {
-                        enemyAtPosition = true;
-                        std::cout << enemy.color << static_cast<char>(enemy.type) << GameConstants::RESET;
-                        break;
-                    }
-                }
-                if (!enemyAtPosition) {
-                    if (is_place_mode_active && ((j / 2 == active_grid_x && i / 2 == active_grid_y) || (j / 2 == active_grid_x && i / 2 == active_grid_y + 1))) {
-                        std::cout << "\033[31m" << GameConstants::BORDER_WALL_X << GameConstants::RESET;
-                    } else {
-                        std::cout << GameConstants::BORDER_WALL_X;
-                    }
+                if (is_place_mode_active && ((j / 2 == active_grid_x && i / 2 == active_grid_y) || (j / 2 == active_grid_x && i / 2 == active_grid_y + 1))) {
+                    std::cout << "\033[31m" << GameConstants::BORDER_WALL_X << GameConstants::RESET;
+                } else {
+                    std::cout << GameConstants::BORDER_WALL_X;
                 }
             }
         }
@@ -227,20 +200,10 @@ void Draw::bottom_grid(int i, int GRID_SIZE, bool is_place_mode_active, int acti
                 }
             }
         } else {
-            bool enemyAtPosition = false;
-            for (const Enemy& enemy : enemies) {
-                if (enemy.x == j / 2 && i / 2 == enemy.y) {
-                    enemyAtPosition = true;
-                    std::cout << enemy.color << static_cast<char>(enemy.type) << GameConstants::RESET;
-                    break;
-                }
-            }
-            if (!enemyAtPosition) {
-                if (is_place_mode_active && ((j / 2 == active_grid_x && i / 2 == active_grid_y) || (j / 2 == active_grid_x && i / 2 == active_grid_y + 1))) {
-                    std::cout << "\033[31m" << GameConstants::BORDER_WALL_X << GameConstants::RESET;
-                } else {
-                    std::cout << GameConstants::BORDER_WALL_X;
-                }
+            if (is_place_mode_active && ((j / 2 == active_grid_x && i / 2 == active_grid_y) || (j / 2 == active_grid_x && i / 2 == active_grid_y + 1))) {
+                std::cout << "\033[31m" << GameConstants::BORDER_WALL_X << GameConstants::RESET;
+            } else {
+                std::cout << GameConstants::BORDER_WALL_X;
             }
         }
     }

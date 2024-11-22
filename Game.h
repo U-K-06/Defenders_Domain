@@ -5,12 +5,15 @@
 
 #include <windows.h>
 #include <vector>
+#include <chrono>
 
 struct Enemy {
   int type;
   std::string color;
   int x;
   int y;
+  int hasMoved = false;
+  std::chrono::steady_clock::time_point last_move_time = std::chrono::steady_clock::now();
 };
 
 struct TowerPositionDataStruct {
