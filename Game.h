@@ -31,7 +31,7 @@ public:
   int Run();
   void toggle_state(bool& is_place_mode_active);
   void Move(bool is_place_mode_active, std::string direction, int& active_grid_y, int &active_grid_x, int &selection_tower, int number_of_towers, int GRID_SIZE);
-  void hide_cursor();
+  static void hide_cursor();
   void clear_screen(int GRID_SIZE);
   std::tuple<int, int> calculate_grid();
   void calculate_tower_positions(int GRID_SIZE, int active_tower, int active_grid_x, int active_grid_y, TowerPositionData& TowerPosition);

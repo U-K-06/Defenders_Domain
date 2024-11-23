@@ -2,6 +2,7 @@
 #include <random>
 #include <vector>
 #include <windows.h>
+#include <chrono>
 #include <unistd.h>
 
 #include "draw.h"
@@ -11,12 +12,19 @@
 std::string Draw::m_enemy_color = "";
 int Draw::m_enemy_type = 0;
 
-void Draw::game_name(bool animated)
+void Draw::game_name()
 {
-  if (animated) {
-
-  } else {
-    std::cout << GameConstants::__game_title__ << std::endl;
+  Game::hide_cursor();
+  int color_code = 91 + (rand() % 6);
+  auto start = std::chrono::steady_clock::now();
+  for (char c : GameConstants::__game_title__) {
+    color_code = ((rand() % 99) % 2 == 0) ? ((rand() % 101) % 2 == 0 ? 91 + (rand() % 6) : color_code) : color_code;
+    std::cout << "\033[" << color_code << "m" << c << GameConstants::RESET << std::flush;
+    auto end = std::chrono::steady_clock::now();
+    while (std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() < (1 + (rand() % 6))) { 
+      end = std::chrono::steady_clock::now();
+    }
+    start = std::chrono::steady_clock::now();
   }
 }
 

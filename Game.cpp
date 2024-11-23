@@ -8,8 +8,6 @@
 #include <chrono>
 #include <ctime>
 
-// TODO: ONLY PUSH ENEMIES AFTER A WHILE IN THE VECTOR! 
-
 #include "Game.h"
 #include "draw.h"
 #include "constants.h"
@@ -23,8 +21,9 @@ int number_of_towers = sizeof(tower_names) / sizeof(tower_names[0]);
 Draw draw;
 
 int Game::Run() {
-  PlaySound(Audio::BGM, NULL, SND_FILENAME | SND_ASYNC | SND_LOOP);
-  draw.game_name(true);
+  //PlaySound(Audio::BGM, NULL, SND_FILENAME | SND_ASYNC | SND_LOOP);
+  system("cls");
+  draw.game_name();
   hide_cursor();
 
   float deltaTime = 0.1f;
@@ -53,7 +52,7 @@ int Game::Run() {
 
   while (1) {
 
-    ((rand() % 99) % 2 == 0) ? ((rand() % 101) % 2 == 0) ? color_code = 91 + (rand() % 6) : NULL : NULL;
+    ((rand() % 99) % 2 == 0) ? ((rand() % 101) % 2 == 0) ? color_code = 91 + (rand() % 6) : color_code : color_code;
 
     auto current_time  = std::chrono::steady_clock::now();
     float elapsed_time = std::chrono::duration<float>(current_time - last_time).count();
@@ -170,7 +169,6 @@ int Game::Run() {
           break;
         case KeyBindings::ESC:
           //display_tower_positions(TowerPosition);
-          clear_screen(GRID_SIZE);
           PlaySound(NULL, NULL, 0);
           return 0;
       }
@@ -239,12 +237,11 @@ void Game::hide_cursor()
 }
 
 void Game::clear_screen(int GRID_SIZE) {
-  for (int blank = 0; blank <= 4; blank++) {
-    std::cout << "\033[F";
-  }
-
-  for (int i=-1; i < 2 * GRID_SIZE; i++) {
-    std::cout << "\033[F";
+  static bool is_cleared = false;
+  std::cout << "\033[26;H";
+  if (!is_cleared) {
+    std::cout << "\033[J";
+    is_cleared = true;
   }
   std::cout << '\r';
 }
@@ -253,7 +250,7 @@ std::tuple<int, int> Game::calculate_grid()
 {
   int choice;
   int GRID_SIZE;
-  std::cout << "ENTER THE GRID SIDE \n\t(0 -> 2x2)\n\t(1 -> 3x3)\n\t(2 -> 4x4)\n\t(3 -> 5x5)\n\t(4 -> 6x6)\n\t(5 -> 8x8)\n\t(6 -> 10x10)\n\t(7 -> CUSTOM GRID SIZE)\n\t(8 -> EXIT)\n";
+ std::cout << "\n\n\n\nENTER THE GRID SIZE \n\t(0 -> 2x2)\n\t(1 -> 3x3)\n\t(2 -> 4x4)\n\t(3 -> 5x5)\n\t(4 -> 6x6)\n\t(5 -> 8x8)\n\t(6 -> 10x10)\n\t(7 -> CUSTOM GRID SIZE)\n\t(8 -> EXIT)\n";
   std::cout << "Enter Your Choice: ";
   std::cin >> choice;
 
@@ -269,8 +266,9 @@ std::tuple<int, int> Game::calculate_grid()
   }
 
   else return std::make_tuple(0, choice);
-  
-  system("cls");
+
+ // system("cls");
+
   return std::make_tuple(GRID_SIZE, choice);
 }
 

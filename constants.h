@@ -37,7 +37,7 @@ namespace Audio {
 
 namespace GameConstants {
 
-    constexpr const char* __game_title__                                                 = R"(
+    const std::string __game_title__                                                 = R"(
 
                            DDDDDD       EEEEEEEEE     FFFFFFFFF     EEEEEEEEE     NN       N       DDDDDD       EEEEEEEEE     RRRRRRRRRRR     !!         SSSSSSSS
                           D      D      E             F             E             N N      N      D      D      E             R          R     !!       SS       
@@ -53,15 +53,15 @@ namespace GameConstants {
 
 
 
-                                           DDDDDD            OOOOOO          MM             MM
-                                          D      D         OO      OO        M M           M M
-                                          D       D       OO        OO       M  M         M  M
-                                          D       D      OO          OO      M   M       M   M
-                                          D       D     OO            OO     M    M     M    M
-                                          D       D      OO          OO      M     M   M     M
-                                          D       D       OO        OO       M      M M      M
-                                          D      D         OO      00        M       M       M
-                                           DDDDDD            OOOOOO          M               M
+                                           DDDDDD            OOOOOO          MM             MM          AAAA            |#|     NN       N     
+                                          D      D         OO      OO        M M           M M         AA  AA           |#|     N N      N
+                                          D       D       OO        OO       M  M         M  M        AA    AA          |#|     N  N     N
+                                          D       D      OO          OO      M   M       M   M       AA      AA         |#|     N   N    N
+                                          D       D     OO            OO     M    M     M    M      AA        AA        |#|     N    N   N
+                                          D       D      OO          OO      M     M   M     M     AAAAAAAAAAAAAA       |#|     N     N  N 
+                                          D       D       OO        OO       M      M M      M    AA            AA      |#|     N      N N
+                                          D      D         OO      00        M       M       M   AA              AA     |#|     N       NN
+                                           DDDDDD            OOOOOO          M               M  AA                AA    |#|     N        N
 
     )";
 

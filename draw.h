@@ -8,13 +8,12 @@
 class Draw {
 public:
   void grid(int GRID_SIZE, std::string tower_names[], int active_tower, int selection_tower, int active_grid_x, int active_grid_y, bool is_place_mode_active, TowerPositionData TowerPosition, std::vector<Enemy>& enemies, int door_x, int door_y, int color_code);
-  void game_name(bool animated);
+  void game_name();
   static std::string m_enemy_color;
   static int m_enemy_type;
   static bool is_tower_placed(int x, int y, TowerPositionData& TowerPosition);
 
 private:
-  bool isPrinted = false;
   std::string place_tower(int index, int level);
   int get_tower_index(int x, int y, TowerPositionData& TowerPosition);
   int get_tower_level(int x, int y, TowerPositionData& TowerPosition);
