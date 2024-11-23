@@ -269,9 +269,8 @@ std::tuple<int, int> Game::calculate_grid()
   }
 
   else return std::make_tuple(0, choice);
-
+  
   system("cls");
-  draw.game_name(false);
   return std::make_tuple(GRID_SIZE, choice);
 }
 

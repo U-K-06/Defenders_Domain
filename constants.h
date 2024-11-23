@@ -36,6 +36,35 @@ namespace Audio {
 #endif
 
 namespace GameConstants {
+
+    constexpr const char* __game_title__                                                 = R"(
+
+                           DDDDDD       EEEEEEEEE     FFFFFFFFF     EEEEEEEEE     NN       N       DDDDDD       EEEEEEEEE     RRRRRRRRRRR     !!         SSSSSSSS
+                          D      D      E             F             E             N N      N      D      D      E             R          R     !!       SS       
+                          D       D     E             F             E             N  N     N      D       D     E             R           R     !!      SS 
+                          D       D     E             F             E             N   N    N      D       D     E             R          R       !!       SS
+                          D       D     EEEEEE        FFFFFF        EEEEEE        N    N   N      D       D     EEEEEE        RRRRRRRRRRRR                  SS
+                          D       D     E             F             E             N     N  N      D       D     E             R        R                       SS
+                          D       D     E             F             E             N      N N      D       D     E             R         R                       SS
+                          D      D      E             F             E             N       NN      D      D      E             R          R                     SS 
+                           DDDDDD       EEEEEEEEE     F             EEEEEEEEE     N        N       DDDDDD       EEEEEEEEE     R           R             SSSSSSSS
+
+
+
+
+
+                                           DDDDDD            OOOOOO          MM             MM
+                                          D      D         OO      OO        M M           M M
+                                          D       D       OO        OO       M  M         M  M
+                                          D       D      OO          OO      M   M       M   M
+                                          D       D     OO            OO     M    M     M    M
+                                          D       D      OO          OO      M     M   M     M
+                                          D       D       OO        OO       M      M M      M
+                                          D      D         OO      00        M       M       M
+                                           DDDDDD            OOOOOO          M               M
+
+    )";
+
     constexpr const int MAX_ENEMIES        = 90;
     constexpr const char* EMPTY            = "     ";
     constexpr const char BORDER_CORNER     = '+';
