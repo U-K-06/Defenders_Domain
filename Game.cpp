@@ -10,7 +10,10 @@
 
 #include "Game.h"
 #include "draw.h"
+#include "bullet.h"
 #include "constants.h"
+
+std::vector<Bullet> bullets;
 
 std::string tower_names[] = { "Electric Tower", "Fire Tower", "Poison Tower", "Water Tower", "Ice Tower", "Wind Tower", "Shadow Tower" };
 
@@ -82,8 +85,27 @@ int Game::Run() {
       if (currentSpawnInterval > 0.5f) currentSpawnInterval -= 0.1f;
     }
 
+    for (auto& tower : TowerPosition) {
+      tower.shoot(bullets, enemies);
+    }
+
+    for (auto it = bullets.begin(); it != bullets.end(); ) {
+      it->update();
+
+      if (it->checkCollision()) {
+        it->applyDamage();
+        it = bullets.erase(it);
+      } else {
+        if (it->isOutOfBounds(GRID_SIZE)) {
+          it = bullets.erase(it);
+        } else {
+          ++it;
+        }
+      }
+    }
+
     clear_screen(GRID_SIZE);
-    draw.grid(GRID_SIZE, tower_names, active_tower, selection_tower, active_grid_x, active_grid_y, is_place_mode_active, TowerPosition, enemies, door_x, door_y, color_code);
+    draw.grid(GRID_SIZE, tower_names, active_tower, selection_tower, active_grid_x, active_grid_y, is_place_mode_active, TowerPosition, enemies, door_x, door_y, color_code, bullets);
 
     for (Enemy& enemy : enemies) {
       auto current_time  = std::chrono::steady_clock::now();
@@ -117,10 +139,10 @@ int Game::Run() {
     for (auto& tower : TowerPosition)
     {
       time_t current_time = time(0);
-      if (tower.level < 4 && (current_time - tower.last_upgrade_time) >= GameConstants::UPGRADE_TIMES[tower.index][tower.level]) 
+      if (tower.getLevel() < 4 && (current_time - tower.getLastUpgradeTime()) >= GameConstants::UPGRADE_TIMES[tower.getIndex()][tower.getLevel()]) 
       {
-        tower.level++; 
-        tower.last_upgrade_time = current_time;
+        tower.setLevel(tower.getLevel() + 1); 
+        tower.setLastUpgradeTime(current_time);
       }
     }
 
@@ -274,12 +296,8 @@ std::tuple<int, int> Game::calculate_grid()
 
 void Game::calculate_tower_positions(int GRID_SIZE, int active_tower, int active_grid_x, int active_grid_y, TowerPositionData& TowerPosition)
 {
-  TowerPositionDataStruct newTowerPosition;
-  newTowerPosition.index             = active_tower;
-  newTowerPosition.x                 = active_grid_x;
-  newTowerPosition.y                 = active_grid_y;
-  newTowerPosition.last_upgrade_time = time(0);
-
+  TowerPositionDataClass newTowerPosition(active_tower, active_grid_x, active_grid_y);
+  newTowerPosition.setLastUpgradeTime(time(0));
 
   TowerPosition.push_back(newTowerPosition);
   placed_towers_list.push_back(newTowerPosition);
@@ -289,7 +307,7 @@ void Game::display_tower_positions(const TowerPositionData& TowerPosition)
 {
   std::cout << "Tower Posistions: \n";
   for (const auto& tower : TowerPosition) {
-    std::cout << "Tower: " << tower.index << ", Coord: [" << tower.x << ", " << tower.y << "]" << std::endl;
+    std::cout << "Tower: " << tower.getIndex() << ", Coord: [" << tower.getX() << ", " << tower.getY() << "]" << std::endl;
   }
 }
 
