@@ -39,6 +39,17 @@ void Draw::game_name()
   }
 }
 
+void Draw::lose_game()
+{
+  Game::hide_cursor();
+  int color_code = 91 + (rand() % 6);
+  for (char c : GameConstants::__game_lose__) {
+    color_code = ((rand() % 99) % 2 == 0) ? ((rand() % 101) % 2 == 0 ? 91 + (rand() % 6) : color_code) : color_code;
+    std::cout << "\033[" << color_code << "m" << c << GameConstants::RESET << std::flush;
+  }
+  exit(0);
+}
+
 void Draw::grid(int GRID_SIZE, std::string tower_names[], int active_tower, int selection_tower, int active_grid_x, int active_grid_y, bool is_place_mode_active, TowerPositionData TowerPosition, std::vector<Enemy>& enemies, int door_x, int door_y, int color_code, std::vector<Bullet>& bullets)
 {
     int name_index = 0;

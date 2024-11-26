@@ -66,6 +66,23 @@ namespace GameConstants {
 
     )";
 
+    const std::string __game_lose__                                                  = R"(
+              
+                          GGGGGGGG                AAAA             MM             MM     EEEEEEEEE                OOOOOO         VV                VV      EEEEEEEEE          RRRRRRRRRRR  
+                        G         G              AA  AA            M M           M M     E                      OO      OO        VV              VV       E                  R          R 
+                        G                       AA    AA           M  M         M  M     E                     OO        OO        VV            VV        E                  R           R
+                        G                      AA      AA          M   M       M   M     E                    OO          OO        VV          VV         E                  R          R  
+                        G    GGGGGG           AA        AA         M    M     M    M     EEEEEE              OO            OO        VV        VV          EEEEEE             RRRRRRRRRRRR   
+                        G         G          AAAAAAAAAAAAAA        M     M   M     M     E                    OO          OO          VV      VV           E                  R        R    
+                        G         G         AA            AA       M      M M      M     E                     OO        OO            VV    VV            E                  R         R  
+                        G         G        AA              AA      M       M       M     E                      OO      00              VV  VV             E                  R          R 
+                          GGGGGGGGG       AA                AA     M               M     EEEEEEEEE                OOOOOO                 VVVV              EEEEEEEEE          R           R
+
+
+
+
+    )";
+
     constexpr const int MAX_ENEMIES        = 90;
     constexpr const char* EMPTY            = "     ";
     constexpr const char BORDER_CORNER     = '+';

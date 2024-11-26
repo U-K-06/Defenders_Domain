@@ -123,6 +123,10 @@ int Game::Run() {
           }
           enemy.hasMoved = true;
           enemy.last_move_time = current_time;
+
+          if (enemy.x == door_y-1 && enemy.y == door_y-1) {
+            draw.lose_game();
+          }
         }
       } else {
         if (elapsed_time >= 5.0f) {
@@ -130,11 +134,16 @@ int Game::Run() {
             (dx > 0) ? enemy.x++ : enemy.x--;
           } else {
             (dy > 0) ? enemy.y++ : enemy.y--;
-          }
+          
           enemy.last_move_time = current_time;
+          
+          if (enemy.x == door_y && enemy.y == door_y) {
+            draw.lose_game();
+          }
         }
       }
     }
+  }
 
     for (auto& tower : TowerPosition)
     {
