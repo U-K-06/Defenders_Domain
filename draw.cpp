@@ -2,6 +2,7 @@
 #include <random>
 #include <vector>
 #include <windows.h>
+#include <conio.h>
 #include <chrono>
 #include <unistd.h>
 
@@ -18,13 +19,23 @@ void Draw::game_name()
   int color_code = 91 + (rand() % 6);
   auto start = std::chrono::steady_clock::now();
   for (char c : GameConstants::__game_title__) {
+      if (_kbhit()) {
+        char input = _getch();
+        switch (input) {
+          case KeyBindings::ENTER_KEY:
+            isCompleted = true;
+            break;
+        }
+      }
     color_code = ((rand() % 99) % 2 == 0) ? ((rand() % 101) % 2 == 0 ? 91 + (rand() % 6) : color_code) : color_code;
     std::cout << "\033[" << color_code << "m" << c << GameConstants::RESET << std::flush;
-    auto end = std::chrono::steady_clock::now();
-    while (std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() < (1 + (rand() % 6))) { 
-      end = std::chrono::steady_clock::now();
+    if (!Draw::isCompleted) {
+      auto end = std::chrono::steady_clock::now();
+      while (std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() < (1 + (rand() % 6))) { 
+        end = std::chrono::steady_clock::now();
+      }
+      start = std::chrono::steady_clock::now();
     }
-    start = std::chrono::steady_clock::now();
   }
 }
 
@@ -227,7 +238,7 @@ void Draw::render_bullets(const std::vector<Bullet>& bullets) {
   for (const Bullet& bullet : bullets) {
    int bullet_x = bullet.getX();
    int bullet_y = bullet.getY();
-   std::string color_code = bullet.getColorCode();
+   std::string color_code = "1;33";
 
    std::cout << "\033[" << color_code << "m" << "•" << GameConstants::RESET;
   }

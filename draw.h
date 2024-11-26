@@ -12,6 +12,7 @@ public:
   static std::string m_enemy_color;
   static int m_enemy_type;
   static bool is_tower_placed(int x, int y, TowerPositionData& TowerPosition);
+  bool isCompleted = false;
 
 private:
   std::string place_tower(int index, int level);

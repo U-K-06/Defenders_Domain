@@ -5,8 +5,9 @@ namespace KeyBindings {
     constexpr int DOWN_ARROW            = 80;
     constexpr int LEFT_ARROW            = 75;
     constexpr int RIGHT_ARROW           = 77;
-    constexpr int ESC                   = 27;
-    constexpr int SPACE                 = 32;
+    constexpr int ESC_KEY               = 27;
+    constexpr int ENTER_KEY             = 13;
+    constexpr int SPACE_KEY             = 32;
     constexpr int Q_KEY                 = 81;
     constexpr int q_KEY                 = 113;
     constexpr int COL_KEY               = 58;

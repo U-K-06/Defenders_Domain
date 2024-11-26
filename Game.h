@@ -6,6 +6,7 @@
 #include <windows.h>
 #include <vector>
 #include <chrono>
+#include <cmath>
 
 class Enemy {
 public:
@@ -31,14 +32,14 @@ public:
 
 class Tower {
 public:
-  Tower(int index, const std::string& color_code)
-    : index(index), color_code(color_code) {}
+  Tower(int index)
+    : index(index) {}
 
   void shoot(std::vector<Bullet>& bullets, std::vector<Enemy>& enemies) {
-    for (Enemy& enemy: enemies) {
+    for (Enemy& enemy : enemies) {
       if (isEnemeyInRange(enemy)) {
         int damage = calculateDamage(enemy.type);
-        bullets.emplace_back(x, y, &enemy, damage, color_code);
+        bullets.emplace_back(x, y, &enemy, damage);
         break;
       }
     }
@@ -52,11 +53,11 @@ public:
 private:
   int index;
   int x,y;
-  std::string color_code;
 
   bool isEnemeyInRange(const Enemy& enemy) {
-    // TODO: implement range check logic
-    return true;
+    int range = 5 - index;
+    int distance = static_cast<int>(std::hypot(enemy.x - x, enemy.y - y));
+    return distance <= range;
   }
 
   int calculateDamage(int enemyType) {
@@ -77,11 +78,11 @@ private:
 
 class TowerPositionDataClass {
 public:
-    TowerPositionDataClass(int idx, int posX, int posY)
-        : index(idx), x(posX), y(posY), level(0), last_upgrade_time(0) {}
+    TowerPositionDataClass(int idx, int posX, int posY, Tower& tower)
+        : index(idx), x(posX), y(posY), level(0), last_upgrade_time(0), tower(tower) {}
 
     void shoot(std::vector<Bullet>& bullets, std::vector<Enemy>& enemies) {
-        // TODO: Implement shooting system
+      tower.shoot(bullets, enemies);
     }
 
     int getIndex() const { return index; }
@@ -99,6 +100,7 @@ private:
     int y;
     int level;
     time_t last_upgrade_time;
+    Tower tower;
 };
 
 using TowerPositionData = std::vector<TowerPositionDataClass>;

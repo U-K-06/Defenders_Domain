@@ -180,7 +180,7 @@ int Game::Run() {
             Move(is_place_mode_active, "RIGHT", active_grid_y, active_grid_x, selection_tower, number_of_towers, GRID_SIZE);
           break;
         case KeyBindings::COL_KEY:
-        case KeyBindings::SPACE:
+        case KeyBindings::SPACE_KEY:
           if (!is_place_mode_active) {
             active_tower = selection_tower;
           } else {
@@ -189,7 +189,7 @@ int Game::Run() {
             }
           }
           break;
-        case KeyBindings::ESC:
+        case KeyBindings::ESC_KEY:
           //display_tower_positions(TowerPosition);
           PlaySound(NULL, NULL, 0);
           return 0;
@@ -296,7 +296,8 @@ std::tuple<int, int> Game::calculate_grid()
 
 void Game::calculate_tower_positions(int GRID_SIZE, int active_tower, int active_grid_x, int active_grid_y, TowerPositionData& TowerPosition)
 {
-  TowerPositionDataClass newTowerPosition(active_tower, active_grid_x, active_grid_y);
+  Tower tower(active_tower);
+  TowerPositionDataClass newTowerPosition(active_tower, active_grid_x, active_grid_y, tower);
   newTowerPosition.setLastUpgradeTime(time(0));
 
   TowerPosition.push_back(newTowerPosition);

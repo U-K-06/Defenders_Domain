@@ -4,8 +4,8 @@
 
 class Bullet {
 public:
-    Bullet(int x, int y, Enemy* target, int damage, const std::string& color_code)
-        : x(x), y(y), target(target), damage(damage), color_code(color_code) {}
+    Bullet(int x, int y, Enemy* target, int damage)
+        : x(x), y(y), target(target), damage(damage) {}
 
     void update() {
       if (target) {
@@ -33,11 +33,9 @@ public:
 
     int getX() const { return x; }
     int getY() const { return y; }
-    const std::string& getColorCode() const { return color_code; };
 
 private:
   int x, y;
   Enemy* target;
   int damage;
-  std::string color_code;
 };
