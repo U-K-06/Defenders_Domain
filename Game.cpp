@@ -199,7 +199,7 @@ int Game::Run() {
           }
           break;
         case KeyBindings::ESC_KEY:
-          //display_tower_positions(TowerPosition);
+          display_tower_positions(TowerPosition);
           PlaySound(NULL, NULL, 0);
           return 0;
       }
