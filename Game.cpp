@@ -105,7 +105,7 @@ int Game::Run() {
     }
 
     clear_screen(GRID_SIZE);
-    draw.grid(GRID_SIZE, tower_names, active_tower, selection_tower, active_grid_x, active_grid_y, is_place_mode_active, TowerPosition, enemies, door_x, door_y, door_x, door_y, color_code, bullets);
+    draw.grid(GRID_SIZE, tower_names, active_tower, selection_tower, active_grid_x, active_grid_y, is_place_mode_active, TowerPosition, enemies, door_x, door_y, color_code, bullets);
 
     for (Enemy& enemy : enemies) {
       auto current_time  = std::chrono::steady_clock::now();
