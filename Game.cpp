@@ -97,7 +97,7 @@ int Game::Run()
 
     for (auto &tower : TowerPosition)
     {
-      tower.shoot(bullets, enemies);
+      tower.shoot(bullets, enemies, tower.getX(), tower.getY());
     }
 
     for (auto it = bullets.begin(); it != bullets.end();)
@@ -121,7 +121,7 @@ int Game::Run()
         }
       }
     }
-
+    
     clear_screen(GRID_SIZE);
     draw.grid(GRID_SIZE, tower_names, active_tower, selection_tower, active_grid_x, active_grid_y, is_place_mode_active, TowerPosition, enemies, door_x, door_y, color_code, bullets);
 
@@ -156,10 +156,6 @@ int Game::Run()
       }
       else
       {
-        // for (int i = 0; i < placed_towers_count; i++)
-        // {
-        //   shoot_bullets(placed_towers[i], enemy);
-        // }
         if (elapsed_time >= 5.0f)
         {
           if (abs(dx) > abs(dy))
@@ -242,7 +238,6 @@ int Game::Run()
         }
         break;
       case KeyBindings::ESC_KEY:
-        display_tower_positions(TowerPosition);
         PlaySound(NULL, NULL, 0);
         return 0;
       }
@@ -359,7 +354,6 @@ void Game::calculate_tower_positions(int GRID_SIZE, int active_tower, int active
   Tower tower(active_tower);
   TowerPositionDataClass newTowerPosition(active_tower, active_grid_x, active_grid_y, tower);
   newTowerPosition.setLastUpgradeTime(time(0));
-
   TowerPosition.push_back(newTowerPosition);
   placed_towers_list.push_back(newTowerPosition);
 }
@@ -370,30 +364,5 @@ void Game::display_tower_positions(const TowerPositionData &TowerPosition)
   for (const auto &tower : TowerPosition)
   {
     std::cout << "Tower: " << tower.getIndex() << ", Coord: [" << tower.getX() << ", " << tower.getY() << "]" << std::endl;
-  }
-}
-
-int Game::calculate_enemy_tower_distance(TowerPositionDataClass &tower, Enemy &enemy)
-{
-  int distance_x = tower.getX() - enemy.x;
-  int distance_y = tower.getY() - enemy.y;
-  return sqrt((pow(distance_x, 2)) + pow(distance_y, 2)); // Euclidean distance formula
-}
-
-void Game::shoot_bullets(TowerPositionDataClass &tower, Enemy &enemy)
-{
-  if (calculate_enemy_tower_distance(tower, enemy) <= GameConstants::RANGE)
-  {
-    for (int i = 0; i < 5; i++)
-    {
-      Bullet bullet(tower.getX(), tower.getY(), &enemy, *(&enemy.health));
-      bullet.update();
-
-      if (bullet.checkCollision())
-      {
-        bullet.applyDamage();
-        break;
-      }
-    }
   }
 }
