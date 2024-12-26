@@ -57,7 +57,7 @@ void Draw::grid(int GRID_SIZE, std::string tower_names[], int active_tower, int 
     std::cout << "\n";
     for (int i = 0; i <= 2 * GRID_SIZE; i++) {
         if (i <= 1) {
-            top_grid(i, GRID_SIZE, is_place_mode_active, active_grid_x, active_grid_y, TowerPosition, enemies, door_x, door_y, color_code);
+            top_grid(i, GRID_SIZE, is_place_mode_active, active_grid_x, active_grid_y, TowerPosition, enemies, bullets, door_x, door_y, color_code);
         } else {
           if (i % 2 != 0) {
             if (!tower_names[name_index].empty()) {
@@ -68,12 +68,11 @@ void Draw::grid(int GRID_SIZE, std::string tower_names[], int active_tower, int 
             }       
             mid_grid(i, selection_tower, active_tower, is_place_mode_active, GRID_SIZE, active_grid_x, active_grid_y, door_x, door_y, color_code, TowerPosition, enemies);
           } else {
-              bottom_grid(i, GRID_SIZE, is_place_mode_active, active_grid_x, active_grid_y, TowerPosition, enemies);
+              bottom_grid(i, GRID_SIZE, is_place_mode_active, active_grid_x, active_grid_y, TowerPosition, enemies, bullets, door_x, door_y, color_code);
             }
         }
         std::cout << '\n';
     }
-    render_bullets(bullets);
 }
 
 std::string Draw::place_tower(int index, int level)
@@ -136,49 +135,125 @@ int Draw::get_tower_level(int x, int y, TowerPositionData& TowerPosition)
   return -1;
 }
 
-void Draw::top_grid(int i, int GRID_SIZE, bool is_place_mode_active, int active_grid_x, int active_grid_y, TowerPositionData TowerPosition, std::vector<Enemy>& enemies, int door_x, int door_y, int color_code) {
+void Draw::top_grid(int i, int GRID_SIZE, bool is_place_mode_active, int active_grid_x, int active_grid_y, TowerPositionData TowerPosition, std::vector<Enemy>& enemies, const std::vector<Bullet>& bullets, int door_x, int door_y, int color_code) {
     std::cout << "\t\t\t\t\t\t\t\t";
 
+
     if (i % 2 != 0) {
-      for (int j = 0; j <= 2 * GRID_SIZE; j++) {
-          if (j % 2 == 0) {
-            if (is_place_mode_active && ((j / 2 == active_grid_x && i / 2 == active_grid_y) || (j / 2 == active_grid_x + 1 && i / 2 == active_grid_y))) {
-              std::cout << "\033[31m" << GameConstants::BORDER_WALL_Y << GameConstants::RESET; 
-            } else {
-              std::cout << GameConstants::BORDER_WALL_Y;
-            }
-          } else {
-              if (j / 2 == door_x && i / 2 == door_y) {
-                  std::cout << "\033[" + std::to_string(color_code) + "m" << GameConstants::DOOR << GameConstants::RESET;
-              } else {
-                  (is_tower_placed(j, i, TowerPosition)) ? std::cout << place_tower(get_tower_index(j, i, TowerPosition), get_tower_level(j, i, TowerPosition)) : std::cout << GameConstants::EMPTY;
-              }
-          }
-      }
-    } else {
+
         for (int j = 0; j <= 2 * GRID_SIZE; j++) {
+
             if (j % 2 == 0) {
-                bool enemyAtPosition = false;
-                for (const Enemy& enemy : enemies) {
-                    if (enemy.x == j / 2 && enemy.y == i / 2) {
-                        enemyAtPosition = true;
-                        std::cout << enemy.color << static_cast<char>(enemy.type) << GameConstants::RESET;
+
+                if (is_place_mode_active && ((j / 2 == active_grid_x && i / 2 == active_grid_y) || (j / 2 == active_grid_x + 1 && i / 2 == active_grid_y))) {
+
+                    std::cout << "\033[31m" << GameConstants::BORDER_WALL_Y << GameConstants::RESET; 
+
+                } else {
+
+                    std::cout << GameConstants::BORDER_WALL_Y;
+
+                }
+
+            } else {
+
+                // Check for bullets in the positions where BORDER_WALL_X would be rendered
+
+                bool bullet_rendered = false;
+
+                for (const Bullet& bullet : bullets) {
+
+                    if (j / 2 == bullet.getX() && i / 2 == bullet.getY()) {
+
+                        std::cout << "\033[1;33m" << "." << GameConstants::RESET;
+
+                        bullet_rendered = true;
+
                         break;
+
                     }
 
                 }
-                if (!enemyAtPosition) {
-                    if (is_place_mode_active && ((j / 2 == active_grid_x && i / 2 == active_grid_y) || (j / 2 == active_grid_x + 1 && i / 2 == active_grid_y + 1) || (j / 2 == active_grid_x && i / 2 == active_grid_y + 1) || (j / 2 == active_grid_x + 1 && i / 2 == active_grid_y))) {
-                        std::cout << "\033[31m" << GameConstants::BORDER_CORNER << GameConstants::RESET;
-                    } else {
-                        std::cout << GameConstants::BORDER_CORNER;
-                    }
+
+                if (!bullet_rendered) {
+
+                    (is_tower_placed(j, i, TowerPosition)) ? std::cout << place_tower(get_tower_index(j, i, TowerPosition), get_tower_level(j, i, TowerPosition)) : std::cout << GameConstants::EMPTY;
+
                 }
+
+            }
+
+        }
+
+    } else {
+
+        for (int j = 0; j <= 2 * GRID_SIZE; j++) {
+
+            if (j % 2 == 0) {
+
+                bool enemyAtPosition = false;
+
+                for (const Enemy& enemy : enemies) {
+
+                    if (enemy.x == j / 2 && enemy.y == i / 2) {
+
+                        enemyAtPosition = true;
+
+                        std::cout << enemy.color << static_cast<char>(enemy.type) << GameConstants::RESET;
+
+                        break;
+
+                    }
+
+                }
+
+
+                if (!enemyAtPosition) {
+
+                    if (is_place_mode_active && ((j / 2 == active_grid_x && i / 2 == active_grid_y) || (j / 2 == active_grid_x + 1 && i / 2 == active_grid_y + 1) || (j / 2 == active_grid_x && i / 2 == active_grid_y + 1) || (j / 2 == active_grid_x + 1 && i / 2 == active_grid_y))) {
+
+                        std::cout << "\033[31m" << GameConstants::BORDER_CORNER << GameConstants::RESET;
+
+                    } else {
+
+                        std::cout << GameConstants::BORDER_CORNER;
+
+                    }
+
+                }
+
             } else {
-                if (is_place_mode_active && ((j / 2 == active_grid_x && i / 2 == active_grid_y) || (j / 2 == active_grid_x && i / 2 == active_grid_y + 1))) {
-                    std::cout << "\033[31m" << GameConstants::BORDER_WALL_X << GameConstants::RESET;
-                } else {
-                    std::cout << GameConstants::BORDER_WALL_X;
+
+                // Check for bullets in the positions where BORDER_WALL_X would be rendered
+
+                bool bullet_rendered = false;
+
+                for (const Bullet& bullet : bullets) {
+
+                    if (j / 2 == bullet.getX() && i / 2 == active_grid_y) {
+
+                        std::cout << "\033[1;33m" << "." << GameConstants::RESET;
+
+                        bullet_rendered = true;
+
+                        break;
+
+                    }
+
+                }
+
+                if (!bullet_rendered) {
+
+                    if (is_place_mode_active && ((j / 2 == active_grid_x && i / 2 == active_grid_y) || (j / 2 == active_grid_x && i / 2 == active_grid_y + 1))) {
+
+                        std::cout << "\033[31m" << GameConstants::BORDER_WALL_X << GameConstants::RESET;
+
+                    } else {
+
+                        std::cout << GameConstants::BORDER_WALL_X;
+
+                    }
+
                 }
             }
         }
@@ -201,33 +276,134 @@ void Draw::render_tower_names(int& name_index, int selection_tower, int active_t
   }
 }
 
-void Draw::bottom_grid(int i, int GRID_SIZE, bool is_place_mode_active, int active_grid_x, int active_grid_y, TowerPositionData TowerPosition, std::vector<Enemy>& enemies) {
-    std::cout << "\t\t\t\t\t\t\t\t";
-    for (int j = 0; j <= 2 * GRID_SIZE; j++) {
-        if (j % 2 == 0) {
-            bool enemyAtPosition = false;
-            for (const Enemy& enemy : enemies) {
-                if (enemy.x == j / 2 && enemy.y == i / 2) {
-                    enemyAtPosition = true;
-                    std::cout << enemy.color << static_cast<char>(enemy.type) << GameConstants::RESET;
-                    break;
-                }
-            }
-            if (!enemyAtPosition) {
-                if (is_place_mode_active && ((j / 2 == active_grid_x && i / 2 == active_grid_y) || (j / 2 == active_grid_x + 1 && i / 2 == active_grid_y + 1) || (j / 2 == active_grid_x && i / 2 == active_grid_y + 1) || (j / 2 == active_grid_x + 1 && i / 2 == active_grid_y))) {
-                    std::cout << "\033[31m" << GameConstants::BORDER_CORNER << GameConstants::RESET;
+void Draw::bottom_grid(int i, int GRID_SIZE, bool is_place_mode_active, int active_grid_x, int active_grid_y, TowerPositionData TowerPosition, std::vector<Enemy>& enemies, const std::vector<Bullet>& bullets, int door_x, int door_y, int color_code) {
+
+    std::cout << "\ \t\t\t\t\t\t\t\t";
+
+
+    if (i % 2 != 0) {
+
+        for (int j = 0; j <= 2 * GRID_SIZE; j++) {
+
+            if (j % 2 == 0) {
+
+                if (is_place_mode_active && ((j / 2 == active_grid_x && i / 2 == active_grid_y) || (j / 2 == active_grid_x + 1 && i / 2 == active_grid_y))) {
+
+                    std::cout << "\033[31m" << GameConstants::BORDER_WALL_Y << GameConstants::RESET; 
+
                 } else {
-                    std::cout << GameConstants::BORDER_CORNER;
+
+                    std::cout << GameConstants::BORDER_WALL_Y;
+
                 }
-            }
-        } else {
-            if (is_place_mode_active && ((j / 2 == active_grid_x && i / 2 == active_grid_y) || (j / 2 == active_grid_x && i / 2 == active_grid_y + 1))) {
-                std::cout << "\033[31m" << GameConstants::BORDER_WALL_X << GameConstants::RESET;
+
             } else {
-                std::cout << GameConstants::BORDER_WALL_X;
+
+                // Check for bullets in the positions where BORDER_WALL_X would be rendered
+
+                bool bullet_rendered = false;
+
+                for (const Bullet& bullet : bullets) {
+
+                    if (j / 2 == bullet.getX() && i / 2 == bullet.getY()) {
+
+                        std::cout << "\033[1;33m" << "." << GameConstants::RESET;
+
+                        bullet_rendered = true;
+
+                        break;
+
+                    }
+
+                }
+
+                if (!bullet_rendered) {
+
+                    (is_tower_placed(j, i, TowerPosition)) ? std::cout << place_tower(get_tower_index(j, i, TowerPosition), get_tower_level(j, i, TowerPosition)) : std::cout << GameConstants::EMPTY;
+
+                }
+
             }
+
         }
+
+    } else {
+
+        for (int j = 0; j <= 2 * GRID_SIZE; j++) {
+
+            if (j % 2 == 0) {
+
+                bool enemyAtPosition = false;
+
+                for (const Enemy& enemy : enemies) {
+
+                    if (enemy.x == j / 2 && enemy.y == i / 2) {
+
+                        enemyAtPosition = true;
+
+                        std::cout << enemy.color << static_cast<char>(enemy.type) << GameConstants::RESET;
+
+                        break;
+
+                    }
+
+                }
+
+
+                if (!enemyAtPosition) {
+
+                    if (is_place_mode_active && ((j / 2 == active_grid_x && i / 2 == active_grid_y) || (j / 2 == active_grid_x + 1 && i / 2 == active_grid_y + 1) || (j / 2 == active_grid_x && i / 2 == active_grid_y + 1) || (j / 2 == active_grid_x + 1 && i / 2 == active_grid_y))) {
+
+                        std::cout << "\033[31m" << GameConstants::BORDER_CORNER << GameConstants::RESET;
+
+                    } else {
+
+                        std::cout << GameConstants::BORDER_CORNER;
+
+                    }
+
+                }
+
+            } else {
+
+                // Check for bullets in the positions where BORDER_WALL_X would be rendered
+
+                bool bullet_rendered = false;
+
+                for (const Bullet& bullet : bullets) {
+
+                    if (j / 2 == bullet.getX() && i / 2 == active_grid_y) {
+
+                        std::cout << "\033[1;33m" << "." << GameConstants::RESET;
+
+                        bullet_rendered = true;
+
+                        break;
+
+                    }
+
+                }
+
+                if (!bullet_rendered) {
+
+                    if (is_place_mode_active && ((j / 2 == active_grid_x && i / 2 == active_grid_y) || (j / 2 == active_grid_x && i / 2 == active_grid_y + 1))) {
+
+                        std::cout << "\033[31m" << GameConstants::BORDER_WALL_X << GameConstants::RESET;
+
+                    } else {
+
+                        std::cout << GameConstants::BORDER_WALL_X;
+
+                    }
+
+                }
+
+            }
+
+        }
+
     }
+
 }
 
 void Draw::mid_grid(int i, int selection_tower, int active_tower, bool is_place_mode_active, int GRID_SIZE, int active_grid_x, int active_grid_y, int door_x, int door_y, int color_code, TowerPositionData& TowerPosition, std::vector<Enemy>& enemies)
@@ -253,8 +429,7 @@ void Draw::render_bullets(const std::vector<Bullet>& bullets) {
   for (const Bullet& bullet : bullets) {
    int bullet_x = bullet.getX();
    int bullet_y = bullet.getY();
-   std::string color_code = "1;33";
 
-   std::cout << "\033[" << color_code << "m" << "•" << GameConstants::RESET;
+  //  std::cout << "\033[1;33" "m" << "•" << GameConstants::RESET;
   }
-}
+} 
