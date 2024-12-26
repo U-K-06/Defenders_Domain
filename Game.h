@@ -44,7 +44,7 @@ public:
         y = tower_y;
         bullets.emplace_back(x, y, &enemy, damage);
         for (const Bullet& bullet : bullets) {
-          std::cout << "Bullet added at position: (" << bullet.getX() << ", " << bullet.getY() << ") with damage: " << damage << "\n";
+          // std::cout << "Bullet added at position: (" << bullet.getX() << ", " << bullet.getY() << ") with damage: " << damage << "\n";
         }
         break;
       }
