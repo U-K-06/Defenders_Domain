@@ -1,7 +1,11 @@
+#ifdef _WIN32
+#include <windows.h>
 #include <conio.h>
+#else
+#include "_linux.h"
+#endif
 #include <iostream>
 #include <future>
-#include <windows.h>
 #include <cstdlib>
 #include <time.h>
 #include <tuple>
@@ -28,8 +32,12 @@ Draw draw;
 
 int Game::Run()
 {
-  // PlaySound(Audio::BGM, NULL, SND_FILENAME | SND_ASYNC | SND_LOOP);
-  system("cls");
+  #ifdef _WIN32
+    // PlaySound(TEXT("audio.wav"), NULL, SND_FILENAME | SND_ASYNC | SND_LOOP);
+    system("cls");
+  #else
+    system("clear");
+  #endif
   draw.game_name();
   hide_cursor();
 
@@ -187,9 +195,9 @@ int Game::Run()
       }
     }
 
-    if (_kbhit())
+    if (kbhit())
     {
-      input = _getch();
+      input = getch();
       switch (input)
       {
       case KeyBindings::Q_KEY:
@@ -238,7 +246,9 @@ int Game::Run()
         }
         break;
       case KeyBindings::ESC_KEY:
-        PlaySound(NULL, NULL, 0);
+        #ifdef _WIN32 
+          PlaySound(NULL, NULL, 0);
+        #endif
         return 0;
       }
     }
@@ -299,13 +309,17 @@ std::string Game::enemy_color(int choice)
 
 void Game::hide_cursor()
 {
-  HANDLE out = GetStdHandle(STD_OUTPUT_HANDLE);
+  #ifdef _WIN32
+    HANDLE out = GetStdHandle(STD_OUTPUT_HANDLE);
 
-  CONSOLE_CURSOR_INFO cursor_info;
+    CONSOLE_CURSOR_INFO cursor_info;
 
-  GetConsoleCursorInfo(out, &cursor_info);
-  cursor_info.bVisible = false;
-  SetConsoleCursorInfo(out, &cursor_info);
+    GetConsoleCursorInfo(out, &cursor_info);
+    cursor_info.bVisible = false;
+    SetConsoleCursorInfo(out, &cursor_info);
+  #else
+    std::cout << "\033[?25l";
+  #endif
 }
 
 void Game::clear_screen(int GRID_SIZE)

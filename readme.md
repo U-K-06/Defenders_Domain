@@ -35,5 +35,5 @@ cl main.cpp Game.cpp draw.cpp /FePTD.exe /link winmm.lib
 ### Linux && Mac OS
 Open your command prompt and run the following command:
 ```bash
-g++ main.cpp game.cpp draw.cpp -o PTD -lSDL2
+g++ main.cpp Game.cpp draw.cpp _linux.cpp -o PTD
 ```
