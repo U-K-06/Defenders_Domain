@@ -23,8 +23,7 @@ public:
 
     void applyDamage() {
       if (target) {
-        target->takeDamage(damage);
-        // std::cout << target << "Damage: " << damage << std::endl; 
+        target->takeDamage(damage); 
       }
     }
 

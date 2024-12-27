@@ -16,6 +16,7 @@ The project contains the following files and directories:
 - `game.h` - Header file that declares the functions in `game.cpp`.
 - `main.cpp` - The entry point of the application where execution begins.
 - `PTD.exe` - The compiled executable for Windows.
+- `screenshots/` - Directory containing screenshots of the game.
 
 ## Compiling the Program
 

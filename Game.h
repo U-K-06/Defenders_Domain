@@ -38,18 +38,13 @@ public:
 class Tower {
 public:
   Tower(int index)
-    : index(index), x(0), y(0) {}
+    : index(index) {}
 
-  void shoot(std::vector<Bullet>& bullets, std::vector<Enemy>& enemies, int tower_x, int tower_y) {
+  void shoot(std::vector<Bullet>& bullets, std::vector<Enemy>& enemies) {
     for (Enemy& enemy : enemies) {
       if (isEnemeyInRange(enemy)) {
         int damage = calculateDamage(enemy.type);
-        x = tower_x;
-        y = tower_y;
         bullets.emplace_back(x, y, &enemy, damage);
-        for (const Bullet& bullet : bullets) {
-          // std::cout << "Bullet added at position: (" << bullet.getX() << ", " << bullet.getY() << ") with damage: " << damage << "\n";
-        }
         break;
       }
     }
@@ -66,8 +61,7 @@ private:
 
   bool isEnemeyInRange(const Enemy& enemy) {
     int range = 5 - index;
-    int distance = std::abs(x - enemy.x) + std::abs(y - enemy.y);
-    // std::cout << "Distance between tower and enemy: " << distance << " " << (int)(distance <= range) <<"\n";
+    int distance = static_cast<int>(std::hypot(enemy.x - x, enemy.y - y));
     return distance <= range;
   }
 
@@ -92,8 +86,8 @@ public:
     TowerPositionDataClass(int idx, int posX, int posY, Tower& tower)
         : index(idx), x(posX), y(posY), level(0), last_upgrade_time(0), tower(tower) {}
 
-    void shoot(std::vector<Bullet>& bullets, std::vector<Enemy>& enemies, int x, int y) {
-      tower.shoot(bullets, enemies, x, y);
+    void shoot(std::vector<Bullet>& bullets, std::vector<Enemy>& enemies) {
+      tower.shoot(bullets, enemies);
     }
 
     int getIndex() const { return index; }
