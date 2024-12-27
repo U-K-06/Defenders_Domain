@@ -1,14 +1,11 @@
-#ifdef _WIN32
-#include <windows.h>
-#include <conio.h>
-#else
-#include "_linux.h"
-#endif
 #include <iostream>
 #include <random>
 #include <vector>
+#include <windows.h>
+#include <conio.h>
 #include <chrono>
 #include <string>
+// #include <unistd.h>
 #include "draw.h"
 #include "constants.h"
 #include "Game.h"
@@ -21,10 +18,9 @@ void Draw::game_name()
   Game::hide_cursor();
   int color_code = 91 + (rand() % 6);
   auto start = std::chrono::steady_clock::now();
-  char input;
   for (char c : GameConstants::__game_title__) {
-      if (kbhit()) {
-          input = getch();
+      if (_kbhit()) {
+        char input = _getch();
         switch (input) {
           case KeyBindings::ENTER_KEY:
             isCompleted = true;
@@ -282,7 +278,7 @@ void Draw::render_tower_names(int& name_index, int selection_tower, int active_t
 
 void Draw::bottom_grid(int i, int GRID_SIZE, bool is_place_mode_active, int active_grid_x, int active_grid_y, TowerPositionData TowerPosition, std::vector<Enemy>& enemies, const std::vector<Bullet>& bullets, int door_x, int door_y, int color_code) {
 
-    std::cout << "\t\t\t\t\t\t\t\t";
+    std::cout << "\ \t\t\t\t\t\t\t\t";
 
 
     if (i % 2 != 0) {
