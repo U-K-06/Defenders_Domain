@@ -3,11 +3,7 @@
 #ifndef GAME_H
 #define GAME_H
 
-#ifdef _WIN32
 #include <windows.h>
-#else
-#include <unistd.h>
-#endif
 #include <vector>
 #include <chrono>
 #include <cmath>
@@ -33,22 +29,10 @@ public:
   }
 };
 
-#include "bullet.h"
-
 class Tower {
 public:
   Tower(int index)
     : index(index) {}
-
-  void shoot(std::vector<Bullet>& bullets, std::vector<Enemy>& enemies) {
-    for (Enemy& enemy : enemies) {
-      if (isEnemeyInRange(enemy)) {
-        int damage = calculateDamage(enemy.type);
-        bullets.emplace_back(x, y, &enemy, damage);
-        break;
-      }
-    }
-  }
 
   void setPosition(int x, int y) {
     this->x = x;
@@ -86,10 +70,6 @@ public:
     TowerPositionDataClass(int idx, int posX, int posY, Tower& tower)
         : index(idx), x(posX), y(posY), level(0), last_upgrade_time(0), tower(tower) {}
 
-    void shoot(std::vector<Bullet>& bullets, std::vector<Enemy>& enemies) {
-      tower.shoot(bullets, enemies);
-    }
-
     int getIndex() const { return index; }
     int getX() const { return x; }
     int getY() const { return y; }
@@ -120,8 +100,7 @@ public:
   std::tuple<int, int> calculate_grid();
   void calculate_tower_positions(int GRID_SIZE, int active_tower, int active_grid_x, int active_grid_y, TowerPositionData& TowerPosition);
   void display_tower_positions(const TowerPositionData& TowerPosition);
-  int calculate_enemy_tower_distance(TowerPositionDataClass& tower,Enemy& enemy );
-  void shoot_bullets(TowerPositionDataClass& tower,Enemy& enemy);
+  int calculate_enemy_tower_distance(TowerPositionDataClass& tower,Enemy& enemy);
 
 private:
   std::vector<TowerPositionDataClass> placed_towers_list;

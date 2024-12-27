@@ -1,11 +1,7 @@
-#ifdef _WIN32
-#include <windows.h>
 #include <conio.h>
-#else
-#include "_linux.h"
-#endif
 #include <iostream>
 #include <future>
+#include <windows.h>
 #include <cstdlib>
 #include <time.h>
 #include <tuple>
@@ -14,10 +10,7 @@
 #include <cmath>
 #include "Game.h"
 #include "draw.h"
-#include "bullet.h"
 #include "constants.h"
-
-std::vector<Bullet> bullets;
 
 std::string tower_names[] = {"Electric Tower", "Fire Tower", "Poison Tower", "Water Tower", "Ice Tower", "Wind Tower", "Shadow Tower"};
 
@@ -32,12 +25,8 @@ Draw draw;
 
 int Game::Run()
 {
-  #ifdef _WIN32
-    // PlaySound(TEXT("audio.wav"), NULL, SND_FILENAME | SND_ASYNC | SND_LOOP);
-    system("cls");
-  #else
-    system("clear");
-  #endif
+  // PlaySound(Audio::BGM, NULL, SND_FILENAME | SND_ASYNC | SND_LOOP);
+  system("cls");
   draw.game_name();
   hide_cursor();
 
@@ -103,35 +92,8 @@ int Game::Run()
         currentSpawnInterval -= 0.1f;
     }
 
-    for (auto &tower : TowerPosition)
-    {
-      tower.shoot(bullets, enemies);
-    }
-
-    for (auto it = bullets.begin(); it != bullets.end();)
-    {
-      it->update();
-
-      if (it->checkCollision())
-      {
-        it->applyDamage();
-        it = bullets.erase(it);
-      }
-      else
-      {
-        if (it->isOutOfBounds(GRID_SIZE))
-        {
-          it = bullets.erase(it);
-        }
-        else
-        {
-          ++it;
-        }
-      }
-    }
-
     clear_screen(GRID_SIZE);
-    draw.grid(GRID_SIZE, tower_names, active_tower, selection_tower, active_grid_x, active_grid_y, is_place_mode_active, TowerPosition, enemies, door_x, door_y, color_code, bullets);
+    draw.grid(GRID_SIZE, tower_names, active_tower, selection_tower, active_grid_x, active_grid_y, is_place_mode_active, TowerPosition, enemies, door_x, door_y, color_code);
 
     for (Enemy &enemy : enemies)
     {
@@ -164,10 +126,6 @@ int Game::Run()
       }
       else
       {
-        // for (int i = 0; i < placed_towers_count; i++)
-        // {
-        //   shoot_bullets(placed_towers[i], enemy);
-        // }
         if (elapsed_time >= 5.0f)
         {
           if (abs(dx) > abs(dy))
@@ -199,9 +157,9 @@ int Game::Run()
       }
     }
 
-    if (kbhit())
+    if (_kbhit())
     {
-      input = getch();
+      input = _getch();
       switch (input)
       {
       case KeyBindings::Q_KEY:
@@ -250,7 +208,6 @@ int Game::Run()
         }
         break;
       case KeyBindings::ESC_KEY:
-        display_tower_positions(TowerPosition);
         PlaySound(NULL, NULL, 0);
         return 0;
       }
@@ -312,17 +269,13 @@ std::string Game::enemy_color(int choice)
 
 void Game::hide_cursor()
 {
-  #ifdef _WIN32
-    HANDLE out = GetStdHandle(STD_OUTPUT_HANDLE);
+  HANDLE out = GetStdHandle(STD_OUTPUT_HANDLE);
 
-    CONSOLE_CURSOR_INFO cursor_info;
+  CONSOLE_CURSOR_INFO cursor_info;
 
-    GetConsoleCursorInfo(out, &cursor_info);
-    cursor_info.bVisible = false;
-    SetConsoleCursorInfo(out, &cursor_info);
-  #else
-    std::cout << "\033[?25l";
-  #endif
+  GetConsoleCursorInfo(out, &cursor_info);
+  cursor_info.bVisible = false;
+  SetConsoleCursorInfo(out, &cursor_info);
 }
 
 void Game::clear_screen(int GRID_SIZE)
@@ -382,30 +335,5 @@ void Game::display_tower_positions(const TowerPositionData &TowerPosition)
   for (const auto &tower : TowerPosition)
   {
     std::cout << "Tower: " << tower.getIndex() << ", Coord: [" << tower.getX() << ", " << tower.getY() << "]" << std::endl;
-  }
-}
-
-int Game::calculate_enemy_tower_distance(TowerPositionDataClass &tower, Enemy &enemy)
-{
-  int distance_x = tower.getX() - enemy.x;
-  int distance_y = tower.getY() - enemy.y;
-  return sqrt((pow(distance_x, 2)) + pow(distance_y, 2)); // Euclidean distance formula
-}
-
-void Game::shoot_bullets(TowerPositionDataClass &tower, Enemy &enemy)
-{
-  if (calculate_enemy_tower_distance(tower, enemy) <= GameConstants::RANGE)
-  {
-    for (int i = 0; i < 5; i++)
-    {
-      Bullet bullet(tower.getX(), tower.getY(), &enemy, *(&enemy.health));
-      bullet.update();
-
-      if (bullet.checkCollision())
-      {
-        bullet.applyDamage();
-        break;
-      }
-    }
   }
 }
