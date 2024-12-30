@@ -16,7 +16,7 @@ public:
   bool isCompleted = false;
 
 private:
-  std::string place_tower(int index, int level);
+  std::string place_tower(int index);
   int get_tower_index(int x, int y, TowerPositionData& TowerPosition);
   int get_tower_level(int x, int y, TowerPositionData& TowerPosition);
   void top_grid(int i, int GRID_SIZE, bool is_place_mode_active, int active_grid_x, int active_grid_y, TowerPositionData TowerPosition, std::vector<Enemy>& enemies, int door_x, int door_y, int color_code);

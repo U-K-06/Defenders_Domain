@@ -150,10 +150,15 @@ int Game::Run()
     for (auto &tower : TowerPosition)
     {
       time_t current_time = time(0);
-      if (tower.getLevel() < 4 && (current_time - tower.getLastUpgradeTime()) >= GameConstants::UPGRADE_TIMES[tower.getIndex()][tower.getLevel()])
+      if ((current_time - GameConstants::BOOM_TIMER[tower.getIndex()]) >= GameConstants::BOOM_TIMER[tower.getIndex()])
       {
-        tower.setLevel(tower.getLevel() + 1);
-        tower.setLastUpgradeTime(current_time);
+        switch(tower.getIndex())
+        {
+          case 0:
+            tower.ElectricBomb(enemies);
+            break;
+          default: return -1;
+        }
       }
     }
 
@@ -216,7 +221,7 @@ int Game::Run()
   return 0;
 }
 
-void Game::toggle_state(bool &is_place_mode_active) { is_place_mode_active = !is_place_mode_active; }
+void Game::toggle_state(bool &is_place_mode_active) const { is_place_mode_active = !is_place_mode_active; }
 
 void Game::Move(bool is_place_mode_active, std::string direction, int &active_grid_y, int &active_grid_x, int &selection_tower, int number_of_towers, int GRID_SIZE)
 {
@@ -323,7 +328,6 @@ void Game::calculate_tower_positions(int GRID_SIZE, int active_tower, int active
 {
   Tower tower(active_tower);
   TowerPositionDataClass newTowerPosition(active_tower, active_grid_x, active_grid_y, tower);
-  newTowerPosition.setLastUpgradeTime(time(0));
 
   TowerPosition.push_back(newTowerPosition);
   placed_towers_list.push_back(newTowerPosition);

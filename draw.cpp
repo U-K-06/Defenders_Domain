@@ -5,7 +5,6 @@
 #include <conio.h>
 #include <chrono>
 #include <string>
-// #include <unistd.h>
 #include "draw.h"
 #include "constants.h"
 #include "Game.h"
@@ -59,8 +58,6 @@ void Draw::lose_game()
 void Draw::grid(int GRID_SIZE, std::string tower_names[], int active_tower, int selection_tower, int active_grid_x, int active_grid_y, bool is_place_mode_active, TowerPositionData TowerPosition, std::vector<Enemy> &enemies, int door_x, int door_y, int color_code)
 {
   int name_index = 0;
-  std::cout << "Enemies are like: (" << m_enemy_color << static_cast<char>(m_enemy_type) << GameConstants::RESET << ")\n--> The color indicates the type of tower that is the enemy's weakness.\n"
-            << "The ASCII code represents the enemy's health (HP): " << m_enemy_type << std::endl;
   std::cout << "\n";
   for (int i = 0; i <= 2 * GRID_SIZE; i++)
   {
@@ -91,32 +88,32 @@ void Draw::grid(int GRID_SIZE, std::string tower_names[], int active_tower, int 
   }
 }
 
-std::string Draw::place_tower(int index, int level)
+std::string Draw::place_tower(int index)
 {
   std::string tower;
 
   switch (index)
   {
   case 0:
-    tower = GameConstants::ELECTRIC_TOWERS[level];
+    tower = GameConstants::ELECTRIC_TOWERS[0];
     break;
   case 1:
-    tower = GameConstants::FIRE_TOWERS[level];
+    tower = GameConstants::FIRE_TOWERS[0];
     break;
   case 2:
-    tower = GameConstants::POISON_TOWERS[level];
+    tower = GameConstants::POISON_TOWERS[0];
     break;
   case 3:
-    tower = GameConstants::WATER_TOWERS[level];
+    tower = GameConstants::WATER_TOWERS[0];
     break;
   case 4:
-    tower = GameConstants::ICE_TOWERS[level];
+    tower = GameConstants::ICE_TOWERS[0];
     break;
   case 5:
-    tower = GameConstants::WIND_TOWERS[level];
+    tower = GameConstants::WIND_TOWERS[0];
     break;
   case 6:
-    tower = GameConstants::SHADOW_TOWERS[level];
+    tower = GameConstants::SHADOW_TOWERS[0];
     break;
   default:
     return GameConstants::EMPTY;
@@ -149,8 +146,8 @@ int Draw::get_tower_level(int x, int y, TowerPositionData &TowerPosition)
 {
   for (const auto &tower : TowerPosition)
   {
-    if (tower.getX() == x / 2 && tower.getY() == y / 2)
-      return tower.getLevel();
+    if (tower.getX() == x / 2 && tower.getY() == y / 2);
+      // return tower.getLevel();
   }
   return -1;
 }
@@ -174,7 +171,7 @@ void Draw::top_grid(int i, int GRID_SIZE, bool is_place_mode_active, int active_
         {
           std::cout << GameConstants::BORDER_WALL_Y;
         }
-      } else (is_tower_placed(j, i, TowerPosition)) ? std::cout << place_tower(get_tower_index(j, i, TowerPosition), get_tower_level(j, i, TowerPosition)) : std::cout << GameConstants::EMPTY;
+      } else (is_tower_placed(j, i, TowerPosition)) ? std::cout << place_tower(get_tower_index(j, i, TowerPosition)) : std::cout << GameConstants::EMPTY;
     }
     
   }
@@ -348,7 +345,7 @@ void Draw::mid_grid(int i, int selection_tower, int active_tower, bool is_place_
       }
       else
       {
-        (is_tower_placed(j, i, TowerPosition)) ? std::cout << place_tower(get_tower_index(j, i, TowerPosition), get_tower_level(j, i, TowerPosition)) : std::cout << GameConstants::EMPTY;
+        (is_tower_placed(j, i, TowerPosition)) ? std::cout << place_tower(get_tower_index(j, i, TowerPosition)) : std::cout << GameConstants::EMPTY;
       }
     }
   }

@@ -92,14 +92,14 @@ namespace GameConstants {
     constexpr const char* BORDER_WALL_X    = "-----";
     constexpr const char* DOOR             = "[(.)]";
 
-    const int UPGRADE_TIMES[7][5] = {
-                                      {200, 350, 450, 500, 700}, // Electric Tower
-                                      {150, 250, 350, 450, 650}, // Fire Tower
-                                      {250, 380, 425, 650, 900}, // Poison Tower
-                                      {140, 240, 340, 440, 540}, // Water Tower
-                                      {180, 280, 380, 500, 600}, // Ice Tower
-                                      {160, 360, 460, 550, 740}, // Wind Tower
-                                      {260, 380, 500, 680, 950}  // Shadow Tower
+    const int BOOM_TIMER[7] = {
+                                      200, // Electric Tower
+                                      150, // Fire Tower
+                                      250, // Poison Tower
+                                      140, // Water Tower
+                                      180, // Ice Tower
+                                      160, // Wind Tower
+                                      260  // Shadow Tower
                                     };
 
     constexpr const char* RESET = "\033[37m";
