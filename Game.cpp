@@ -155,7 +155,7 @@ int Game::Run()
         switch(tower.getIndex())
         {
           case 0:
-            tower.ElectricBomb(enemies);
+            tower.ElectricBomb(enemies,TowerPosition);
             break;
           default: return -1;
         }

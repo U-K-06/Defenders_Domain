@@ -59,7 +59,7 @@ public:
   int getY() const { return y; }
 
   
-  void explode(std::vector<Enemy> &enemies)
+  void explode(std::vector<Enemy> &enemies,std::vector<TowerPositionDataClass> towers)
   {
     for (auto it = enemies.begin(); it != enemies.end();)
     {
@@ -73,13 +73,22 @@ public:
         ++it;
       }
     }
+    for(int i = 0;i<towers.size();i++){
+      if(towers[i] == (*this)){
+         std::cout << "Tower at Index:"<<i;
+      }
+    }
   }
 
-  void ElectricBomb(std::vector<Enemy> &enemies)
+  void ElectricBomb(std::vector<Enemy> &enemies,std::vector<TowerPositionDataClass> towers)
   {
-    this->explode(enemies);
+    this->explode(enemies,towers);
   }
 
+  bool operator==(const TowerPositionDataClass &other) const
+  {
+    return index == other.index && x == other.x && y == other.y;
+  }
 private:
   int index;
   int x;
