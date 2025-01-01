@@ -93,13 +93,13 @@ namespace GameConstants {
     constexpr const char* DOOR             = "[(.)]";
 
     const int BOOM_TIMER[7] = {
-                                      200, // Electric Tower
-                                      150, // Fire Tower
-                                      250, // Poison Tower
-                                      140, // Water Tower
-                                      180, // Ice Tower
-                                      160, // Wind Tower
-                                      260  // Shadow Tower
+                                      6000, // Electric Tower
+                                      1500, // Fire Tower
+                                      2500, // Poison Tower
+                                      1400, // Water Tower
+                                      1800, // Ice Tower
+                                      1600, // Wind Tower
+                                      2600  // Shadow Tower
                                     };
 
     constexpr const char* RESET = "\033[37m";

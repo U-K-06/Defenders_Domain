@@ -5,6 +5,7 @@
 #include <cstdlib>
 #include <time.h>
 #include <tuple>
+#include <thread>
 #include <chrono>
 #include <ctime>
 #include <cmath>
@@ -149,9 +150,9 @@ int Game::Run()
 
     for (auto &tower : TowerPosition)
     {
-      time_t current_time = time(0);
-      if ((current_time - GameConstants::BOOM_TIMER[tower.getIndex()]) >= GameConstants::BOOM_TIMER[tower.getIndex()])
+      if (sleep(GameConstants::BOOM_TIMER[tower.getIndex()]))
       {
+        std::cout << "BOOOOM" << std::endl;
         switch(tower.getIndex())
         {
           case 0:
@@ -272,6 +273,23 @@ std::string Game::enemy_color(int choice)
                                                                                            : colors[0];
 }
 
+// bool Game::sleep(int milliseconds) {
+//     auto start = std::chrono::steady_clock::now();
+    
+//     while (true) {
+//         auto now = std::chrono::steady_clock::now();
+//         auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(now - start).count();
+
+//         if (elapsed >= milliseconds) {
+//           std::cout << elapsed << std::endl;
+//             return true;
+//         }
+//     }
+// }
+bool Game::sleep(int milliseconds) {
+    std::this_thread::sleep_for(std::chrono::milliseconds(milliseconds));
+    return true;
+}
 void Game::hide_cursor()
 {
   HANDLE out = GetStdHandle(STD_OUTPUT_HANDLE);

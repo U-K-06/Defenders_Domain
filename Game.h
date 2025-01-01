@@ -7,6 +7,7 @@
 #include <vector>
 #include <chrono>
 #include <cmath>
+#include <vector>
 
 class Enemy
 {
@@ -61,6 +62,7 @@ public:
   
   void explode(std::vector<Enemy> &enemies,std::vector<TowerPositionDataClass> towers)
   {
+    int indexTower = -1;
     for (auto it = enemies.begin(); it != enemies.end();)
     {
       if (tower.isEnemeyInRange(*it))
@@ -75,8 +77,15 @@ public:
     }
     for(int i = 0;i<towers.size();i++){
       if(towers[i] == (*this)){
-         std::cout << "Tower at Index:"<<i;
+
+         indexTower = i;
+         break;
       }
+    }
+
+    if(indexTower != -1){
+      std::cout << "TEST PASSED!" << std::endl;
+      towers.erase(towers.begin() + indexTower);
     }
   }
 
@@ -115,6 +124,7 @@ private:
   std::vector<Enemy> enemies;
   int enemy_type();
   std::string enemy_color(int choice);
+  bool sleep(int milliseconds);
 };
 
 #endif
