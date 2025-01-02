@@ -7,7 +7,8 @@
 #include <vector>
 #include <chrono>
 #include <cmath>
-#include <vector>
+
+#define max(a,b) (((a) > (b)) ? (a) : (b))
 
 class Enemy
 {
@@ -59,45 +60,33 @@ public:
   int getX() const { return x; }
   int getY() const { return y; }
 
-  
-  void explode(std::vector<Enemy> &enemies,std::vector<TowerPositionDataClass> towers)
+  void explode(std::vector<Enemy> &enemies, int range)
   {
-    int indexTower = -1;
-    for (auto it = enemies.begin(); it != enemies.end();)
-    {
-      if (tower.isEnemeyInRange(*it))
+      for (auto it = enemies.begin(); it != enemies.end();)
       {
-        // std::cout << "Enemy destroyed at position: (" << it->x << ", " << it->y << ")\n";
-        it = enemies.erase(it);
+          int distance = max(std::abs(it->x - x), std::abs(it->y - y));
+          if (distance <= range)
+          {
+              // std::cout << "Enemy destroyed at position: (" << it->x << ", " << it->y << ")\n";
+              it = enemies.erase(it);
+          }
+          else
+          {
+              ++it;
+          }
       }
-      else
-      {
-        ++it;
-      }
-    }
-    for(int i = 0;i<towers.size();i++){
-      if(towers[i] == (*this)){
-
-         indexTower = i;
-         break;
-      }
-    }
-
-    if(indexTower != -1){
-      std::cout << "TEST PASSED!" << std::endl;
-      towers.erase(towers.begin() + indexTower);
-    }
   }
 
-  void ElectricBomb(std::vector<Enemy> &enemies,std::vector<TowerPositionDataClass> towers)
+  void ElectricBomb(std::vector<Enemy> &enemies, int range)
   {
-    this->explode(enemies,towers);
+    this->explode(enemies, range);
   }
 
   bool operator==(const TowerPositionDataClass &other) const
   {
-    return index == other.index && x == other.x && y == other.y;
+      return index == other.index && x == other.x && y == other.y;
   }
+
 private:
   int index;
   int x;
@@ -124,7 +113,6 @@ private:
   std::vector<Enemy> enemies;
   int enemy_type();
   std::string enemy_color(int choice);
-  bool sleep(int milliseconds);
 };
 
 #endif

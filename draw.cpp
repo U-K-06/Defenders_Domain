@@ -34,7 +34,7 @@ void Draw::game_name()
     if (!Draw::isCompleted)
     {
       auto end = std::chrono::steady_clock::now();
-      while (std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() < (1 + (rand() % 6)))
+      while (std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() < (1 + (rand() % 5)))
       {
         end = std::chrono::steady_clock::now();
       }

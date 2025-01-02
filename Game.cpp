@@ -5,7 +5,6 @@
 #include <cstdlib>
 #include <time.h>
 #include <tuple>
-#include <thread>
 #include <chrono>
 #include <ctime>
 #include <cmath>
@@ -13,7 +12,7 @@
 #include "draw.h"
 #include "constants.h"
 
-std::string tower_names[] = {"Electric Tower", "Fire Tower", "Poison Tower", "Water Tower", "Ice Tower", "Wind Tower", "Shadow Tower"};
+std::string tower_names[] = {"Electric Boom", "Fire Boom", "Poison Boom", "Water Boom", "Ice Boom", "Wind Boom", "Shadow Boom"};
 
 std::string colors[] = {"\033[38;5;214m", "\033[38;5;196m", "\033[38;5;93m", "\033[38;5;39m", "\033[38;5;81m", "\033[38;5;159m", "\033[38;5;23m"};
 
@@ -148,19 +147,19 @@ int Game::Run()
       }
     }
 
-    for (auto &tower : TowerPosition)
+    for (auto it = TowerPosition.begin(); it != TowerPosition.end();)
     {
-      if (sleep(GameConstants::BOOM_TIMER[tower.getIndex()]))
-      {
-        std::cout << "BOOOOM" << std::endl;
-        switch(tower.getIndex())
+        time_t current_time = time(0);
+        if ((current_time - GameConstants::BOOM_TIMER[it->getIndex()]) >= GameConstants::BOOM_TIMER[it->getIndex()])
         {
-          case 0:
-            tower.ElectricBomb(enemies,TowerPosition);
-            break;
-          default: return -1;
+            int range = GameConstants::TOWER_RANGE[it->getIndex()];
+            it->explode(enemies, range);
+            it = TowerPosition.erase(it);
         }
-      }
+        else
+        {
+            ++it;
+        }
     }
 
     if (_kbhit())
@@ -273,23 +272,6 @@ std::string Game::enemy_color(int choice)
                                                                                            : colors[0];
 }
 
-// bool Game::sleep(int milliseconds) {
-//     auto start = std::chrono::steady_clock::now();
-    
-//     while (true) {
-//         auto now = std::chrono::steady_clock::now();
-//         auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(now - start).count();
-
-//         if (elapsed >= milliseconds) {
-//           std::cout << elapsed << std::endl;
-//             return true;
-//         }
-//     }
-// }
-bool Game::sleep(int milliseconds) {
-    std::this_thread::sleep_for(std::chrono::milliseconds(milliseconds));
-    return true;
-}
 void Game::hide_cursor()
 {
   HANDLE out = GetStdHandle(STD_OUTPUT_HANDLE);
