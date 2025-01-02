@@ -45,16 +45,21 @@ public:
     return distance <= range;
   }
 
+  void setPlacementTime(time_t time) { placement_time = time; }
+
 private:
   int index;
   int x, y;
+  time_t placement_time;
 };
 
 class TowerPositionDataClass
 {
 public:
-  TowerPositionDataClass(int idx, int posX, int posY, Tower tower)
-      : index(idx), x(posX), y(posY), tower(tower) {}
+  time_t placement_time;
+
+  TowerPositionDataClass(int idx, int posX, int posY, Tower tower, time_t time)
+      : index(idx), x(posX), y(posY), tower(tower), placement_time(time) {}
 
   int getIndex() const { return index; }
   int getX() const { return x; }

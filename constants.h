@@ -92,14 +92,14 @@ namespace GameConstants {
     constexpr const char* BORDER_WALL_X    = "-----";
     constexpr const char* DOOR             = "[(.)]";
 
-    const int BOOM_TIMER[7] = {
-                                      200, // Electric Tower
-                                      150, // Fire Tower
-                                      250, // Poison Tower
-                                      140, // Water Tower
-                                      180, // Ice Tower
-                                      160, // Wind Tower
-                                      260  // Shadow Tower
+    const float BOOM_TIMER[7] = {
+                                      5,    // Electric Tower
+                                      6.5,  // Fire Tower
+                                      8.5,  // Poison Tower
+                                      10,   // Water Tower
+                                      10.8, // Ice Tower
+                                      11.6, // Wind Tower
+                                      12.6  // Shadow Tower
                                     };
 
     const int TOWER_RANGE[] = { 1, 2, 3, 4, 5, 6, 7 };

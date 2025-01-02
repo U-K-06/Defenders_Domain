@@ -25,7 +25,7 @@ Draw draw;
 
 int Game::Run()
 {
-  // PlaySound(Audio::BGM, NULL, SND_FILENAME | SND_ASYNC | SND_LOOP);
+  PlaySound(Audio::BGM, NULL, SND_FILENAME | SND_ASYNC | SND_LOOP); // IGNORE: Error in PlaySound function
   system("cls");
   draw.game_name();
   hide_cursor();
@@ -150,16 +150,16 @@ int Game::Run()
     for (auto it = TowerPosition.begin(); it != TowerPosition.end();)
     {
         time_t current_time = time(0);
-        if ((current_time - GameConstants::BOOM_TIMER[it->getIndex()]) >= GameConstants::BOOM_TIMER[it->getIndex()])
+        time_t placement_time = it->placement_time;
+        int boom_timer = GameConstants::BOOM_TIMER[it->getIndex()];
+
+        if ((current_time - it->placement_time) >= GameConstants::BOOM_TIMER[it->getIndex()] + (int)(GRID_SIZE/4))
         {
             int range = GameConstants::TOWER_RANGE[it->getIndex()];
             it->explode(enemies, range);
             it = TowerPosition.erase(it);
         }
-        else
-        {
-            ++it;
-        }
+        else  ++it;
     }
 
     if (_kbhit())
@@ -327,7 +327,7 @@ std::tuple<int, int> Game::calculate_grid()
 void Game::calculate_tower_positions(int GRID_SIZE, int active_tower, int active_grid_x, int active_grid_y, TowerPositionData &TowerPosition)
 {
   Tower tower(active_tower);
-  TowerPositionDataClass newTowerPosition(active_tower, active_grid_x, active_grid_y, tower);
+  TowerPositionDataClass newTowerPosition(active_tower, active_grid_x, active_grid_y, tower, time(0));
 
   TowerPosition.push_back(newTowerPosition);
   placed_towers_list.push_back(newTowerPosition);
