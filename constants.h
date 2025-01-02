@@ -83,7 +83,10 @@ namespace GameConstants {
 
     )";
 
-    constexpr const int RANGE              = 10;
+    constexpr const float INITIAL_SPAWN_INTERVAL = 2.0f;
+    constexpr const float MIN_SPAWN_INTERVAL     = 0.5f;
+    constexpr const float SPAWN_INTERVAL_DECAY_RATE = 0.1f;
+    constexpr const float TIME_TO_DECREASE_SPAWN_INTERVAL = 30.0f;
 
     constexpr const int MAX_ENEMIES        = 90;
     constexpr const char* EMPTY            = "     ";
@@ -102,7 +105,8 @@ namespace GameConstants {
                                       12.6  // Shadow Tower
                                     };
 
-    const int TOWER_RANGE[] = { 1, 2, 3, 4, 5, 6, 7 };
+    const int UPGRADE_TIME[] = { 5, 7, 7, 6, 6, 7, 8, 9, 1, 1 };
+    const int MAX_TOWER_LEVEL[7] = { 8, 8, 8, 6, 7, 6, 5 };
 
     constexpr const char* RESET = "\033[37m";
 
