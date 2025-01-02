@@ -31,9 +31,16 @@ int Game::Run()
   hide_cursor();
 
   float deltaTime = 0.1f;
-  float currentSpawnInterval = 3.0f;
+  float currentSpawnInterval = GameConstants::INITIAL_SPAWN_INTERVAL;
   float timeSinceLastSpawn = 0.0f;
 
+  time_t last_upgrade_time = time(0);
+
+  int TOWER_RANGE[7]    = { 1, 1, 1, 1, 1, 1, 1 };
+  int TOWER_LEVEL[7]    = { 0, 0, 0, 0, 0, 0, 0 };
+
+  int l_index = 0;
+  
   int active_tower = 0, selection_tower = 0;
   bool is_place_mode_active = false;
   int active_grid_x = 0, active_grid_y = 0;
@@ -66,6 +73,26 @@ int Game::Run()
 
     timeSinceLastSpawn += elapsed_time;
 
+    if (elapsed_time >= GameConstants::TIME_TO_DECREASE_SPAWN_INTERVAL) {
+      currentSpawnInterval -= GameConstants::SPAWN_INTERVAL_DECAY_RATE * (elapsed_time / GameConstants::TIME_TO_DECREASE_SPAWN_INTERVAL);
+      if (currentSpawnInterval >= GameConstants::MIN_SPAWN_INTERVAL) {
+        currentSpawnInterval = GameConstants::MIN_SPAWN_INTERVAL;
+      }
+    }
+
+    time_t current_upgrade_time = time(0);
+
+    if (difftime(current_upgrade_time, last_upgrade_time) >= (GameConstants::UPGRADE_TIME[l_index]))
+    {
+      int index = rand() % number_of_towers;
+      TOWER_LEVEL[index] = (TOWER_LEVEL[index] < GameConstants::MAX_TOWER_LEVEL[index]) ? TOWER_LEVEL[index] + 1 : TOWER_LEVEL[index];
+      last_upgrade_time = current_upgrade_time;
+      (l_index>=number_of_towers) ? l_index : ++l_index;
+    }
+
+    // TODO: as tower level increase it will also increase TOWER_RANGE of that perticular index whols level has been increased by 1
+
+
     if (timeSinceLastSpawn >= currentSpawnInterval)
     {
       Enemy new_enemy;
@@ -87,13 +114,10 @@ int Game::Run()
       enemies.push_back(new_enemy);
 
       timeSinceLastSpawn = 0.0f;
-
-      if (currentSpawnInterval > 0.5f)
-        currentSpawnInterval -= 0.1f;
     }
 
     clear_screen(GRID_SIZE);
-    draw.grid(GRID_SIZE, tower_names, active_tower, selection_tower, active_grid_x, active_grid_y, is_place_mode_active, TowerPosition, enemies, door_x, door_y, color_code);
+    draw.grid(GRID_SIZE, tower_names, active_tower, selection_tower, active_grid_x, active_grid_y, is_place_mode_active, TowerPosition, enemies, door_x, door_y, color_code, TOWER_LEVEL);
 
     for (Enemy &enemy : enemies)
     {
@@ -155,8 +179,7 @@ int Game::Run()
 
         if ((current_time - it->placement_time) >= GameConstants::BOOM_TIMER[it->getIndex()] + (int)(GRID_SIZE/4))
         {
-            int range = GameConstants::TOWER_RANGE[it->getIndex()];
-            it->explode(enemies, range);
+            it->explode(enemies, TOWER_RANGE[it->getIndex()]);
             it = TowerPosition.erase(it);
         }
         else  ++it;

@@ -82,11 +82,6 @@ public:
       }
   }
 
-  void ElectricBomb(std::vector<Enemy> &enemies, int range)
-  {
-    this->explode(enemies, range);
-  }
-
   bool operator==(const TowerPositionDataClass &other) const
   {
       return index == other.index && x == other.x && y == other.y;
