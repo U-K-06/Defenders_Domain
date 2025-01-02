@@ -39,6 +39,16 @@ int Game::Run()
   int TOWER_RANGE[7]    = { 1, 1, 1, 1, 1, 1, 1 };
   int TOWER_LEVEL[7]    = { 0, 0, 0, 0, 0, 0, 0 };
 
+  float BOOM_TIMER[7] = {
+                                      5,    // Electric Tower
+                                      6.5,  // Fire Tower
+                                      8.5,  // Poison Tower
+                                      10,   // Water Tower
+                                      10.8, // Ice Tower
+                                      11.6, // Wind Tower
+                                      12.6  // Shadow Tower
+                                    };
+
   int l_index = 0;
   
   int active_tower = 0, selection_tower = 0;
@@ -88,6 +98,14 @@ int Game::Run()
       TOWER_LEVEL[index] = (TOWER_LEVEL[index] < GameConstants::MAX_TOWER_LEVEL[index]) ? TOWER_LEVEL[index] + 1 : TOWER_LEVEL[index];
       last_upgrade_time = current_upgrade_time;
       (l_index>=number_of_towers) ? l_index : ++l_index;
+      bool buff = ((1+rand()) % 9) % 2 == 0;
+      if (buff) {
+        TOWER_RANGE[index] += 1;
+      }
+      else{
+        int r_sec = 1 + rand() % 3;
+        (BOOM_TIMER[index]-r_sec < GameConstants::MIN_BOOM_TIMER[index]) ? BOOM_TIMER[index] = GameConstants::MIN_BOOM_TIMER[index] : BOOM_TIMER[index] -= r_sec;
+      }
     }
 
     // TODO: as tower level increase it will also increase TOWER_RANGE of that perticular index whols level has been increased by 1
@@ -175,9 +193,9 @@ int Game::Run()
     {
         time_t current_time = time(0);
         time_t placement_time = it->placement_time;
-        int boom_timer = GameConstants::BOOM_TIMER[it->getIndex()];
+        int boom_timer = BOOM_TIMER[it->getIndex()];
 
-        if ((current_time - it->placement_time) >= GameConstants::BOOM_TIMER[it->getIndex()] + (int)(GRID_SIZE/4))
+        if ((current_time - it->placement_time) >= BOOM_TIMER[it->getIndex()] + (int)(GRID_SIZE/4))
         {
             it->explode(enemies, TOWER_RANGE[it->getIndex()]);
             it = TowerPosition.erase(it);

@@ -95,18 +95,10 @@ namespace GameConstants {
     constexpr const char* BORDER_WALL_X    = "-----";
     constexpr const char* DOOR             = "[(.)]";
 
-    const float BOOM_TIMER[7] = {
-                                      5,    // Electric Tower
-                                      6.5,  // Fire Tower
-                                      8.5,  // Poison Tower
-                                      10,   // Water Tower
-                                      10.8, // Ice Tower
-                                      11.6, // Wind Tower
-                                      12.6  // Shadow Tower
-                                    };
-
+    const int MIN_BOOM_TIMER[] = { 3, 4, 6, 8, 8.5, 9, 10 };
     const int UPGRADE_TIME[] = { 5, 7, 7, 6, 6, 7, 8, 9, 1, 1 };
     const int MAX_TOWER_LEVEL[7] = { 8, 8, 8, 6, 7, 6, 5 };
+    const int MAX_TOWER_RANGE[7] = { 5, 5, 4, 3, 5, 7, 3 };
 
     constexpr const char* RESET = "\033[37m";
 
