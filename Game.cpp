@@ -27,6 +27,7 @@ int Game::Run()
 {
   // PlaySound(Audio::BGM, NULL, SND_FILENAME | SND_ASYNC | SND_LOOP); // IGNORE: Error in PlaySound function
   system("cls");
+  SetConsoleFontSize(25);
   draw.game_name();
   hide_cursor();
 
@@ -107,9 +108,6 @@ int Game::Run()
         (BOMB_TIMER[index]-r_sec < GameConstants::MIN_BOMB_TIMER[index]) ? BOMB_TIMER[index] = GameConstants::MIN_BOMB_TIMER[index] : BOMB_TIMER[index] -= r_sec;
       }
     }
-
-    // TODO: as bomb level increase it will also increase bomb_RANGE of that perticular index whols level has been increased by 1
-
 
     if (timeSinceLastSpawn >= currentSpawnInterval)
     {
@@ -310,8 +308,20 @@ int Game::enemy_type()
 
 std::string Game::enemy_color(int choice)
 {
-  return (choice > 5) ? colors[rand() % sizeof(colors) / sizeof(colors[0])] : (choice > 1) ? colors[rand() % (choice - 1)]
-                                                                                           : colors[0];
+  return (choice > 5) ? colors[rand() % sizeof(colors) / sizeof(colors[0])] : (choice > 1) ? colors[rand() % (choice - 1)] : colors[0];
+}
+
+void SetConsoleFontSize(int fontSize) {
+  CONSOLE_FONT_INFOEX cfi;
+  
+  cfi.nFont        = 0;
+  cfi.dwFontSize.X = 0;
+  cfi.dwFontSize.Y = fontSize;
+  cfi.FontFamily   = FF_DONTCARE;
+  cfi.FontWeight   = FW_NORMAL;
+  
+  std::wcscpy(cfi.FaceName, L"Consolas");
+  SetCurrentConsoleFontEx(GetStdHandle(STD_OUTPUT_HANDLE), 0, &cfi); 
 }
 
 void Game::hide_cursor()
