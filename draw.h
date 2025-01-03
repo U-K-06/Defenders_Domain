@@ -9,7 +9,8 @@ class Draw {
 public:
   void game_name();
   void lose_game();
-  void grid(int GRID_SIZE, std::string bomb_names[], int active_bomb, int selection_bomb, int active_grid_x, int active_grid_y, bool is_place_mode_active, BombPositionData bombPosition, std::vector<Enemy>& enemies, int door_x, int door_y, int color_code, int BOMB_LEVEL[], int BOMB_RANGE[], float BOMB_TIMER[], int number_of_bombs);
+  void show_timer(int mm,int ss);
+  void grid(int GRID_SIZE, std::string bomb_names[], int active_bomb, int selection_bomb, int active_grid_x, int active_grid_y, bool is_place_mode_active, BombPositionData bombPosition, std::vector<Enemy>& enemies, int door_x, int door_y, int color_code, int BOMB_LEVEL[], int BOMB_RANGE[], float BOMB_TIMER[], int number_of_bombs, std::chrono::steady_clock::time_point start_time);
   static std::string m_enemy_color;
   static int m_enemy_type;
   static bool is_bomb_placed(int x, int y, BombPositionData& bombPosition);

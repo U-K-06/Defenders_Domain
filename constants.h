@@ -51,9 +51,6 @@ namespace GameConstants {
                            DDDDDD       EEEEEEEEE     F             EEEEEEEEE     N        N       DDDDDD       EEEEEEEEE     R           R             SSSSSSSS
 
 
-
-
-
                                            DDDDDD            OOOOOO          MM             MM          AAAA            |#|     NN       N     
                                           D      D         OO      OO        M M           M M         AA  AA           |#|     N N      N
                                           D       D       OO        OO       M  M         M  M        AA    AA          |#|     N  N     N

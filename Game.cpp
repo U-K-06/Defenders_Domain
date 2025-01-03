@@ -27,7 +27,6 @@ int Game::Run()
 {
   // PlaySound(Audio::BGM, NULL, SND_FILENAME | SND_ASYNC | SND_LOOP); // IGNORE: Error in PlaySound function
   system("cls");
-  Game::SetConsoleFontSize(25);
   draw.game_name();
   hide_cursor();
 
@@ -64,6 +63,7 @@ int Game::Run()
   std::srand(static_cast<unsigned int>(std::time(0)));
 
   auto last_time = std::chrono::steady_clock::now();
+  auto timer_start_time = std::chrono::steady_clock::now();
 
   Draw::m_enemy_type = enemy_type();
   Draw::m_enemy_color = enemy_color(choice);
@@ -133,7 +133,7 @@ int Game::Run()
     }
 
     clear_screen(GRID_SIZE);
-    draw.grid(GRID_SIZE, bomb_names, active_bomb, selection_bomb, active_grid_x, active_grid_y, is_place_mode_active, bombPosition, enemies, door_x, door_y, color_code, BOMB_LEVEL, BOMB_RANGE, BOMB_TIMER, number_of_bombs);
+    draw.grid(GRID_SIZE, bomb_names, active_bomb, selection_bomb, active_grid_x, active_grid_y, is_place_mode_active, bombPosition, enemies, door_x, door_y, color_code, BOMB_LEVEL, BOMB_RANGE, BOMB_TIMER, number_of_bombs, timer_start_time);
 
     for (Enemy &enemy : enemies)
     {
@@ -147,20 +147,20 @@ int Game::Run()
       {
         if (elapsed_time >= 6.0f)
         {
-          if (abs(dx) > abs(dy))
-          {
-            (dx > 0) ? enemy.x++ : enemy.x--;
-          }
-          else
-          {
-            (dy > 0) ? enemy.y++ : enemy.y--;
-          }
+          (abs(dx) > abs(dy)) ? (dx > 0) ? enemy.x++ : enemy.x-- : (dy > 0) ? enemy.y++ : enemy.y--;
           enemy.hasMoved = true;
           enemy.last_move_time = current_time;
 
-          if (enemy.x == door_y - 1 && enemy.y == door_y - 1)
+          if ((enemy.x == door_x - 1 && enemy.y == door_y - 1) || (enemy.x == door_x - 1 && enemy.y == door_y + 1) || (enemy.x == door_x + 1 && enemy.y == door_y - 1) ||(enemy.x == door_x + 1 && enemy.y == door_y + 1))
           {
-            draw.lose_game();
+            if ((enemy.x == door_x - 1 && enemy.y == door_y) || 
+                    (enemy.x == door_x + 1 && enemy.y == door_y) || 
+                    (enemy.x == door_x && enemy.y == door_y - 1) || 
+                    (enemy.x == door_x && enemy.y == door_y + 1))
+                    {
+            // draw.lose_game();
+            std::cout << enemy.x  << "  " << enemy.y << "   door    " << door_x << "   " << door_y << std::endl;
+                    }
           }
         }
       }
@@ -180,7 +180,8 @@ int Game::Run()
 
             if (enemy.x == door_y && enemy.y == door_y)
             {
-              draw.lose_game();
+              // draw.lose_game();
+std::cout << enemy.x  << "  " << enemy.y << "   door    " << door_x << "   " << door_y << std::endl;
             }
           }
         }
@@ -311,19 +312,6 @@ std::string Game::enemy_color(int choice)
   return (choice > 5) ? colors[rand() % sizeof(colors) / sizeof(colors[0])] : (choice > 1) ? colors[rand() % (choice - 1)] : colors[0];
 }
 
-void SetConsoleFontSize(int fontSize) {
-  CONSOLE_FONT_INFOEX cfi;
-  
-  cfi.nFont        = 0;
-  cfi.dwFontSize.X = 0;
-  cfi.dwFontSize.Y = fontSize;
-  cfi.FontFamily   = FF_DONTCARE;
-  cfi.FontWeight   = FW_NORMAL;
-  
-  std::wcscpy(cfi.FaceName, L"Consolas");
-  SetCurrentConsoleFontEx(GetStdHandle(STD_OUTPUT_HANDLE), 0, &cfi); 
-}
-
 void Game::hide_cursor()
 {
   HANDLE out = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -357,22 +345,17 @@ std::tuple<int, int> Game::calculate_grid()
 
   int grid_options[] = { 2, 3, 4, 5, 6, 8, 10 };
 
-  if (choice >= 0 && choice <= 6)
-    GRID_SIZE = grid_options[choice];
+  if (choice >= 0 && choice <= 6) GRID_SIZE = grid_options[choice];
 
   else if (choice == 7)
   {
-    // TODO: Add a limit to max grid size and also change the font size based on the grid size to make it fit in screen
     int size;
-    std::cout << "Enter Grid Size: ";
+    std::cout << "Enter Grid Size (Max -> 15): ";
     std::cin >> size;
-    GRID_SIZE = size;
+    (size <= 15) ? GRID_SIZE = size : GRID_SIZE = 15;
   }
 
-  else
-    return std::make_tuple(0, choice);
-
-  // system("cls");
+  else return std::make_tuple(0, choice);
 
   return std::make_tuple(GRID_SIZE, choice);
 }
@@ -393,16 +376,4 @@ void Game::display_bomb_positions(const BombPositionData &bombPosition)
   {
     std::cout << "bomb: " << bomb.getIndex() << ", Coord: [" << bomb.getX() << ", " << bomb.getY() << "]" << std::endl;
   }
-}
-
-void Game::SetConsoleFontSize(int size) {
-    CONSOLE_FONT_INFOEX cfi;
-    cfi.cbSize = sizeof(cfi);
-    cfi.nFont = 0;
-    cfi.dwFontSize.X = 0; // Width of each character in the font
-    cfi.dwFontSize.Y = size; // Height
-    cfi.FontFamily = FF_DONTCARE;
-    cfi.FontWeight = FW_NORMAL;
-    std::wcscpy(cfi.FaceName, L"Consolas"); // Choose your font
-    SetCurrentConsoleFontEx(GetStdHandle(STD_OUTPUT_HANDLE), FALSE, &cfi);
 }

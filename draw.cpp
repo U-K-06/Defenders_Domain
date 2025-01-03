@@ -55,10 +55,21 @@ void Draw::lose_game()
   exit(0);
 }
 
-void Draw::grid(int GRID_SIZE, std::string bomb_names[], int active_bomb, int selection_bomb, int active_grid_x, int active_grid_y, bool is_place_mode_active, BombPositionData BombPosition, std::vector<Enemy> &enemies, int door_x, int door_y, int color_code, int BOMB_LEVEL[], int BOMB_RANGE[], float BOOM_TIMER[], int number_of_bombs)
-{
-  int name_index = 0;
+void Draw::grid(int GRID_SIZE, std::string bomb_names[], int active_bomb, int selection_bomb, int active_grid_x, int active_grid_y, bool is_place_mode_active, BombPositionData BombPosition, std::vector<Enemy> &enemies, int door_x, int door_y, int color_code, int BOMB_LEVEL[], int BOMB_RANGE[], float BOOM_TIMER[], int number_of_bombs, std::chrono::steady_clock::time_point start_time)
+{ 
   std::cout << "\n";
+  int name_index = 0;
+
+  auto current_time = std::chrono::steady_clock::now();
+  auto elapsed_time = std::chrono::duration_cast<std::chrono::seconds>(current_time - start_time).count();
+  
+  int minutes = elapsed_time / 60;
+  int seconds = elapsed_time % 60;
+
+  show_timer(minutes, seconds);
+
+  std::cout << "\n";
+  
   for (int i = 0; i <= 2 * GRID_SIZE; i++)
   {
     if (i <= 1)
@@ -203,9 +214,6 @@ void Draw::top_grid(int i, int GRID_SIZE, bool is_place_mode_active, int active_
       }
       else
       {
-
-        // Check for bullets in the positions where BORDER_WALL_X would be rendered
-
         if (is_place_mode_active && ((j / 2 == active_grid_x && i / 2 == active_grid_y) || (j / 2 == active_grid_x && i / 2 == active_grid_y + 1)))
         {
 
@@ -219,6 +227,12 @@ void Draw::top_grid(int i, int GRID_SIZE, bool is_place_mode_active, int active_
       }
     }
   }
+}
+
+void Draw::show_timer(int mm,int ss){
+    std::cout<<"\t\t\t\t\t\t\t\t\t\t\t\t";
+    std::cout << (mm < 10 ? "0" : "") << mm << ":" << (ss < 10 ? "0" : "") << ss;
+    std::cout<<std::endl;
 }
 
 void Draw::render_bomb_names(int& name_index, int selection_bomb, int active_bomb, bool is_place_mode_active, std::string bomb_names[], int bomb_lvls[])
@@ -316,11 +330,11 @@ void Draw::mid_grid(int i, int selection_bomb, int active_bomb, bool is_place_mo
     { 
       if (is_place_mode_active && ((j / 2 == active_grid_x && i / 2 == active_grid_y) || (j / 2 == active_grid_x + 1 && i / 2 == active_grid_y)))
       {
-        (j == 2 * GRID_SIZE && name_index < number_of_bombs) ?  std::cout << "\033[31m" << GameConstants::BORDER_WALL_Y << GameConstants::RESET << "\t\t\t" << "( " << bomb_lvls[name_index] << " )" << "\t\t[ " << BOOM_TIMER[name_index] << BOMB_RANGE[name_index]  << " ]" : std::cout << "\033[31m" << GameConstants::BORDER_WALL_Y << GameConstants::RESET;
+        (j == 2 * GRID_SIZE && name_index < number_of_bombs) ?  std::cout << "\033[31m" << GameConstants::BORDER_WALL_Y << GameConstants::RESET << "\t\t\t" << "( " << bomb_lvls[name_index] << " )\t\t[ " << BOOM_TIMER[name_index] << BOMB_RANGE[name_index] << " ]" : std::cout << "\033[31m" << GameConstants::BORDER_WALL_Y << GameConstants::RESET;
       }
       else
       {
-        (j == 2 * GRID_SIZE && name_index < number_of_bombs) ? std::cout << GameConstants::BORDER_WALL_Y << "\t\t\t" << "( " << bomb_lvls[name_index] << " )" << "\t\t[ " << BOOM_TIMER[name_index] << ", " << BOMB_RANGE[name_index]  << " ]" : std::cout << GameConstants::BORDER_WALL_Y;
+        (j == 2 * GRID_SIZE && name_index < number_of_bombs) ? std::cout << GameConstants::BORDER_WALL_Y << "\t\t\t" << "( " << bomb_lvls[name_index] << " )\t\t[ " << BOOM_TIMER[name_index] << ", " << BOMB_RANGE[name_index] << " ]" : std::cout << GameConstants::BORDER_WALL_Y;
       }
     }
     else
