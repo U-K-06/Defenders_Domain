@@ -27,7 +27,7 @@ int Game::Run()
 {
   // PlaySound(Audio::BGM, NULL, SND_FILENAME | SND_ASYNC | SND_LOOP); // IGNORE: Error in PlaySound function
   system("cls");
-  SetConsoleFontSize(25);
+  Game::SetConsoleFontSize(25);
   draw.game_name();
   hide_cursor();
 
@@ -393,4 +393,16 @@ void Game::display_bomb_positions(const BombPositionData &bombPosition)
   {
     std::cout << "bomb: " << bomb.getIndex() << ", Coord: [" << bomb.getX() << ", " << bomb.getY() << "]" << std::endl;
   }
+}
+
+void Game::SetConsoleFontSize(int size) {
+    CONSOLE_FONT_INFOEX cfi;
+    cfi.cbSize = sizeof(cfi);
+    cfi.nFont = 0;
+    cfi.dwFontSize.X = 0; // Width of each character in the font
+    cfi.dwFontSize.Y = size; // Height
+    cfi.FontFamily = FF_DONTCARE;
+    cfi.FontWeight = FW_NORMAL;
+    std::wcscpy(cfi.FaceName, L"Consolas"); // Choose your font
+    SetCurrentConsoleFontEx(GetStdHandle(STD_OUTPUT_HANDLE), FALSE, &cfi);
 }
