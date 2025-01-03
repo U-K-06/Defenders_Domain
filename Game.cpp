@@ -12,6 +12,8 @@
 #include "draw.h"
 #include "constants.h"
 
+// std::string bomb_names[] = {"Electro bomb", "Fire bomb", "Poison bomb", "Water bomb", "Ice bomb", "Wind bomb" };
+
 std::string bomb_names[] = {"Electro bomb", "Fire bomb", "Poison bomb", "Water bomb", "Ice bomb", "Wind bomb", "Shadow bomb"};
 
 std::string colors[] = {"\033[38;5;214m", "\033[38;5;196m", "\033[38;5;93m", "\033[38;5;39m", "\033[38;5;81m", "\033[38;5;159m", "\033[38;5;23m"};
@@ -25,7 +27,7 @@ Draw draw;
 
 int Game::Run()
 {
-  // PlaySound(Audio::BGM, NULL, SND_FILENAME | SND_ASYNC | SND_LOOP); // IGNORE: Error in PlaySound function
+  PlaySound(Audio::BGM, NULL, SND_FILENAME | SND_ASYNC | SND_LOOP); // IGNORE: Error in PlaySound function
   system("cls");
   draw.game_name();
   hide_cursor();
@@ -36,21 +38,21 @@ int Game::Run()
 
   time_t last_upgrade_time = time(0);
 
-  int BOMB_RANGE[7]    = { 1, 1, 1, 1, 1, 1, 1 };
-  int BOMB_LEVEL[7]    = { 0, 0, 0, 0, 0, 0, 0 };
+  int BOMB_RANGE[7] = {1, 1, 1, 1, 1, 1, 1};
+  int BOMB_LEVEL[7] = {0, 0, 0, 0, 0, 0, 0};
 
   float BOMB_TIMER[7] = {
-                                      5,    // Electric bomb
-                                      6.5,  // Fire bomb
-                                      8.5,  // Poison bomb
-                                      10,   // Water bomb
-                                      10.8, // Ice bomb
-                                      11.6, // Wind bomb
-                                      12.6  // Shadow bomb
-                                    };
+      5,    // Electric bomb
+      6.5,  // Fire bomb
+      8.5,  // Poison bomb
+      10,   // Water bomb
+      10.8, // Ice bomb
+      6, // Wind bomb
+      12.6  // Shadow bomb
+  };
 
   int l_index = 0;
-  
+
   int active_bomb = 0, selection_bomb = 0;
   bool is_place_mode_active = false;
   int active_grid_x = 0, active_grid_y = 0;
@@ -84,9 +86,11 @@ int Game::Run()
 
     timeSinceLastSpawn += elapsed_time;
 
-    if (elapsed_time >= GameConstants::TIME_TO_DECREASE_SPAWN_INTERVAL) {
+    if (elapsed_time >= GameConstants::TIME_TO_DECREASE_SPAWN_INTERVAL)
+    {
       currentSpawnInterval -= GameConstants::SPAWN_INTERVAL_DECAY_RATE * (elapsed_time / GameConstants::TIME_TO_DECREASE_SPAWN_INTERVAL);
-      if (currentSpawnInterval >= GameConstants::MIN_SPAWN_INTERVAL) {
+      if (currentSpawnInterval >= GameConstants::MIN_SPAWN_INTERVAL)
+      {
         currentSpawnInterval = GameConstants::MIN_SPAWN_INTERVAL;
       }
     }
@@ -99,13 +103,15 @@ int Game::Run()
       BOMB_LEVEL[index] = (BOMB_LEVEL[index] < GameConstants::MAX_BOMB_LEVEL[index]) ? BOMB_LEVEL[index] + 1 : BOMB_LEVEL[index];
       last_upgrade_time = current_upgrade_time;
       (l_index >= number_of_bombs) ? l_index : ++l_index;
-      bool buff = ((1+rand()) % 9) % 2 == 0;
-      if (buff) {
+      bool buff = ((1 + rand()) % 9) % 2 == 0;
+      if (buff)
+      {
         BOMB_RANGE[index] += 1;
       }
-      else{
+      else
+      {
         int r_sec = 1 + rand() % 3;
-        (BOMB_TIMER[index]-r_sec < GameConstants::MIN_BOMB_TIMER[index]) ? BOMB_TIMER[index] = GameConstants::MIN_BOMB_TIMER[index] : BOMB_TIMER[index] -= r_sec;
+        (BOMB_TIMER[index] - r_sec < GameConstants::MIN_BOMB_TIMER[index]) ? BOMB_TIMER[index] = GameConstants::MIN_BOMB_TIMER[index] : BOMB_TIMER[index] -= r_sec;
       }
     }
 
@@ -145,21 +151,22 @@ int Game::Run()
 
       if (!enemy.hasMoved)
       {
-        if (elapsed_time >= 6.0f)
+        if (elapsed_time >= 2.0f)
         {
-          (abs(dx) > abs(dy)) ? (dx > 0) ? enemy.x++ : enemy.x-- : (dy > 0) ? enemy.y++ : enemy.y--;
+          (abs(dx) > abs(dy)) ? (dx > 0) ? enemy.x++ : enemy.x-- : (dy > 0) ? enemy.y++
+                                                                            : enemy.y--;
           enemy.hasMoved = true;
           enemy.last_move_time = current_time;
 
-          if ((enemy.x == door_x - 1 && enemy.y == door_y - 1) || (enemy.x == door_x - 1 && enemy.y == door_y + 1) || (enemy.x == door_x + 1 && enemy.y == door_y - 1) ||(enemy.x == door_x + 1 && enemy.y == door_y + 1))
+          if ((enemy.x == door_x - 1 && enemy.y == door_y - 1) || (enemy.x == door_x - 1 && enemy.y == door_y + 1) || (enemy.x == door_x + 1 && enemy.y == door_y - 1) || (enemy.x == door_x + 1 && enemy.y == door_y + 1))
           {
-            if ((enemy.x == door_x - 1 && enemy.y == door_y) || 
-                    (enemy.x == door_x + 1 && enemy.y == door_y) || 
-                    (enemy.x == door_x && enemy.y == door_y - 1) || 
-                    (enemy.x == door_x && enemy.y == door_y + 1))
-                    {
-            draw.lose_game();
-                    }
+            if ((enemy.x == door_x - 1 && enemy.y == door_y) ||
+                (enemy.x == door_x + 1 && enemy.y == door_y) ||
+                (enemy.x == door_x && enemy.y == door_y - 1) ||
+                (enemy.x == door_x && enemy.y == door_y + 1))
+            {
+              draw.lose_game();
+            }
           }
         }
       }
@@ -188,16 +195,17 @@ int Game::Run()
 
     for (auto it = bombPosition.begin(); it != bombPosition.end();)
     {
-        time_t current_time = time(0);
-        time_t placement_time = it->placement_time;
-        int bomb_timer = BOMB_TIMER[it->getIndex()];
+      time_t current_time = time(0);
+      time_t placement_time = it->placement_time;
+      int bomb_timer = BOMB_TIMER[it->getIndex()];
 
-        if ((current_time - it->placement_time) >= BOMB_TIMER[it->getIndex()] + (int)(GRID_SIZE/4))
-        {
-            it->explode(enemies, BOMB_RANGE[it->getIndex()]);
-            it = bombPosition.erase(it);
-        }
-        else  ++it;
+      if ((current_time - it->placement_time) >= BOMB_TIMER[it->getIndex()] + (int)(GRID_SIZE / 4))
+      {
+        it->explode(enemies, BOMB_RANGE[it->getIndex()],door_x, door_y);
+        it = bombPosition.erase(it);
+      }
+      else
+        ++it;
     }
 
     if (_kbhit())
@@ -307,7 +315,8 @@ int Game::enemy_type()
 
 std::string Game::enemy_color(int choice)
 {
-  return (choice > 5) ? colors[rand() % sizeof(colors) / sizeof(colors[0])] : (choice > 1) ? colors[rand() % (choice - 1)] : colors[0];
+  return (choice > 5) ? colors[rand() % sizeof(colors) / sizeof(colors[0])] : (choice > 1) ? colors[rand() % (choice - 1)]
+                                                                                           : colors[0];
 }
 
 void Game::hide_cursor()
@@ -341,9 +350,10 @@ std::tuple<int, int> Game::calculate_grid()
   std::cout << "Enter Your Choice: ";
   std::cin >> choice;
 
-  int grid_options[] = { 4, 5, 6, 8, 10 };
+  int grid_options[] = {4, 5, 6, 8, 10};
 
-  if (choice >= 0 && choice <= 4) GRID_SIZE = grid_options[choice];
+  if (choice >= 0 && choice <= 4)
+    GRID_SIZE = grid_options[choice];
 
   else if (choice == 5)
   {
@@ -353,9 +363,11 @@ std::tuple<int, int> Game::calculate_grid()
     (size <= 15) ? GRID_SIZE = size : GRID_SIZE = 15;
   }
 
-  else if (choice == 6) exit(0);
+  else if (choice == 6)
+    exit(0);
 
-  else return std::make_tuple(0, choice);
+  else
+    return std::make_tuple(0, choice);
 
   return std::make_tuple(GRID_SIZE, choice);
 }

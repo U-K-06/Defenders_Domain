@@ -8,7 +8,7 @@
 #include <chrono>
 #include <cmath>
 
-#define my_max(a,b) (((a) > (b)) ? (a) : (b))
+#define my_max(a, b) (((a) > (b)) ? (a) : (b))
 
 class Enemy
 {
@@ -21,14 +21,12 @@ public:
   int hasMoved = false;
   int is_slowed = false;
   int is_poisoned = false;
-  
+
   std::chrono::steady_clock::time_point last_move_time = std::chrono::steady_clock::now();
   Enemy() : type(0), health(type), color("default"), x(x), y(y) {}
 
   Enemy(int initialHealth, int enemyType)
       : type(enemyType), health(enemyType), color("default"), x(0), y(0) {}
-
-
 };
 
 class Bomb
@@ -70,13 +68,13 @@ public:
   int getX() const { return x; }
   int getY() const { return y; }
 
-  void normal_explode(std::vector<Enemy> & enemies, int range, std::vector<Enemy>::iterator &it)
+  void normal_explode(std::vector<Enemy> &enemies, int range, std::vector<Enemy>::iterator &it)
   {
     // std::cout << "Enemy destroyed at position: (" << it->x << ", " << it->y << ")\n";
     it = enemies.erase(it);
   }
 
-  void poison_explode(std::vector<Enemy> & enemies, int range, std::vector<Enemy>::iterator &it)
+  void poison_explode(std::vector<Enemy> &enemies, int range, std::vector<Enemy>::iterator &it)
   {
     std::string purple = "\033[38;5;93m";
   }
@@ -87,49 +85,67 @@ public:
     std::cout << moveAmount << std::endl;
 
     // TODO: Make 2.5 * the enemy's movement speed
-    
+
     (rand() % 2 == 0) ? ((it->x - moveAmount < 0) ? it = enemies.erase(it) : (it->x -= moveAmount, ++it)) : ((it->y - moveAmount < 0) ? it = enemies.erase(it) : (it->y -= moveAmount, ++it));
   }
 
-  void wind_explode(std::vector<Enemy> &enemies, int range, std::vector<Enemy>::iterator &it)
+  void wind_explode(std::vector<Enemy> &enemies, int range, std::vector<Enemy>::iterator &it, int door_x, int door_y)
   {
-    
-    // FIXME: in wind, we are moving the enemy in random direction but we have to do it in opposite direction from where the door is
-
-    (rand() % 2 == 0) ? ((it->x - 2 < 0) ? it = enemies.erase(it) : (it->x -= 2, ++it)) : ((it->y - 2 < 0) ? it = enemies.erase(it) : (it->y -= 2, ++it));
-  }
-
-  void explode(std::vector<Enemy> &enemies, int range)
-  {
-    for (auto it = enemies.begin(); it != enemies.end();)
+    int dx = it->x - door_x;
+    int dy = it->y - door_y;
+    if (abs(dx) > abs(dy))
     {
-        int distance = my_max(std::abs(it->x - x), std::abs(it->y - y));
-        if (distance <= range)
-        {
-          switch(index)
-          {
-            case 2:
-              poison_explode(enemies, range, it);
-            case 4:
-              ice_explode(enemies, range, it);
-            case 5:
-              wind_explode(enemies, range, it);
-            default:
-              normal_explode(enemies, range, it);
-          }
-        }
-        else
-        {
-            ++it;
-        }
+      if (dx > 0)
+      {
+        (it->x + 2 >= range) ? it = enemies.erase(it) : (it->x += 2, ++it);
+      }
+      else
+      {
+        (it->x - 2 < 0) ? it = enemies.erase(it) : (it->x -= 2, ++it);
+      }
+    }
+    else
+    {
+      if (dy > 0)
+      {
+        (it->y + 2 >= range) ? it = enemies.erase(it) : (it->y += 2, ++it);
+      }
+      else
+      {
+        (it->y - 2 < 0) ? it = enemies.erase(it) : (it->y -= 2, ++it);
+      }
     }
   }
 
-
+  void explode(std::vector<Enemy> &enemies, int range,int door_x, int door_y)
+  {
+    for (auto it = enemies.begin(); it != enemies.end();)
+    {
+      int distance = my_max(std::abs(it->x - x), std::abs(it->y - y));
+      if (distance <= range)
+      {
+        switch (index)
+        {
+        case 2:
+          poison_explode(enemies, range, it);
+        case 4:
+          ice_explode(enemies, range, it);
+        case 5:
+          wind_explode(enemies, range, it, door_x, door_y);
+        default:
+          normal_explode(enemies, range, it);
+        }
+      }
+      else
+      {
+        ++it;
+      }
+    }
+  }
 
   bool operator==(const BombPositionDataClass &other) const
   {
-      return index == other.index && x == other.x && y == other.y;
+    return index == other.index && x == other.x && y == other.y;
   }
 
 private:

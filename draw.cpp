@@ -322,20 +322,22 @@ void Draw::bottom_grid(int i, int GRID_SIZE, bool is_place_mode_active, int acti
     }
   }
 }
+
 void Draw::mid_grid(int i, int selection_bomb, int active_bomb, bool is_place_mode_active, int GRID_SIZE, int active_grid_x, int active_grid_y, int door_x, int door_y, int color_code, BombPositionData &BombPosition, std::vector<Enemy> &enemies, int bomb_lvls[], int name_index, int BOMB_RANGE[], float BOOM_TIMER[], int number_of_bombs)
 {
   int index = name_index - 1;
   for (int j = 0; j <= 2 * GRID_SIZE; j++)
   {
     if (j % 2 == 0)
-    { 
+    {
+      // FIXME: VALUES ARE GETTING SHOWED EXTRA TIMES
       if (is_place_mode_active && ((j / 2 == active_grid_x && i / 2 == active_grid_y) || (j / 2 == active_grid_x + 1 && i / 2 == active_grid_y)))
       {
-        (j == 2 * GRID_SIZE && name_index < number_of_bombs) ?  std::cout << "\033[31m" << GameConstants::BORDER_WALL_Y << GameConstants::RESET << "\t\t\t" << "( " << bomb_lvls[index] << " )\t\t[ " << ((BOOM_TIMER[index] < 10) ? " " : "")<< std::fixed << std::setprecision(1) << BOOM_TIMER[index] << ", " << BOMB_RANGE[index] << " ]" : std::cout << "\033[31m" << GameConstants::BORDER_WALL_Y << GameConstants::RESET;
+        (j == 2 * GRID_SIZE && index <= number_of_bombs) ?  std::cout << "\033[31m" << GameConstants::BORDER_WALL_Y << GameConstants::RESET << "\t\t\t" << "( " << bomb_lvls[index] << " )\t\t[ " << ((BOOM_TIMER[index] < 10) ? " " : "")<< std::fixed << std::setprecision(1) << BOOM_TIMER[index] << ", " << BOMB_RANGE[index] << " ]" : std::cout << "\033[31m" << GameConstants::BORDER_WALL_Y << GameConstants::RESET;
       }
       else
       {
-        (j == 2 * GRID_SIZE && name_index < number_of_bombs) ? std::cout << GameConstants::BORDER_WALL_Y << "\t\t\t" << "( " << bomb_lvls[index] << " )\t\t[ " << ((BOOM_TIMER[index] < 10) ? " " : "")<<  std::fixed << std::setprecision(1) << BOOM_TIMER[index] << ", " << BOMB_RANGE[index] << " ]" : std::cout << GameConstants::BORDER_WALL_Y;
+        (j == 2 * GRID_SIZE && index <= number_of_bombs) ? std::cout << GameConstants::BORDER_WALL_Y << "\t\t\t" << "( " << bomb_lvls[index] << " )\t\t[ " << ((BOOM_TIMER[index] < 10) ? " " : "")<<  std::fixed << std::setprecision(1) << BOOM_TIMER[index] << ", " << BOMB_RANGE[index] << " ]" : std::cout << GameConstants::BORDER_WALL_Y;
       }
     }
     else
