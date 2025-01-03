@@ -158,8 +158,7 @@ int Game::Run()
                     (enemy.x == door_x && enemy.y == door_y - 1) || 
                     (enemy.x == door_x && enemy.y == door_y + 1))
                     {
-            // draw.lose_game();
-            std::cout << enemy.x  << "  " << enemy.y << "   door    " << door_x << "   " << door_y << std::endl;
+            draw.lose_game();
                     }
           }
         }
@@ -180,8 +179,7 @@ int Game::Run()
 
             if (enemy.x == door_y && enemy.y == door_y)
             {
-              // draw.lose_game();
-std::cout << enemy.x  << "  " << enemy.y << "   door    " << door_x << "   " << door_y << std::endl;
+              draw.lose_game();
             }
           }
         }
@@ -339,21 +337,23 @@ std::tuple<int, int> Game::calculate_grid()
 {
   int choice;
   int GRID_SIZE;
-  std::cout << "\n\n\n\nENTER THE GRID SIZE \n\t(0 -> 2x2)\n\t(1 -> 3x3)\n\t(2 -> 4x4)\n\t(3 -> 5x5)\n\t(4 -> 6x6)\n\t(5 -> 8x8)\n\t(6 -> 10x10)\n\t(7 -> CUSTOM GRID SIZE)\n\t(8 -> EXIT)\n";
+  std::cout << "\n\n\n\nENTER THE GRID SIZE \n\t(0 -> 4x4)\n\t(1 -> 5x5)\n\t(2 -> 6x6)\n\t(3 -> 8x8)\n\t(4 -> 10x10)\n\t(5 -> CUSTOM GRID SIZE)\n\t(6 -> EXIT)\n";
   std::cout << "Enter Your Choice: ";
   std::cin >> choice;
 
-  int grid_options[] = { 2, 3, 4, 5, 6, 8, 10 };
+  int grid_options[] = { 4, 5, 6, 8, 10 };
 
-  if (choice >= 0 && choice <= 6) GRID_SIZE = grid_options[choice];
+  if (choice >= 0 && choice <= 4) GRID_SIZE = grid_options[choice];
 
-  else if (choice == 7)
+  else if (choice == 5)
   {
     int size;
     std::cout << "Enter Grid Size (Max -> 15): ";
     std::cin >> size;
     (size <= 15) ? GRID_SIZE = size : GRID_SIZE = 15;
   }
+
+  else if (choice == 6) exit(0);
 
   else return std::make_tuple(0, choice);
 

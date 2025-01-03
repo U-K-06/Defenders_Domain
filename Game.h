@@ -8,7 +8,7 @@
 #include <chrono>
 #include <cmath>
 
-#define max(a,b) (((a) > (b)) ? (a) : (b))
+#define my_max(a,b) (((a) > (b)) ? (a) : (b))
 
 class Enemy
 {
@@ -103,7 +103,7 @@ public:
   {
     for (auto it = enemies.begin(); it != enemies.end();)
     {
-        int distance = max(std::abs(it->x - x), std::abs(it->y - y));
+        int distance = my_max(std::abs(it->x - x), std::abs(it->y - y));
         if (distance <= range)
         {
           switch(index)

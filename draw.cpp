@@ -8,6 +8,7 @@
 #include "draw.h"
 #include "constants.h"
 #include "Game.h"
+#include <iomanip>
 
 std::string Draw::m_enemy_color = "";
 int Draw::m_enemy_type = 0;
@@ -330,11 +331,11 @@ void Draw::mid_grid(int i, int selection_bomb, int active_bomb, bool is_place_mo
     { 
       if (is_place_mode_active && ((j / 2 == active_grid_x && i / 2 == active_grid_y) || (j / 2 == active_grid_x + 1 && i / 2 == active_grid_y)))
       {
-        (j == 2 * GRID_SIZE && name_index < number_of_bombs) ?  std::cout << "\033[31m" << GameConstants::BORDER_WALL_Y << GameConstants::RESET << "\t\t\t" << "( " << bomb_lvls[name_index] << " )\t\t[ " << BOOM_TIMER[name_index] << BOMB_RANGE[name_index] << " ]" : std::cout << "\033[31m" << GameConstants::BORDER_WALL_Y << GameConstants::RESET;
+        (j == 2 * GRID_SIZE && name_index < number_of_bombs) ?  std::cout << "\033[31m" << GameConstants::BORDER_WALL_Y << GameConstants::RESET << "\t\t\t" << "( " << bomb_lvls[index] << " )\t\t[ " << ((BOOM_TIMER[index] < 10) ? " " : "")<< std::fixed << std::setprecision(1) << BOOM_TIMER[index] << ", " << BOMB_RANGE[index] << " ]" : std::cout << "\033[31m" << GameConstants::BORDER_WALL_Y << GameConstants::RESET;
       }
       else
       {
-        (j == 2 * GRID_SIZE && name_index < number_of_bombs) ? std::cout << GameConstants::BORDER_WALL_Y << "\t\t\t" << "( " << bomb_lvls[name_index] << " )\t\t[ " << BOOM_TIMER[name_index] << ", " << BOMB_RANGE[name_index] << " ]" : std::cout << GameConstants::BORDER_WALL_Y;
+        (j == 2 * GRID_SIZE && name_index < number_of_bombs) ? std::cout << GameConstants::BORDER_WALL_Y << "\t\t\t" << "( " << bomb_lvls[index] << " )\t\t[ " << ((BOOM_TIMER[index] < 10) ? " " : "")<<  std::fixed << std::setprecision(1) << BOOM_TIMER[index] << ", " << BOMB_RANGE[index] << " ]" : std::cout << GameConstants::BORDER_WALL_Y;
       }
     }
     else
