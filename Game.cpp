@@ -12,20 +12,20 @@
 #include "draw.h"
 #include "constants.h"
 
-std::string tower_names[] = {"Electric Boom", "Fire Boom", "Poison Boom", "Water Boom", "Ice Boom", "Wind Boom", "Shadow Boom"};
+std::string bomb_names[] = {"Electro bomb", "Fire bomb", "Poison bomb", "Water bomb", "Ice bomb", "Wind bomb", "Shadow bomb"};
 
 std::string colors[] = {"\033[38;5;214m", "\033[38;5;196m", "\033[38;5;93m", "\033[38;5;39m", "\033[38;5;81m", "\033[38;5;159m", "\033[38;5;23m"};
 
-int number_of_towers = sizeof(tower_names) / sizeof(tower_names[0]);
-int placed_towers_count = 0;
+int number_of_bombs = sizeof(bomb_names) / sizeof(bomb_names[0]);
+int placed_bombs_count = 0;
 
-std::vector<TowerPositionDataClass> placed_towers;
+std::vector<BombPositionDataClass> placed_bombs;
 
 Draw draw;
 
 int Game::Run()
 {
-  PlaySound(Audio::BGM, NULL, SND_FILENAME | SND_ASYNC | SND_LOOP); // IGNORE: Error in PlaySound function
+  // PlaySound(Audio::BGM, NULL, SND_FILENAME | SND_ASYNC | SND_LOOP); // IGNORE: Error in PlaySound function
   system("cls");
   draw.game_name();
   hide_cursor();
@@ -36,29 +36,29 @@ int Game::Run()
 
   time_t last_upgrade_time = time(0);
 
-  int TOWER_RANGE[7]    = { 1, 1, 1, 1, 1, 1, 1 };
-  int TOWER_LEVEL[7]    = { 0, 0, 0, 0, 0, 0, 0 };
+  int BOMB_RANGE[7]    = { 1, 1, 1, 1, 1, 1, 1 };
+  int BOMB_LEVEL[7]    = { 0, 0, 0, 0, 0, 0, 0 };
 
-  float BOOM_TIMER[7] = {
-                                      5,    // Electric Tower
-                                      6.5,  // Fire Tower
-                                      8.5,  // Poison Tower
-                                      10,   // Water Tower
-                                      10.8, // Ice Tower
-                                      11.6, // Wind Tower
-                                      12.6  // Shadow Tower
+  float BOMB_TIMER[7] = {
+                                      5,    // Electric bomb
+                                      6.5,  // Fire bomb
+                                      8.5,  // Poison bomb
+                                      10,   // Water bomb
+                                      10.8, // Ice bomb
+                                      11.6, // Wind bomb
+                                      12.6  // Shadow bomb
                                     };
 
   int l_index = 0;
   
-  int active_tower = 0, selection_tower = 0;
+  int active_bomb = 0, selection_bomb = 0;
   bool is_place_mode_active = false;
   int active_grid_x = 0, active_grid_y = 0;
 
   char input;
   int GRID_SIZE, choice;
   std::tie(GRID_SIZE, choice) = calculate_grid();
-  TowerPositionData TowerPosition;
+  BombPositionData bombPosition;
 
   std::srand(static_cast<unsigned int>(std::time(0)));
 
@@ -94,21 +94,21 @@ int Game::Run()
 
     if (difftime(current_upgrade_time, last_upgrade_time) >= (GameConstants::UPGRADE_TIME[l_index]))
     {
-      int index = rand() % number_of_towers;
-      TOWER_LEVEL[index] = (TOWER_LEVEL[index] < GameConstants::MAX_TOWER_LEVEL[index]) ? TOWER_LEVEL[index] + 1 : TOWER_LEVEL[index];
+      int index = rand() % number_of_bombs;
+      BOMB_LEVEL[index] = (BOMB_LEVEL[index] < GameConstants::MAX_BOMB_LEVEL[index]) ? BOMB_LEVEL[index] + 1 : BOMB_LEVEL[index];
       last_upgrade_time = current_upgrade_time;
-      (l_index>=number_of_towers) ? l_index : ++l_index;
+      (l_index >= number_of_bombs) ? l_index : ++l_index;
       bool buff = ((1+rand()) % 9) % 2 == 0;
       if (buff) {
-        TOWER_RANGE[index] += 1;
+        BOMB_RANGE[index] += 1;
       }
       else{
         int r_sec = 1 + rand() % 3;
-        (BOOM_TIMER[index]-r_sec < GameConstants::MIN_BOOM_TIMER[index]) ? BOOM_TIMER[index] = GameConstants::MIN_BOOM_TIMER[index] : BOOM_TIMER[index] -= r_sec;
+        (BOMB_TIMER[index]-r_sec < GameConstants::MIN_BOMB_TIMER[index]) ? BOMB_TIMER[index] = GameConstants::MIN_BOMB_TIMER[index] : BOMB_TIMER[index] -= r_sec;
       }
     }
 
-    // TODO: as tower level increase it will also increase TOWER_RANGE of that perticular index whols level has been increased by 1
+    // TODO: as bomb level increase it will also increase bomb_RANGE of that perticular index whols level has been increased by 1
 
 
     if (timeSinceLastSpawn >= currentSpawnInterval)
@@ -135,7 +135,7 @@ int Game::Run()
     }
 
     clear_screen(GRID_SIZE);
-    draw.grid(GRID_SIZE, tower_names, active_tower, selection_tower, active_grid_x, active_grid_y, is_place_mode_active, TowerPosition, enemies, door_x, door_y, color_code, TOWER_LEVEL);
+    draw.grid(GRID_SIZE, bomb_names, active_bomb, selection_bomb, active_grid_x, active_grid_y, is_place_mode_active, bombPosition, enemies, door_x, door_y, color_code, BOMB_LEVEL, BOMB_RANGE, BOMB_TIMER, number_of_bombs);
 
     for (Enemy &enemy : enemies)
     {
@@ -189,16 +189,16 @@ int Game::Run()
       }
     }
 
-    for (auto it = TowerPosition.begin(); it != TowerPosition.end();)
+    for (auto it = bombPosition.begin(); it != bombPosition.end();)
     {
         time_t current_time = time(0);
         time_t placement_time = it->placement_time;
-        int boom_timer = BOOM_TIMER[it->getIndex()];
+        int bomb_timer = BOMB_TIMER[it->getIndex()];
 
-        if ((current_time - it->placement_time) >= BOOM_TIMER[it->getIndex()] + (int)(GRID_SIZE/4))
+        if ((current_time - it->placement_time) >= BOMB_TIMER[it->getIndex()] + (int)(GRID_SIZE/4))
         {
-            it->explode(enemies, TOWER_RANGE[it->getIndex()]);
-            it = TowerPosition.erase(it);
+            it->explode(enemies, BOMB_RANGE[it->getIndex()]);
+            it = bombPosition.erase(it);
         }
         else  ++it;
     }
@@ -217,43 +217,44 @@ int Game::Run()
       case KeyBindings::W_KEY:
       case KeyBindings::w_KEY:
       case KeyBindings::UP_ARROW:
-        Move(is_place_mode_active, "UP", active_grid_y, active_grid_x, selection_tower, number_of_towers, GRID_SIZE);
+        Move(is_place_mode_active, "UP", active_grid_y, active_grid_x, selection_bomb, number_of_bombs, GRID_SIZE);
         break;
       case KeyBindings::K_KEY:
       case KeyBindings::S_KEY:
       case KeyBindings::s_KEY:
       case KeyBindings::DOWN_ARROW:
-        Move(is_place_mode_active, "DOWN", active_grid_y, active_grid_x, selection_tower, number_of_towers, GRID_SIZE);
+        Move(is_place_mode_active, "DOWN", active_grid_y, active_grid_x, selection_bomb, number_of_bombs, GRID_SIZE);
         break;
       case KeyBindings::H_KEY:
       case KeyBindings::h_KEY:
       case KeyBindings::a_KEY:
       case KeyBindings::A_KEY:
       case KeyBindings::LEFT_ARROW:
-        Move(is_place_mode_active, "LEFT", active_grid_y, active_grid_x, selection_tower, number_of_towers, GRID_SIZE);
+        Move(is_place_mode_active, "LEFT", active_grid_y, active_grid_x, selection_bomb, number_of_bombs, GRID_SIZE);
         break;
       case KeyBindings::L_KEY:
       case KeyBindings::D_KEY:
       case KeyBindings::d_KEY:
       case KeyBindings::RIGHT_ARROW:
-        Move(is_place_mode_active, "RIGHT", active_grid_y, active_grid_x, selection_tower, number_of_towers, GRID_SIZE);
+        Move(is_place_mode_active, "RIGHT", active_grid_y, active_grid_x, selection_bomb, number_of_bombs, GRID_SIZE);
         break;
       case KeyBindings::COL_KEY:
       case KeyBindings::SPACE_KEY:
         if (!is_place_mode_active)
         {
-          active_tower = selection_tower;
+          active_bomb = selection_bomb;
         }
         else
         {
-          if (!Draw::is_tower_placed(active_grid_x * 2, active_grid_y * 2, TowerPosition))
+          if (!Draw::is_bomb_placed(active_grid_x * 2, active_grid_y * 2, bombPosition))
           {
-            calculate_tower_positions(GRID_SIZE, active_tower, active_grid_x, active_grid_y, TowerPosition);
-            placed_towers_count++;
+            calculate_bomb_positions(GRID_SIZE, active_bomb, active_grid_x, active_grid_y, bombPosition);
+            placed_bombs_count++;
           }
         }
         break;
       case KeyBindings::ESC_KEY:
+        draw.lose_game();
         PlaySound(NULL, NULL, 0);
         return 0;
       }
@@ -264,7 +265,7 @@ int Game::Run()
 
 void Game::toggle_state(bool &is_place_mode_active) const { is_place_mode_active = !is_place_mode_active; }
 
-void Game::Move(bool is_place_mode_active, std::string direction, int &active_grid_y, int &active_grid_x, int &selection_tower, int number_of_towers, int GRID_SIZE)
+void Game::Move(bool is_place_mode_active, std::string direction, int &active_grid_y, int &active_grid_x, int &selection_bomb, int number_of_bombs, int GRID_SIZE)
 {
   if (is_place_mode_active)
   {
@@ -291,13 +292,13 @@ void Game::Move(bool is_place_mode_active, std::string direction, int &active_gr
   {
     if (direction == "UP")
     {
-      selection_tower = selection_tower % number_of_towers;
-      (selection_tower > 0) ? selection_tower-- : selection_tower = number_of_towers - 1;
+      selection_bomb = selection_bomb % number_of_bombs;
+      (selection_bomb > 0) ? selection_bomb-- : selection_bomb = number_of_bombs - 1;
     }
     if (direction == "DOWN")
     {
-      selection_tower++;
-      selection_tower = selection_tower % number_of_towers;
+      selection_bomb++;
+      selection_bomb = selection_bomb % number_of_bombs;
     }
   }
 }
@@ -365,20 +366,20 @@ std::tuple<int, int> Game::calculate_grid()
   return std::make_tuple(GRID_SIZE, choice);
 }
 
-void Game::calculate_tower_positions(int GRID_SIZE, int active_tower, int active_grid_x, int active_grid_y, TowerPositionData &TowerPosition)
+void Game::calculate_bomb_positions(int GRID_SIZE, int active_bomb, int active_grid_x, int active_grid_y, BombPositionData &bombPosition)
 {
-  Tower tower(active_tower);
-  TowerPositionDataClass newTowerPosition(active_tower, active_grid_x, active_grid_y, tower, time(0));
+  Bomb bomb(active_bomb);
+  BombPositionDataClass newbombPosition(active_bomb, active_grid_x, active_grid_y, bomb, time(0));
 
-  TowerPosition.push_back(newTowerPosition);
-  placed_towers_list.push_back(newTowerPosition);
+  bombPosition.push_back(newbombPosition);
+  placed_bombs_list.push_back(newbombPosition);
 }
 
-void Game::display_tower_positions(const TowerPositionData &TowerPosition)
+void Game::display_bomb_positions(const BombPositionData &bombPosition)
 {
-  std::cout << "Tower Posistions: \n";
-  for (const auto &tower : TowerPosition)
+  std::cout << "bomb Posistions: \n";
+  for (const auto &bomb : bombPosition)
   {
-    std::cout << "Tower: " << tower.getIndex() << ", Coord: [" << tower.getX() << ", " << tower.getY() << "]" << std::endl;
+    std::cout << "bomb: " << bomb.getIndex() << ", Coord: [" << bomb.getX() << ", " << bomb.getY() << "]" << std::endl;
   }
 }

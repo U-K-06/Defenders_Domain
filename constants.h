@@ -95,14 +95,14 @@ namespace GameConstants {
     constexpr const char* BORDER_WALL_X    = "-----";
     constexpr const char* DOOR             = "[(.)]";
 
-    const int MIN_BOOM_TIMER[] = { 3, 4, 6, 8, 8.5, 9, 10 };
+    const float MIN_BOMB_TIMER[] = { 3, 4, 6, 8, 8.5, 9, 10 };
     const int UPGRADE_TIME[] = { 5, 7, 7, 6, 6, 7, 8, 9, 1, 1 };
-    const int MAX_TOWER_LEVEL[7] = { 8, 8, 8, 6, 7, 6, 5 };
-    const int MAX_TOWER_RANGE[7] = { 5, 5, 4, 3, 5, 7, 3 };
+    const int MAX_BOMB_LEVEL[7] = { 8, 8, 8, 6, 7, 6, 5 };
+    const int MAX_BOMB_RANGE[7] = { 5, 5, 4, 3, 5, 7, 3 };
 
     constexpr const char* RESET = "\033[37m";
 
-    constexpr const char* ICE_TOWERS[] = {
+    constexpr const char* ICE_BOMBS[] = {
         "\033[38;5;81m  *  \033[37m",
         "\033[38;5;81m  *> \033[37m",
         "\033[38;5;81m <*> \033[37m",
@@ -110,7 +110,7 @@ namespace GameConstants {
         "\033[38;5;81m<<*>>\033[37m"
     };
 
-    constexpr const char* WIND_TOWERS[] = {
+    constexpr const char* WIND_BOMBS[] = {
         "\033[38;5;159m  *  \033[37m",
         "\033[38;5;159m  *> \033[37m",
         "\033[38;5;159m <*> \033[37m",
@@ -118,7 +118,7 @@ namespace GameConstants {
         "\033[38;5;159m<<*>>\033[37m"
     };
 
-    constexpr const char* SHADOW_TOWERS[] = {
+    constexpr const char* SHADOW_BOMBS[] = {
         "\033[38;5;23m  *  \033[37m",
         "\033[38;5;23m  *> \033[37m",
         "\033[38;5;23m <*> \033[37m",
@@ -126,7 +126,7 @@ namespace GameConstants {
         "\033[38;5;23m<<*>>\033[37m"
     };
 
-    constexpr const char* ELECTRIC_TOWERS[] = {
+    constexpr const char* ELECTRO_BOMBS[] = {
         "\033[38;5;214m  *  \033[37m",
         "\033[38;5;214m  *> \033[37m",
         "\033[38;5;214m <*> \033[37m",
@@ -134,7 +134,7 @@ namespace GameConstants {
         "\033[38;5;214m<<*>>\033[37m"
     };
 
-    constexpr const char* FIRE_TOWERS[] = {
+    constexpr const char* FIRE_BOMBS[] = {
         "\033[38;5;196m  *  \033[37m",
         "\033[38;5;196m  *> \033[37m",
         "\033[38;5;196m <*> \033[37m",
@@ -142,7 +142,7 @@ namespace GameConstants {
         "\033[38;5;196m<<*>>\033[37m"
     };
 
-    constexpr const char* POISON_TOWERS[] = {
+    constexpr const char* POISON_BOMBS[] = {
         "\033[38;5;93m  *  \033[37m",
         "\033[38;5;93m  *> \033[37m",
         "\033[38;5;93m <*> \033[37m",
@@ -150,7 +150,7 @@ namespace GameConstants {
         "\033[38;5;93m<<*>>\033[37m"
     };
 
-    constexpr const char* WATER_TOWERS[] = {
+    constexpr const char* WATER_BOMBS[] = {
         "\033[38;5;39m  *  \033[37m",
         "\033[38;5;39m  *> \033[37m",
         "\033[38;5;39m <*> \033[37m",

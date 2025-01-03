@@ -1,7 +1,7 @@
 # Defender's Domain
 
 ## Overview
-Welcome to the **Defender's Domain**! This is a simple simple CLI game where you have to defend your domain from the incoming enemies which are displayed as ASCII characters. The game is written in C++ and uses the Windows API for playing audio.
+**Defender's Domain** is a **command-line interface** (CLI) game where players defend their **domain** from incoming enemies displayed as **ASCII characters**. The game is developed in **C++** and leverages the **Windows API** for audio playback. Players **strategically** place various types of towers on a grid to destroy **enemies** before they reach the door. Each tower has **unique** properties and can be upgraded over time to enhance gameplay. The game features simple **ASCII-based graphics** and offers a challenging and engaging experience.
 
 ## Project Structure
 
@@ -15,6 +15,8 @@ The project contains the following files and directories:
 - `game.h` - Header file that declares the functions in `game.cpp`.
 - `main.cpp` - The entry point of the application where execution begins.
 - `PTD.exe` - The compiled executable for Windows.
+- `screenshots/` - This directory contains screenshots of the game.
+- `LICENSE` - The license file for the project.
 
 ## Features
 - The game features simple **ASCII-based graphics**.
@@ -30,6 +32,7 @@ Some screenshots of the game are shown below:
 
 ### Screenshot 2:
 ![Gameplay](./screenshots/Game_ss_2.png)
+
 To compile the program, you need to have a C++ compiler installed on your system. Below are the commands for compiling the project on different operating systems and compilers:
 
 ## Requirements

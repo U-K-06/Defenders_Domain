@@ -55,7 +55,7 @@ void Draw::lose_game()
   exit(0);
 }
 
-void Draw::grid(int GRID_SIZE, std::string tower_names[], int active_tower, int selection_tower, int active_grid_x, int active_grid_y, bool is_place_mode_active, TowerPositionData TowerPosition, std::vector<Enemy> &enemies, int door_x, int door_y, int color_code, int TOWER_LEVEL[])
+void Draw::grid(int GRID_SIZE, std::string bomb_names[], int active_bomb, int selection_bomb, int active_grid_x, int active_grid_y, bool is_place_mode_active, BombPositionData BombPosition, std::vector<Enemy> &enemies, int door_x, int door_y, int color_code, int BOMB_LEVEL[], int BOMB_RANGE[], float BOOM_TIMER[], int number_of_bombs)
 {
   int name_index = 0;
   std::cout << "\n";
@@ -63,53 +63,53 @@ void Draw::grid(int GRID_SIZE, std::string tower_names[], int active_tower, int 
   {
     if (i <= 1)
     {
-      top_grid(i, GRID_SIZE, is_place_mode_active, active_grid_x, active_grid_y, TowerPosition, enemies, door_x, door_y, color_code, TOWER_LEVEL);
+      top_grid(i, GRID_SIZE, is_place_mode_active, active_grid_x, active_grid_y, BombPosition, enemies, door_x, door_y, color_code, BOMB_LEVEL);
     }
     else
     {
       if (i % 2 != 0)
       {
-        if (!tower_names[name_index].empty())
+        if (!bomb_names[name_index].empty())
         {
-          render_tower_names(name_index, selection_tower, active_tower, is_place_mode_active, tower_names, TOWER_LEVEL);
+          render_bomb_names(name_index, selection_bomb, active_bomb, is_place_mode_active, bomb_names, BOMB_LEVEL);
         }
         else
         {
           std::cout << "\t\t\t\t\t\t\t\t";
         }
-        mid_grid(i, selection_tower, active_tower, is_place_mode_active, GRID_SIZE, active_grid_x, active_grid_y, door_x, door_y, color_code, TowerPosition, enemies, TOWER_LEVEL);
+        mid_grid(i, selection_bomb, active_bomb, is_place_mode_active, GRID_SIZE, active_grid_x, active_grid_y, door_x, door_y, color_code, BombPosition, enemies, BOMB_LEVEL, name_index, BOMB_RANGE, BOOM_TIMER, number_of_bombs);
       }
       else
       {
-        bottom_grid(i, GRID_SIZE, is_place_mode_active, active_grid_x, active_grid_y, TowerPosition, enemies, door_x, door_y, color_code);
+        bottom_grid(i, GRID_SIZE, is_place_mode_active, active_grid_x, active_grid_y, BombPosition, enemies, door_x, door_y, color_code);
       }
     }
     std::cout << '\n';
   }
 }
 
-std::string Draw::place_tower(int index, int tower_lvls[])
+std::string Draw::place_bomb(int index, int bomb_lvls[])
 {
   std::string tower;
 
   switch (index)
   {
-    case 0: return GameConstants::ELECTRIC_TOWERS[tower_lvls[index]];
-    case 1: return GameConstants::FIRE_TOWERS[tower_lvls[index]];
-    case 2: return GameConstants::POISON_TOWERS[tower_lvls[index]];
-    case 3: return GameConstants::WATER_TOWERS[tower_lvls[index]];
-    case 4: return GameConstants::ICE_TOWERS[tower_lvls[index]];
-    case 5: return GameConstants::WIND_TOWERS[tower_lvls[index]];
-    case 6: return GameConstants::SHADOW_TOWERS[tower_lvls[index]];
+    case 0: return GameConstants::ELECTRO_BOMBS[bomb_lvls[index]];
+    case 1: return GameConstants::FIRE_BOMBS[bomb_lvls[index]];
+    case 2: return GameConstants::POISON_BOMBS[bomb_lvls[index]];
+    case 3: return GameConstants::WATER_BOMBS[bomb_lvls[index]];
+    case 4: return GameConstants::ICE_BOMBS[bomb_lvls[index]];
+    case 5: return GameConstants::WIND_BOMBS[bomb_lvls[index]];
+    case 6: return GameConstants::SHADOW_BOMBS[bomb_lvls[index]];
     default: return GameConstants::EMPTY;
   }
 
   return tower;
 }
 
-bool Draw::is_tower_placed(int x, int y, TowerPositionData &TowerPosition)
+bool Draw::is_bomb_placed(int x, int y, BombPositionData &BombPosition)
 {
-  for (const auto &tower : TowerPosition)
+  for (const auto &tower : BombPosition)
   {
     if (tower.getX() == x / 2 && tower.getY() == y / 2)
       return true;
@@ -117,9 +117,9 @@ bool Draw::is_tower_placed(int x, int y, TowerPositionData &TowerPosition)
   return false;
 }
 
-int Draw::get_tower_index(int x, int y, TowerPositionData &TowerPosition)
+int Draw::get_bomb_index(int x, int y, BombPositionData &BombPosition)
 {
-  for (const auto &tower : TowerPosition)
+  for (const auto &tower : BombPosition)
   {
     if (tower.getX() == x / 2 && tower.getY() == y / 2)
       return tower.getIndex();
@@ -127,9 +127,9 @@ int Draw::get_tower_index(int x, int y, TowerPositionData &TowerPosition)
   return -1;
 }
 
-int Draw::get_tower_level(int x, int y, TowerPositionData &TowerPosition)
+int Draw::get_bomb_level(int x, int y, BombPositionData &BombPosition)
 {
-  for (const auto &tower : TowerPosition)
+  for (const auto &tower : BombPosition)
   {
     if (tower.getX() == x / 2 && tower.getY() == y / 2);
       // return tower.getLevel();
@@ -137,7 +137,7 @@ int Draw::get_tower_level(int x, int y, TowerPositionData &TowerPosition)
   return -1;
 }
 
-void Draw::top_grid(int i, int GRID_SIZE, bool is_place_mode_active, int active_grid_x, int active_grid_y, TowerPositionData TowerPosition, std::vector<Enemy> &enemies, int door_x, int door_y, int color_code, int TOWER_LEVEL[])
+void Draw::top_grid(int i, int GRID_SIZE, bool is_place_mode_active, int active_grid_x, int active_grid_y, BombPositionData BombPosition, std::vector<Enemy> &enemies, int door_x, int door_y, int color_code, int BOMB_LEVEL[])
 {
   std::cout << "\t\t\t\t\t\t\t\t";
 
@@ -150,13 +150,13 @@ void Draw::top_grid(int i, int GRID_SIZE, bool is_place_mode_active, int active_
       {
         if (is_place_mode_active && ((j / 2 == active_grid_x && i / 2 == active_grid_y) || (j / 2 == active_grid_x + 1 && i / 2 == active_grid_y)))
         {
-          std::cout << "\033[31m" << GameConstants::BORDER_WALL_Y << GameConstants::RESET;
+          (j == 2 * GRID_SIZE) ? std::cout << "\033[31m" << GameConstants::BORDER_WALL_Y << GameConstants::RESET << "\t\t\t" << "LEVELS\t\tBUFFS[EXPLOSION TIME, AREA]" : std::cout << "\033[31m" << GameConstants::BORDER_WALL_Y << GameConstants::RESET;
         }
         else
         {
-          std::cout << GameConstants::BORDER_WALL_Y;
+          (j == 2 * GRID_SIZE) ? std::cout << GameConstants::BORDER_WALL_Y << "\t\t\t" << "LEVELS\t\tBUFFS[EXPLOSION TIME, AREA]" : std::cout << GameConstants::BORDER_WALL_Y;
         }
-      } else (is_tower_placed(j, i, TowerPosition)) ? std::cout << place_tower(get_tower_index(j, i, TowerPosition), TOWER_LEVEL) : std::cout << GameConstants::EMPTY;
+      } else (is_bomb_placed(j, i, BombPosition)) ? std::cout << place_bomb(get_bomb_index(j, i, BombPosition), BOMB_LEVEL) : std::cout << GameConstants::EMPTY;
     }
     
   }
@@ -221,26 +221,26 @@ void Draw::top_grid(int i, int GRID_SIZE, bool is_place_mode_active, int active_
   }
 }
 
-void Draw::render_tower_names(int &name_index, int selection_tower, int active_tower, bool is_place_mode_active, std::string tower_names[], int tower_lvls[])
+void Draw::render_bomb_names(int& name_index, int selection_bomb, int active_bomb, bool is_place_mode_active, std::string bomb_names[], int bomb_lvls[])
 {
-  if (name_index == selection_tower && !(is_place_mode_active))
+  if (name_index == selection_bomb && !(is_place_mode_active))
   {
-    std::cout << "\t\t\t\033[34m" << tower_names[name_index] << "  (" << tower_lvls[name_index] << ")" << "\t\t\t\t" << GameConstants::RESET;
-    name_index++;
+    std::cout << "\t\t\t\033[34m" << bomb_names[name_index] << "\t\t\t\t" << GameConstants::RESET;
+    name_index++; 
   }
-  else if (name_index == active_tower)
+  else if (name_index == active_bomb)
   {
-    std::cout << "\t\t\t\033[32m" << tower_names[name_index] << "  (" << tower_lvls[name_index] << ")" << "\t\t\t\t" << GameConstants::RESET;
+    std::cout << "\t\t\t\033[32m" << bomb_names[name_index] << "\t\t\t\t" << GameConstants::RESET;
     name_index++;
   }
   else
   {
-    std::cout << "\t\t\t" << tower_names[name_index] << "  (" << tower_lvls[name_index] << ")" << "\t\t\t\t";
+    std::cout << "\t\t\t" << bomb_names[name_index] << "\t\t\t\t";
     name_index++;
   }
 }
 
-void Draw::bottom_grid(int i, int GRID_SIZE, bool is_place_mode_active, int active_grid_x, int active_grid_y, TowerPositionData TowerPosition, std::vector<Enemy> &enemies, int door_x, int door_y, int color_code)
+void Draw::bottom_grid(int i, int GRID_SIZE, bool is_place_mode_active, int active_grid_x, int active_grid_y, BombPositionData BombPosition, std::vector<Enemy> &enemies, int door_x, int door_y, int color_code)
 {
   std::cout << "\t\t\t\t\t\t\t\t";
 
@@ -307,19 +307,20 @@ void Draw::bottom_grid(int i, int GRID_SIZE, bool is_place_mode_active, int acti
     }
   }
 }
-void Draw::mid_grid(int i, int selection_tower, int active_tower, bool is_place_mode_active, int GRID_SIZE, int active_grid_x, int active_grid_y, int door_x, int door_y, int color_code, TowerPositionData &TowerPosition, std::vector<Enemy> &enemies, int TOWER_LEVEL[])
+void Draw::mid_grid(int i, int selection_bomb, int active_bomb, bool is_place_mode_active, int GRID_SIZE, int active_grid_x, int active_grid_y, int door_x, int door_y, int color_code, BombPositionData &BombPosition, std::vector<Enemy> &enemies, int bomb_lvls[], int name_index, int BOMB_RANGE[], float BOOM_TIMER[], int number_of_bombs)
 {
+  int index = name_index - 1;
   for (int j = 0; j <= 2 * GRID_SIZE; j++)
   {
     if (j % 2 == 0)
-    {
+    { 
       if (is_place_mode_active && ((j / 2 == active_grid_x && i / 2 == active_grid_y) || (j / 2 == active_grid_x + 1 && i / 2 == active_grid_y)))
       {
-        std::cout << "\033[31m" << GameConstants::BORDER_WALL_Y << GameConstants::RESET;
+        (j == 2 * GRID_SIZE && name_index < number_of_bombs) ?  std::cout << "\033[31m" << GameConstants::BORDER_WALL_Y << GameConstants::RESET << "\t\t\t" << "( " << bomb_lvls[name_index] << " )" << "\t\t[ " << BOOM_TIMER[name_index] << BOMB_RANGE[name_index]  << " ]" : std::cout << "\033[31m" << GameConstants::BORDER_WALL_Y << GameConstants::RESET;
       }
       else
       {
-        std::cout << GameConstants::BORDER_WALL_Y;
+        (j == 2 * GRID_SIZE && name_index < number_of_bombs) ? std::cout << GameConstants::BORDER_WALL_Y << "\t\t\t" << "( " << bomb_lvls[name_index] << " )" << "\t\t[ " << BOOM_TIMER[name_index] << ", " << BOMB_RANGE[name_index]  << " ]" : std::cout << GameConstants::BORDER_WALL_Y;
       }
     }
     else
@@ -330,7 +331,7 @@ void Draw::mid_grid(int i, int selection_tower, int active_tower, bool is_place_
       }
       else
       {
-        (is_tower_placed(j, i, TowerPosition)) ? std::cout << place_tower(get_tower_index(j, i, TowerPosition), TOWER_LEVEL) : std::cout << GameConstants::EMPTY;
+        (is_bomb_placed(j, i, BombPosition)) ? std::cout << place_bomb(get_bomb_index(j, i, BombPosition), bomb_lvls) : std::cout << GameConstants::EMPTY;
       }
     }
   }
