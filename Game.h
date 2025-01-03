@@ -82,14 +82,18 @@ public:
   void ice_explode(std::vector<Enemy> &enemies, int range, std::vector<Enemy>::iterator &it)
   {
     int moveAmount = rand() % 2 + 3;
+    std::cout << moveAmount << std::endl;
 
     // TODO: Make 2.5 * the enemy's movement speed
     
-    //(rand() % 2 == 0) ? ((it->x - moveAmount < 0) ? it = enemies.erase(it) : (it->x -= moveAmount, ++it)) : ((it->y - moveAmount < 0) ? it = enemies.erase(it) : (it->y -= moveAmount, ++it));
+    (rand() % 2 == 0) ? ((it->x - moveAmount < 0) ? it = enemies.erase(it) : (it->x -= moveAmount, ++it)) : ((it->y - moveAmount < 0) ? it = enemies.erase(it) : (it->y -= moveAmount, ++it));
   }
 
   void wind_explode(std::vector<Enemy> &enemies, int range, std::vector<Enemy>::iterator &it)
   {
+    
+    // FIXME: in wind, we are moving the enemy in random direction but we have to do it in opposite direction from where the door is
+
     (rand() % 2 == 0) ? ((it->x - 2 < 0) ? it = enemies.erase(it) : (it->x -= 2, ++it)) : ((it->y - 2 < 0) ? it = enemies.erase(it) : (it->y -= 2, ++it));
   }
 

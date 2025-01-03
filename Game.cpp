@@ -345,13 +345,14 @@ std::tuple<int, int> Game::calculate_grid()
   std::cout << "Enter Your Choice: ";
   std::cin >> choice;
 
-  int grid_options[] = {2, 3, 4, 5, 6, 8, 10};
+  int grid_options[] = { 2, 3, 4, 5, 6, 8, 10 };
 
   if (choice >= 0 && choice <= 6)
     GRID_SIZE = grid_options[choice];
 
   else if (choice == 7)
   {
+    // TODO: Add a limit to max grid size and also change the font size based on the grid size to make it fit in screen
     int size;
     std::cout << "Enter Grid Size: ";
     std::cin >> size;
