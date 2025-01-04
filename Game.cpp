@@ -302,6 +302,9 @@ int Game::Run()
         PlaySound(NULL, NULL, 0);
         
         return 0;
+      default:
+        input -= 48;
+        if (input > 0 && input < number_of_bombs) active_bomb = (input - 1);
       }
     }
   }
