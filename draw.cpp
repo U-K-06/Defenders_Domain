@@ -9,6 +9,9 @@
 #include "constants.h"
 #include "Game.h"
 #include <iomanip>
+#include <utility>
+#include <algorithm>
+#include <thread>
 
 std::string Draw::m_enemy_color = "";
 int Draw::m_enemy_type = 0;
@@ -89,7 +92,8 @@ void Draw::grid(int GRID_SIZE,
                   int BOMB_RANGE[],
                   float BOOM_TIMER[],
                   int number_of_bombs,
-                  std::chrono::steady_clock::time_point start_time)
+                  std::chrono::steady_clock::time_point start_time,
+                  std::vector<std::pair<int, int>> portal_corners)
 { 
   std::cout << "\n";
   int name_index = 0;
@@ -106,7 +110,6 @@ void Draw::grid(int GRID_SIZE,
   
   for (int i = 0; i <= 2 * GRID_SIZE; i++)
   {
-
     if (i <= 1)       top_grid(i, 
                                 GRID_SIZE, 
                                 is_place_mode_active,
@@ -121,7 +124,6 @@ void Draw::grid(int GRID_SIZE,
 
     else
     {
-
       if (i % 2 != 0)
       {
 
@@ -162,7 +164,8 @@ void Draw::grid(int GRID_SIZE,
                      enemies,
                      door_x,
                      door_y,
-                     color_code);
+                     color_code,
+                     portal_corners);
     }
 
     std::cout << '\n';
@@ -382,7 +385,8 @@ void Draw::bottom_grid(int i,
                         BombPositionData BombPosition, std::vector<Enemy> &enemies,
                         int door_x,
                         int door_y,
-                        int color_code)
+                        int color_code,
+                        std::vector<std::pair<int, int>> portal_corners)
 {
   std::cout << "\t\t\t\t\t\t\t\t";
 
@@ -437,7 +441,7 @@ void Draw::bottom_grid(int i,
           }
           else
           {
-            std::cout << GameConstants::BORDER_CORNER;
+           (std::find(portal_corners.begin(), portal_corners.end(), std::make_pair(j / 2, i / 2)) != portal_corners.end()) ? std::cout << "\033[32m" << GameConstants::BORDER_CORNER << GameConstants::RESET : std::cout << GameConstants::BORDER_CORNER;
           }
         }
       }
@@ -484,18 +488,17 @@ void Draw::mid_grid(int i,
   {
     if (j % 2 == 0)
     {
-      // FIXME: VALUES ARE GETTING SHOWED EXTRA TIMES
       if (is_place_mode_active && 
           ((j / 2 == active_grid_x && i / 2 == active_grid_y) ||
            (j / 2 == active_grid_x + 1 && i / 2 == active_grid_y)))
       {
         (j == 2 * GRID_SIZE && 
-         (index <= number_of_bombs && index != -1)) 
-          ?  std::cout << "\033[31m"
+         (index <= number_of_bombs && index != -1))
+           ? std::cout << "\033[31m"
                        << GameConstants::BORDER_WALL_Y 
                        << GameConstants::RESET 
                        << "\t\t\t( " 
-                       << bomb_lvls[index]
+                       << bomb_lvls[index] + 1
                        << " )\t\t[ " 
                        << ((BOOM_TIMER[index] < 10) ? " " : "")
                        << std::fixed 
@@ -504,7 +507,7 @@ void Draw::mid_grid(int i,
                        << ", " 
                        << BOMB_RANGE[index] 
                        << " ]" 
-          : std::cout << "\033[31m" 
+          : std::cout << "\033[31m"
                       << GameConstants::BORDER_WALL_Y 
                       << GameConstants::RESET;
       }
@@ -514,7 +517,7 @@ void Draw::mid_grid(int i,
          (index <= number_of_bombs && index != -1))
           ? std::cout << GameConstants::BORDER_WALL_Y 
                       << "\t\t\t( " 
-                      << bomb_lvls[index] 
+                      << bomb_lvls[index] + 1
                       << " )\t\t[ " 
                       << ((BOOM_TIMER[index] < 10) ? " " : "")
                       <<  std::fixed 

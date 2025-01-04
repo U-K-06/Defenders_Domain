@@ -22,6 +22,7 @@ public:
   int hasMoved = false;
   int is_slowed = false;
   int is_poisoned = false;
+  int MOVEMENT_SPEED = 5.0f;
 
   std::chrono::steady_clock::time_point last_move_time = std::chrono::steady_clock::now();
   Enemy() : type(0), health(type), color("default"), x(x), y(y) {}
@@ -90,9 +91,8 @@ public:
                     std::vector<Enemy>::iterator &it)
   {
     int moveAmount = rand() % 2 + 3;
-    std::cout << moveAmount << std::endl;
 
-    // TODO: Make 2.5 * the enemy's movement speed
+    it->MOVEMENT_SPEED -= 2.5f;
 
     (rand() % 2 == 0) ? ((it->x - moveAmount < 0)
                        ? it = enemies.erase(it)
@@ -111,18 +111,30 @@ public:
     int dx = it->x - door_x;
     int dy = it->y - door_y;
 
-    if (abs(dx) > abs(dy))  (dx > 0) ? (it->x + 2 >= range)
+    if (abs(dx) > abs(dy))  (dx > 0) ? (it->x + 1 >= range)
                                       ? it = enemies.erase(it)
-                                      : (it->x += 2, ++it)
-                                     : (it->x - 2 < 0)
+                                      : (it->x += 1, ++it)
+                                     : (it->x - 1 < 0)
                                       ? it = enemies.erase(it)
-                                      : (it->x -= 2, ++it);
-    else  (dy > 0) ? (it->y + 2 >= range)
+                                      : (it->x -= 1, ++it);
+    else  (dy > 0) ? (it->y + 1 >= range)
                     ? it = enemies.erase(it)
-                    : (it->y += 2, ++it)
-                   : (it->y - 2 < 0)
+                    : (it->y += 1, ++it)
+                   : (it->y - 1 < 0)
                     ? it = enemies.erase(it)
-                    : (it->y -= 2, ++it);
+                    : (it->y -= 1, ++it);
+  }
+  void water_explode(std::vector<Enemy>& enemies,int range ,std::vector<Enemy>::iterator& it,int door_x,int door_y)
+  {
+    it -> MOVEMENT_SPEED += (2+rand()%3) + 0.3;
+    wind_explode(enemies,range,it,door_x,door_y);
+  }
+
+  void shadow_explode(std::vector<Enemy> &enemies,
+                    int range,
+                    std::vector<Enemy>::iterator &it)
+  {
+
   }
 
   void explode(std::vector<Enemy> &enemies,
@@ -136,14 +148,23 @@ public:
       
       if (distance <= range)
       {
-        switch (getIndex()) // i changed index to getIndex()
+        switch (getIndex())
         {
         case 2:
           poison_explode(enemies, range, it);
+          break;
+        case 3:
+          water_explode(enemies, range, it,door_x,door_y);
+          break;
         case 4:
           ice_explode(enemies, range, it);
+          break;
         case 5:
           wind_explode(enemies, range, it, door_x, door_y);
+          break;
+        case 6:
+          shadow_explode(enemies, range, it);
+          break;
         default:
           normal_explode(enemies, range, it);
         }
@@ -175,6 +196,9 @@ public:
              int &selection_tower,
              int number_of_towers,
              int GRID_SIZE);
+
+  float calculateDistance(int x1, int y1, int x2, int y2);
+  std::pair<int, int> findNearestPortalCorner(const std::vector<std::pair<int, int>>& portal_corners, int x, int y);
   static void hide_cursor();
   void clear_screen(int GRID_SIZE);
   std::tuple<int, int> calculate_grid();
@@ -190,6 +214,9 @@ private:
   std::vector<Enemy> enemies;
   int enemy_type();
   std::string enemy_color(int choice);
+  bool isEnemyInPortalCorners(const std::vector<std::pair<int, int>> &portal_corners,
+                               int enemy_x,
+                               int enemy_y);
 };
 
 #endif

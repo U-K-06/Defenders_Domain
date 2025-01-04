@@ -31,7 +31,8 @@ public:
              int BOMB_RANGE[],
              float BOMB_TIMER[],
              int number_of_bombs,
-             std::chrono::steady_clock::time_point start_time);
+             std::chrono::steady_clock::time_point start_time,
+             std::vector<std::pair<int, int>> portal_corners);
   
   static bool is_bomb_placed(int x,
                               int y,
@@ -81,7 +82,8 @@ private:
                     std::vector<Enemy>& enemies,
                     int door_x,
                     int door_y,
-                    int color_code);
+                    int color_code,
+                    std::vector<std::pair<int, int>> portal_corners);
                     
   void mid_grid(int i,
                   int selection_bomb,
