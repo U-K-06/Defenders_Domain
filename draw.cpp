@@ -476,7 +476,10 @@ void Draw::mid_grid(int i,
                      float BOOM_TIMER[],
                      int number_of_bombs)
 {
+  static int counter = 0;
   int index = name_index - 1;
+  counter++;
+  if (counter > 7)  index = -1;
   for (int j = 0; j <= 2 * GRID_SIZE; j++)
   {
     if (j % 2 == 0)
@@ -486,7 +489,8 @@ void Draw::mid_grid(int i,
           ((j / 2 == active_grid_x && i / 2 == active_grid_y) ||
            (j / 2 == active_grid_x + 1 && i / 2 == active_grid_y)))
       {
-        (j == 2 * GRID_SIZE && index <= number_of_bombs) 
+        (j == 2 * GRID_SIZE && 
+         (index <= number_of_bombs && index != -1)) 
           ?  std::cout << "\033[31m"
                        << GameConstants::BORDER_WALL_Y 
                        << GameConstants::RESET 
@@ -507,7 +511,7 @@ void Draw::mid_grid(int i,
       else
       {
         (j == 2 * GRID_SIZE &&
-         index <= number_of_bombs)
+         (index <= number_of_bombs && index != -1))
           ? std::cout << GameConstants::BORDER_WALL_Y 
                       << "\t\t\t( " 
                       << bomb_lvls[index] 
