@@ -14,9 +14,8 @@
 #include "draw.h"
 #include "constants.h"
 
-// std::string bomb_names[] = {"Electro bomb", "Fire bomb", "Poison bomb", "Water bomb", "Ice bomb", "Wind bomb" };
-
-std::string bomb_names[] = {"Electro bomb", "Fire bomb", "Poison bomb", "Water bomb", "Ice bomb", "Wind bomb", "Shadow bomb"};
+std::string bomb_names[] = {"Electro bomb", "Fire bomb", "Poison bomb", "Water bomb", "Ice bomb", "Wind bomb" };
+// std::string bomb_names[] = {"Electro bomb", "Fire bomb", "Poison bomb", "Water bomb", "Ice bomb", "Wind bomb", "Shadow bomb"};
 
 std::string colors[] = {
     "\033[38;5;214m",
@@ -75,10 +74,10 @@ int Game::Run()
 
   int door_x = 2 + 2 * (rand() % (GRID_SIZE / 2 - 1)), door_y = 2 + 2 * (rand() % (GRID_SIZE / 2 - 1));
 
-  portal_corners.push_back(std::make_pair(door_x - 1, door_y - 2)); // Top-left
-  portal_corners.push_back(std::make_pair(door_x, door_y  - 1));     // Top-right
-  portal_corners.push_back(std::make_pair(door_x - 1, door_y - 1));     // Bottom-left
-  portal_corners.push_back(std::make_pair(door_x - 1, door_y));         // Bottom-right
+  portal_corners.push_back(std::make_pair(door_x + 1, door_y));     // Top-left
+  portal_corners.push_back(std::make_pair(door_x + 2, door_y));     // Top-right
+  portal_corners.push_back(std::make_pair(door_x + 1, door_y + 1)); // Bottom-left
+  portal_corners.push_back(std::make_pair(door_x + 1, door_y + 1)); // Bottom-right
 
   int color_code = 91 + (rand() % 6);
 
@@ -282,7 +281,12 @@ for (Enemy &enemy : enemies)
 
       if ((current_time - it->placement_time) >= BOMB_TIMER[it->getIndex()] + (int)(GRID_SIZE / 4))
       {
-        it->explode(enemies, BOMB_RANGE[it->getIndex()], door_x, door_y);
+        it->explode(enemies,
+                     BOMB_RANGE[it->getIndex()],
+                     door_x,
+                     door_y,
+                     number_of_bombs,
+                     bombPosition);
         it = bombPosition.erase(it);
       }
       else
@@ -373,7 +377,7 @@ for (Enemy &enemy : enemies)
         return 0;
       default:
         input -= 48;
-        if (input > 0 && input < number_of_bombs)
+        if (input > 0 && input <= number_of_bombs)
           active_bomb = (input - 1);
       }
     }

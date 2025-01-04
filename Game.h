@@ -71,6 +71,18 @@ public:
   int getX() const { return x; }
   int getY() const { return y; }
 
+  int random_bomb_spawner(int number_of_bombs)
+    {
+      int random_bomb = 1 + rand() % 100;
+      if (random_bomb >= 1 && random_bomb <= 5)         return 6;
+      else if (random_bomb >= 6 && random_bomb <= 15)   return 5;
+      else if (random_bomb >= 16 && random_bomb <= 30)  return 4;
+      else if (random_bomb >= 31 && random_bomb <= 56)  return 3;
+      else if (random_bomb >= 57 && random_bomb <= 81)  return 2;
+      else if (random_bomb >= 82 && random_bomb <= 100) return 1;
+      else return -1;
+    }
+
   void normal_explode(std::vector<Enemy> &enemies,
                        int range,
                        std::vector<Enemy>::iterator &it)
@@ -126,21 +138,43 @@ public:
   }
   void water_explode(std::vector<Enemy>& enemies,int range ,std::vector<Enemy>::iterator& it,int door_x,int door_y)
   {
-    it -> MOVEMENT_SPEED += (2+rand()%3) + 0.3;
+    it -> MOVEMENT_SPEED += (2 + rand() % 3) + 0.3;
     wind_explode(enemies,range,it,door_x,door_y);
   }
 
   void shadow_explode(std::vector<Enemy> &enemies,
                     int range,
-                    std::vector<Enemy>::iterator &it)
+                    int number_of_bombs,
+                    std::vector<Enemy>::iterator &it,
+                    std::vector<BombPositionDataClass> &bombs)
   {
+     
+    int bomb_x = getX();
+    int bomb_y = getY();
 
+    // int dx = (rand() % (2 * range + 1)) - range;
+    // int dy = (rand() % (2 * range + 1)) - range;
+
+    int dx = bomb_x + 1;
+    int dy = bomb_y + 1;
+
+    while (abs(dx) != abs(dy) || dx == 0 || dy == 0) {
+        dx = (rand() % (2 * range + 1)) - range;
+        dy = (rand() % (2 * range + 1)) - range;
+    }
+
+    int random_bomb = random_bomb_spawner(number_of_bombs);
+    Bomb new_bomb(random_bomb);
+    BombPositionDataClass new_bomb_positions(random_bomb, dx, dy, new_bomb,time(nullptr));
+    bombs.push_back(new_bomb_positions);
   }
 
   void explode(std::vector<Enemy> &enemies,
                 int range,
                 int door_x,
-                int door_y)
+                int door_y,
+                int number_of_bombs,
+                std::vector<BombPositionDataClass> bombs)
   {
     for (auto it = enemies.begin(); it != enemies.end();)
     {
@@ -163,7 +197,7 @@ public:
           wind_explode(enemies, range, it, door_x, door_y);
           break;
         case 6:
-          shadow_explode(enemies, range, it);
+          shadow_explode(enemies, range, number_of_bombs, it, bombs);
           break;
         default:
           normal_explode(enemies, range, it);

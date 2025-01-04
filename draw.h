@@ -5,6 +5,8 @@
 
 #include "Game.h"
 
+class Enemy;
+class BombPositionDataClass;
 
 class Draw {
 public:
@@ -22,7 +24,7 @@ public:
              int active_grid_x,
              int active_grid_y,
              bool is_place_mode_active,
-             BombPositionData bombPosition,
+             std::vector<BombPositionDataClass> bombPosition,
              std::vector<Enemy>& enemies,
              int door_x,
              int door_y,
@@ -36,7 +38,7 @@ public:
   
   static bool is_bomb_placed(int x,
                               int y,
-                              BombPositionData& bombPosition);
+                              std::vector<BombPositionDataClass>& bombPosition);
   
   static std::string m_enemy_color;
   static int m_enemy_type;
@@ -48,18 +50,18 @@ private:
 
   int get_bomb_index(int x,
                       int y,
-                      BombPositionData& bombPosition);
+                      std::vector<BombPositionDataClass>& bombPosition);
 
   int get_bomb_level(int x,
                       int y,
-                      BombPositionData& bombPosition);
+                      std::vector<BombPositionDataClass>& bombPosition);
 
   void top_grid(int i,
                  int GRID_SIZE,
                  bool is_place_mode_active,
                  int active_grid_x,
                  int active_grid_y,
-                 BombPositionData bombPosition,
+                 std::vector<BombPositionDataClass> bombPosition,
                  std::vector<Enemy>& enemies,
                  int door_x,
                  int door_y,
@@ -78,7 +80,7 @@ private:
                     bool is_place_mode_active,
                     int active_grid_x,
                     int active_grid_y,
-                    BombPositionData bombPosition,
+                    std::vector<BombPositionDataClass> bombPosition,
                     std::vector<Enemy>& enemies,
                     int door_x,
                     int door_y,
@@ -95,7 +97,7 @@ private:
                   int door_x,
                   int door_y,
                   int color_code,
-                  BombPositionData& bombPosition,
+                  std::vector<BombPositionDataClass>& bombPosition,
                   std::vector<Enemy>& enemies,
                   int bomb_lvls[],
                   int name_index,
