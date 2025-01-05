@@ -5,13 +5,13 @@
 #include <conio.h>
 #include <chrono>
 #include <string>
-#include "draw.h"
-#include "constants.h"
-#include "Game.h"
 #include <iomanip>
 #include <utility>
 #include <algorithm>
-#include <thread>
+
+#include "draw.h"
+#include "constants.h"
+#include "Game.h"
 
 std::string Draw::m_enemy_color = "";
 int Draw::m_enemy_type = 0;

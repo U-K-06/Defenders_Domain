@@ -1,7 +1,7 @@
 #include <conio.h>
 #include <iostream>
 #include <future>
-#include <windows.h>
+#include <Windows.h>
 #include <cstdlib>
 #include <time.h>
 #include <tuple>
@@ -15,8 +15,10 @@
 #include "draw.h"
 #include "constants.h"
 
-std::string bomb_names[] = {"Electro bomb", "Fire bomb", "Poison bomb", "Water bomb", "Ice bomb", "Wind bomb" };
-// std::string bomb_names[] = {"Electro bomb", "Fire bomb", "Poison bomb", "Water bomb", "Ice bomb", "Wind bomb", "Shadow bomb"};
+#pragma comment(lib, "User32.lib")
+
+// std::string bomb_names[] = {"Electro bomb", "Fire bomb", "Poison bomb", "Water bomb", "Ice bomb", "Wind bomb" };
+std::string bomb_names[] = {"Electro bomb", "Fire bomb", "Poison bomb", "Water bomb", "Ice bomb", "Wind bomb", "Shadow bomb"};
 
 std::string colors[] = {
     "\033[38;5;214m",
@@ -40,7 +42,7 @@ int Game::Run()
   simulateKeyPress(VK_OEM_MINUS, true);
 
   simulateKeyPress(VK_OEM_MINUS, true);
-  
+
   PlaySound(Audio::BGM, NULL, SND_FILENAME | SND_ASYNC | SND_LOOP); // IGNORE: Error in PlaySound function
 
   system("cls");
@@ -247,6 +249,9 @@ for (Enemy &enemy : enemies)
             {
               std::cout << enemy.color << (char)(enemy.type) << "POS: " << enemy.x << ", " << enemy.y << GameConstants::RESET << " " << door_x << ", " << door_y;
                 draw.lose_game();
+                simulateKeyPress(VK_OEM_PLUS,true);
+                simulateKeyPress(VK_OEM_PLUS,true);
+                exit(0);
             }
             
             // std::cout << "Enemy position: (" << enemy.x << ", " << enemy.y << ")  Nearest corner: (" << nearest_corner.first << ", " << nearest_corner.second << ")" << std::endl;
@@ -268,6 +273,9 @@ for (Enemy &enemy : enemies)
             {
               std::cout << enemy.color << (char)(enemy.type) << "POS: " << enemy.x << ", " << enemy.y << GameConstants::RESET << " " << door_x << ", " << door_y;
                 draw.lose_game();
+                simulateKeyPress(VK_OEM_PLUS,true);
+                simulateKeyPress(VK_OEM_PLUS,true);
+                exit(0);
             }
 
             // std::cout << "Enemy position: (" << enemy.x << ", " << enemy.y << ")  Nearest corner: (" << nearest_corner.first << ", " << nearest_corner.second << ")" << std::endl;
@@ -356,24 +364,47 @@ for (Enemy &enemy : enemies)
         break;
       case KeyBindings::COL_KEY:
       case KeyBindings::SPACE_KEY:
-        if (!is_place_mode_active)
-          active_bomb = selection_bomb;
+        if (!is_place_mode_active) active_bomb = selection_bomb;
         else
         {
           if (!Draw::is_bomb_placed(active_grid_x * 2, active_grid_y * 2, bombPosition))
           {
+            if (active_bomb == 6) {
+              srand(time(0));
+              int random_bomb = rand() % (number_of_bombs-1);
+              int dx = active_grid_x, dy = active_grid_y;
+              int random = rand() % 3;
+              int sign = rand() % 2 ? 1 : -1;
+
+              dx += (random == 0) ? sign : 0;
+              dy += (random == 1) ? sign : 0;
+              if (random == 2)
+              {
+                dx += sign;
+                dy += sign;
+              }
+              calculate_bomb_positions(GRID_SIZE,
+                                      active_bomb,
+                                      dx,
+                                      dy,
+                                      bombPosition);
+        
+            }
+            
             calculate_bomb_positions(GRID_SIZE,
-                                     active_bomb,
-                                     active_grid_x,
-                                     active_grid_y,
-                                     bombPosition);
+                                    active_bomb,
+                                    active_grid_x,
+                                    active_grid_y,
+                                    bombPosition);
             placed_bombs_count++;
           }
         }
         break;
       case KeyBindings::ESC_KEY:
         draw.lose_game();
-
+        simulateKeyPress(VK_OEM_PLUS,true);
+        simulateKeyPress(VK_OEM_PLUS,true);
+        exit(0);
         PlaySound(NULL, NULL, 0);
 
         return 0;
