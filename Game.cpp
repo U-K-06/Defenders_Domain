@@ -10,6 +10,7 @@
 #include <utility>
 #include <algorithm>
 #include <cmath>
+
 #include "Game.h"
 #include "draw.h"
 #include "constants.h"
@@ -36,6 +37,10 @@ Draw draw;
 
 int Game::Run()
 {
+  simulateKeyPress(VK_OEM_MINUS, true);
+
+  simulateKeyPress(VK_OEM_MINUS, true);
+  
   PlaySound(Audio::BGM, NULL, SND_FILENAME | SND_ASYNC | SND_LOOP); // IGNORE: Error in PlaySound function
 
   system("cls");
@@ -223,10 +228,7 @@ for (Enemy &enemy : enemies)
     int dx = nearest_corner.first - enemy.x;
     int dy = nearest_corner.second - enemy.y;
 
-    if (isEnemyInPortalCorners(portal_corners, enemy.x, enemy.y))
-    {
-        continue;
-    }
+    if (isEnemyInPortalCorners(portal_corners, enemy.x, enemy.y)) { continue; }
 
     if (!enemy.hasMoved)
     {
@@ -430,6 +432,16 @@ void Game::Move(bool is_place_mode_active,
       selection_bomb = selection_bomb % number_of_bombs;
     }
   }
+}
+
+void Game::simulateKeyPress(WORD virtualKey, bool ctrl) {
+    if (ctrl) { keybd_event(VK_CONTROL, 0, 0, 0); }
+
+    keybd_event(virtualKey, 0, 0, 0);
+
+    keybd_event(virtualKey, 0, KEYEVENTF_KEYUP, 0);
+
+    if (ctrl) { keybd_event(VK_CONTROL, 0, KEYEVENTF_KEYUP, 0); }
 }
 
 float Game::calculateDistance(int x1, int y1, int x2, int y2) {

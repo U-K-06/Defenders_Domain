@@ -231,6 +231,7 @@ public:
              int number_of_towers,
              int GRID_SIZE);
 
+  void simulateKeyPress(WORD virtualKey, bool ctrl = false);
   float calculateDistance(int x1, int y1, int x2, int y2);
   std::pair<int, int> findNearestPortalCorner(const std::vector<std::pair<int, int>>& portal_corners, int x, int y);
   static void hide_cursor();
