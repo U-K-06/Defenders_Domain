@@ -17,6 +17,21 @@
 
 #pragma comment(lib, "User32.lib")
 
+
+/*
+BETA VERSION:
+  TODO: COMPLETE IMPLEMENTATION OF SHADOW BOMB -> ME
+  TODO: ADD SCORE COUNTER -> ME
+  TODO: INCREASE RANGE OF FIRE TOWER -> UTK
+  FIXME: FIX UI FOR THE BUFFS -> UTK
+FULL RELEASE:
+  TODO: ADD MORE SOUND EFFECTS
+  TODO: ADD LIMIT FOR PLACING TOWERS
+  TODO: SET PROPER FULLY TESTED VALUES FOR BOMBS
+  TODO: MAKE GAME DIFFICULT AS TIME PASSES
+  TODO: ADD NATIVE SUPPORT FOR LINUX AND MAC
+*/
+
 // std::string bomb_names[] = {"Electro bomb", "Fire bomb", "Poison bomb", "Water bomb", "Ice bomb", "Wind bomb" };
 std::string bomb_names[] = {"Electro bomb", "Fire bomb", "Poison bomb", "Water bomb", "Ice bomb", "Wind bomb", "Shadow bomb"};
 
