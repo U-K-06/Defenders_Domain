@@ -484,7 +484,8 @@ void Draw::mid_grid(int i,
   static int counter = 0;
   int index = name_index - 1;
   counter++;
-  if (counter > 7)  index = -1;
+  (counter > 7) ? counter=0, index = -1 : index = name_index - 1;
+  std::cout << counter;
   for (int j = 0; j <= 2 * GRID_SIZE; j++)
   {
     if (j % 2 == 0)
