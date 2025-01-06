@@ -131,7 +131,6 @@ public:
   }
 
   void shadow_explode(std::vector<Enemy> &enemies,
-                    int range,
                     int number_of_bombs,
                     int door_x,
                     int door_y,
@@ -141,20 +140,21 @@ public:
     int bomb_type = rand() % (number_of_bombs - 1);
     switch(bomb_type)
     {
+      std::cout << bomb_type << std::endl;
       case 2:
-        poison_explode(enemies, range, it);
+        poison_explode(enemies, 1, it);
         break;
       case 3:
-        water_explode(enemies, range, it, 0, 0);
+        water_explode(enemies, 1, it, 0, 0);
         break;
       case 4:
-        ice_explode(enemies, range, it);
+        ice_explode(enemies, 1, it);
         break;
       case 5:
-        wind_explode(enemies, range, it, 0, 0);
+        wind_explode(enemies, 1, it, 0, 0);
         break;
       default:
-        normal_explode(enemies, range, it);
+        normal_explode(enemies, 1, it);
         break;
     } 
   }
@@ -187,7 +187,7 @@ public:
           wind_explode(enemies, range, it, door_x, door_y);
           break;
         case 6:
-          shadow_explode(enemies, range, number_of_bombs, door_x, door_y, it, bombs);
+          shadow_explode(enemies, number_of_bombs, door_x, door_y, it, bombs);
           break;
         default:
           normal_explode(enemies, range, it);
@@ -240,9 +240,54 @@ private:
   std::vector<Enemy> enemies;
   int enemy_type();
   std::string enemy_color(int choice);
+  bool isBombPlacedAt(int x, int y) const;
   bool isEnemyInPortalCorners(const std::vector<std::pair<int, int>> &portal_corners,
                                int enemy_x,
                                int enemy_y);
+  void spawn_shadow_entity(int GRID_SIZE, 
+                           int active_bomb,
+                           int &dx,
+                           int &dy,
+                           BombPositionData &bombPosition)
+  {
+    const int max_attempts = 10;
+    int attempts = 0;
+    while (attempts < max_attempts) {
+      int random = rand() % 4;
+      int sign_x = rand() % 2 ? 1 : -1;
+      int sign_y = rand() % 2 ? 1 : -1;
+
+      int new_dx = dx;
+      int new_dy = dy;
+
+      switch (random) {
+          case 0:
+              new_dx += sign_x;
+              break;
+          case 1:
+              new_dy += sign_y;
+              break;
+          case 2:
+              new_dy += sign_x;
+              new_dx += sign_y;
+              break;
+          case 3:
+              new_dx += sign_x;
+              new_dy -= sign_y;
+              break;
+      }
+      if (!isBombPlacedAt(new_dx, new_dy)) {
+          dx = new_dx;
+          dy = new_dy;
+          calculate_bomb_positions(GRID_SIZE,
+                                    active_bomb,
+                                    dx,
+                                    dy,
+                                    bombPosition);
+          break;
+      }
+    }
+  }
 };
 
 #endif

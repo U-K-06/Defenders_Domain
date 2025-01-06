@@ -185,64 +185,11 @@ int Game::Run()
               timer_start_time,
               portal_corners);
 
-    // for (Enemy &enemy : enemies)
-    // {
-    //   auto current_time = std::chrono::steady_clock::now();
-    //   float elapsed_time = std::chrono::duration<float>(current_time - enemy.last_move_time).count();
-
-      // int dx = door_x - enemy.x;
-      // int dy = door_y - enemy.y;
-
-
-    //   if (isEnemyInPortalCorners(portal_corners, enemy.x, enemy.y)) continue;
-
-    //   if (!enemy.hasMoved)
-    //   {
-    //     if (elapsed_time >= (enemy.MOVEMENT_SPEED + 1))
-    //     {
-    //       (abs(dx) > abs(dy)) ? (dx > 0)
-    //                                 ? enemy.x++
-    //                                 : enemy.x--
-    //                           : (dy > 0)
-    //                               ? enemy.y++
-    //                               : enemy.y--;
-    //       enemy.hasMoved = true;
-    //       enemy.last_move_time = current_time;
-
-    //       if (isEnemyInPortalCorners(portal_corners, enemy.x, enemy.y)) 
-    //       {
-    //         std::cout << enemy.color << (char)(enemy.type) << "POS: " << enemy.x << ", " << enemy.y << GameConstants::RESET << " " << door_x << ", " << door_y;
-    //         draw.lose_game();
-    //       }
-    //     }
-    //   }
-    //   else
-    //   {
-    //     if (elapsed_time >= enemy.MOVEMENT_SPEED)
-    //     {
-    //       if (abs(dx) > abs(dy))
-    //         (dx > 0) ? enemy.x++ : enemy.x--;
-    //       else
-    //       {
-    //         (dy > 0) ? enemy.y++ : enemy.y--;
-
-    //         enemy.last_move_time = current_time;
-    //         if (isEnemyInPortalCorners(portal_corners, enemy.x, enemy.y))
-    //         {
-    //           std::cout << enemy.color << (char)(enemy.type) << "POS: " << enemy.x << ", " << enemy.y << GameConstants::RESET << " " << door_x << ", " << door_y;
-    //           draw.lose_game();
-    //         }
-    //       }
-    //     }
-    //   }
-    // }
-
 for (Enemy &enemy : enemies)
 {
     auto current_time = std::chrono::steady_clock::now();
     float elapsed_time = std::chrono::duration<float>(current_time - enemy.last_move_time).count();
 
-    // Find the nearest portal corner
     std::pair<int, int> nearest_corner = findNearestPortalCorner(portal_corners, enemy.x, enemy.y);
     int dx = nearest_corner.first - enemy.x;
     int dy = nearest_corner.second - enemy.y;
@@ -261,7 +208,6 @@ for (Enemy &enemy : enemies)
             enemy.hasMoved = true;
             enemy.last_move_time = current_time;
 
-            // Check if the enemy reaches the nearest portal corner
             if (isEnemyInPortalCorners(portal_corners, enemy.x, enemy.y))
             {
               std::cout << enemy.color << (char)(enemy.type) << "POS: " << enemy.x << ", " << enemy.y << GameConstants::RESET << " " << door_x << ", " << door_y;
@@ -285,7 +231,6 @@ for (Enemy &enemy : enemies)
             }
             enemy.last_move_time = current_time;
 
-            // Check if the enemy reaches the nearest portal corner
             if (isEnemyInPortalCorners(portal_corners, enemy.x, enemy.y))
             {
               std::cout << enemy.color << (char)(enemy.type) << "POS: " << enemy.x << ", " << enemy.y << GameConstants::RESET << " " << door_x << ", " << door_y;
@@ -388,24 +333,11 @@ for (Enemy &enemy : enemies)
           {
             if (active_bomb == 6) {
               srand(time(0));
+              
               int random_bomb = rand() % (number_of_bombs-1);
               int dx = active_grid_x, dy = active_grid_y;
-              int random = rand() % 3;
-              int sign = rand() % 2 ? 1 : -1;
-
-              dx += (random == 0) ? sign : 0;
-              dy += (random == 1) ? sign : 0;
-              if (random == 2)
-              {
-                dx += sign;
-                dy += sign;
-              }
-              calculate_bomb_positions(GRID_SIZE,
-                                      active_bomb,
-                                      dx,
-                                      dy,
-                                      bombPosition);
-        
+              
+              spawn_shadow_entity(GRID_SIZE, random_bomb, dx, dy, bombPosition);
             }
             
             calculate_bomb_positions(GRID_SIZE,
@@ -604,6 +536,17 @@ void Game::display_bomb_positions(const BombPositionData &bombPosition)
   {
     std::cout << "bomb: " << bomb.getIndex() << ", Coord: [" << bomb.getX() << ", " << bomb.getY() << "]" << std::endl;
   }
+}
+
+bool Game::isBombPlacedAt(int x, int y) const
+{
+  for (const auto &bomb : placed_bombs_list)
+  {
+    if (bomb.getX() == x && bomb.getY() == y)
+      return true;
+  }
+
+  return false;
 }
 
 bool Game::isEnemyInPortalCorners(const std::vector<std::pair<int, int>> &portal_corners, int enemy_x, int enemy_y)

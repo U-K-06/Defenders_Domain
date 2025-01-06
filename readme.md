@@ -44,12 +44,12 @@ To compile the program, you need to have a C++ compiler installed on your system
 Open your command prompt and run the following command:
 ### GCC
 ```
-g++ main.cpp game.cpp draw.cpp -o PTD.exe -lwinmm
+g++ main.cpp game.cpp draw.cpp -o DD.exe -lwinmm
 ```
 
 
 ### MSVC
 ``` 
-cl main.cpp Game.cpp draw.cpp /FePTD.exe /link winmm.lib
+cl main.cpp Game.cpp draw.cpp /FeDD.exe /link winmm.lib
 ```
 
