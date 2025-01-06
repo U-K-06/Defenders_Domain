@@ -463,7 +463,8 @@ void Draw::bottom_grid(int i,
   }
 }
 
-void draw_bomb_info(bool is_place_mode_active,
+void draw_bomb_info(int i,
+                    bool is_place_mode_active,
                     int GRID_SIZE,
                     int active_grid_x,
                     int active_grid_y,
