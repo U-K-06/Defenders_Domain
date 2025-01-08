@@ -140,7 +140,6 @@ public:
     int bomb_type = rand() % (number_of_bombs - 1);
     switch(bomb_type)
     {
-      std::cout << bomb_type << std::endl;
       case 2:
         poison_explode(enemies, 1, it);
         break;
@@ -262,18 +261,28 @@ private:
 
       switch (random) {
           case 0:
-              new_dx += sign_x;
+              new_dx -= sign_x; // don't let them be new_dx, new_dy -ve or > GRID_SIZE
+              new_dy += sign_y;
+              std::cout << new_dx << " " << new_dy << std::endl;
+              attempts++;
               break;
           case 1:
-              new_dy += sign_y;
+              new_dx -= sign_x;
+              new_dy -= sign_y;
+              std::cout << new_dx << " " << new_dy << std::endl;
+              attempts++;
               break;
           case 2:
               new_dy += sign_x;
               new_dx += sign_y;
+              std::cout << new_dx << " " << new_dy << std::endl;
+              attempts++;
               break;
           case 3:
               new_dx += sign_x;
               new_dy -= sign_y;
+              std::cout << new_dx << " " << new_dy << std::endl;
+              attempts++;
               break;
       }
       if (!isBombPlacedAt(new_dx, new_dy)) {

@@ -76,11 +76,11 @@ int Game::Run()
   float BOMB_TIMER[7] = {
       5,    // Electric bomb
       6.5,  // Fire bomb
-      8.5,  // Poison bomb
-      12,   // Water bomb
-      10.8, // Ice bombe
-      6,    // Wind bomb
-      13.6  // Shadow bomb
+      10,  // Poison bomb
+      8,   // Water bomb
+      7.5, // Ice bombe
+      4,    // Wind bomb
+      10  // Shadow bomb
   };
   int active_grid_x = 0, active_grid_y = 0, l_index = 0, active_bomb = 0, selection_bomb = 0;
   bool is_place_mode_active = false;

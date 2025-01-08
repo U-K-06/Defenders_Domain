@@ -92,9 +92,9 @@ namespace GameConstants {
     constexpr const char* BORDER_WALL_X                                                                   = "-----";
     constexpr const char* DOOR                                                                            = "[(.)]";
 
-    const float MIN_BOMB_TIMER[]                                                                          = { 3, 4, 6, 8, 8.5, 9, 10 };
-    const int UPGRADE_TIME[]                                                                              = { 5, 7, 7, 6, 6, 7, 8, 9, 1, 1 };
-    const int MAX_BOMB_LEVEL[7]                                                                           = { 8, 8, 8, 6, 7, 6, 5 };
+    const float MIN_BOMB_TIMER[]                                                                          = { 3, 4, 7, 5, 4.5, 1, 7.5 };
+    const int UPGRADE_TIME[]                                                                              = { 5, 7, 7, 6, 6, 7, 9 };
+    const int MAX_BOMB_LEVEL[7]                                                                           = { 6, 6, 6, 6, 6, 10, 6 };
     const int MAX_BOMB_RANGE[7]                                                                           = { 5, 5, 4, 3, 5, 7, 3 };
 
     constexpr const char* RESET                                                                           = "\033[37m";
