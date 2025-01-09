@@ -20,8 +20,6 @@ public:
   int x;
   int y;
   int hasMoved = false;
-  int is_slowed = false;
-  int is_poisoned = false;
   int MOVEMENT_SPEED = 5.0f;
 
   std::chrono::steady_clock::time_point last_move_time = std::chrono::steady_clock::now();
@@ -81,9 +79,27 @@ public:
 
   void poison_explode(std::vector<Enemy> &enemies,
                        int range,
-                       std::vector<Enemy>::iterator &it)
+                       int GRID_SIZE,
+                       std::vector<Enemy>::iterator &it,
+                       std::string &poison_color)
   {
-    std::string purple = "\033[38;5;93m";
+    normal_explode(enemies, range, it);
+
+    int center_x = it->x, center_y = it->y;
+
+    for (int dx = -range; dx <= range; ++dx)
+    {
+      for (int dy = -range; dy <= range; ++dy)
+      {
+        int new_x = center_x + dx;
+        int new_y = center_y + dy;
+
+        if (new_x >= 0 && new_x < GRID_SIZE && new_y >= 0 && new_y < GRID_SIZE)
+        {
+          
+        }
+      }
+    }
   }
 
   void ice_explode(std::vector<Enemy> &enemies,
@@ -134,6 +150,8 @@ public:
                     int number_of_bombs,
                     int door_x,
                     int door_y,
+                    int GRID_SIZE,
+                    std::string poison_color,
                     std::vector<Enemy>::iterator &it,
                     std::vector<BombPositionDataClass> &bombs)
   {
@@ -141,7 +159,7 @@ public:
     switch(bomb_type)
     {
       case 2:
-        poison_explode(enemies, 1, it);
+        poison_explode(enemies, 1, GRID_SIZE, it, poison_color);
         break;
       case 3:
         water_explode(enemies, 1, it, 0, 0);
@@ -162,6 +180,8 @@ public:
                 int range,
                 int door_x,
                 int door_y,
+                int GRID_SIZE,
+                std::string poison_color,
                 int number_of_bombs,
                 std::vector<BombPositionDataClass> bombs)
   {
@@ -174,7 +194,7 @@ public:
         switch (getIndex())
         {
         case 2:
-          poison_explode(enemies, range, it);
+          poison_explode(enemies, range, GRID_SIZE, it, poison_color);
           break;
         case 3:
           water_explode(enemies, range, it,door_x,door_y);
@@ -186,7 +206,7 @@ public:
           wind_explode(enemies, range, it, door_x, door_y);
           break;
         case 6:
-          shadow_explode(enemies, number_of_bombs, door_x, door_y, it, bombs);
+          shadow_explode(enemies, number_of_bombs, door_x, door_y, GRID_SIZE, poison_color, it, bombs);
           break;
         default:
           normal_explode(enemies, range, it);

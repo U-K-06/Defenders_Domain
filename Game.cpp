@@ -257,6 +257,8 @@ for (Enemy &enemy : enemies)
                      BOMB_RANGE[it->getIndex()],
                      door_x,
                      door_y,
+                     GRID_SIZE,
+                     colors[3],
                      number_of_bombs,
                      bombPosition);
         it = bombPosition.erase(it);
