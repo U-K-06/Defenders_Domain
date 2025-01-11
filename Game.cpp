@@ -36,6 +36,9 @@ FULL RELEASE:
 #pragma comment(lib, "User32.lib")
 
 
+std::vector<std::pair<int, int>> poisoned_cordinates;
+
+
 /*                       START  ->  BOMB CLASS                                                */
 
 void Bomb::setPosition(int x,
@@ -89,7 +92,7 @@ void BombPositionDataClass::poison_explode(std::vector<Enemy> &enemies,
 
       if (new_x >= 0 && new_x < GRID_SIZE && new_y >= 0 && new_y < GRID_SIZE)
       {
-        // IMPLEMENTATION OF POISON GRID
+        poisoned_cordinates.push_back(std::make_pair(new_x, new_y));
       }
     }
   }
@@ -369,7 +372,8 @@ int Game::Run()
               BOMB_TIMER,
               number_of_bombs,
               timer_start_time,
-              portal_corners);
+              portal_corners,
+              poisoned_cordinates);
 
     for (Enemy &enemy : enemies)
     {

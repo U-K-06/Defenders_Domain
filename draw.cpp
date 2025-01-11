@@ -93,7 +93,8 @@ void Draw::grid(int GRID_SIZE,
                   float BOMB_TIMER[],
                   int number_of_bombs,
                   std::chrono::steady_clock::time_point start_time,
-                  std::vector<std::pair<int, int>> portal_corners)
+                  std::vector<std::pair<int, int>> portal_corners,
+                  std::vector<std::pair<int, int>> poisoned_cordinates)
 { 
   std::cout << "\n";
   int name_index = 0;
@@ -111,7 +112,7 @@ void Draw::grid(int GRID_SIZE,
   for (int i = 0; i <= 2 * GRID_SIZE; i++)
   {
     if (i <= 1)       top_grid(i, 
-                                GRID_SIZE, 
+                                GRID_SIZE,
                                 is_place_mode_active,
                                 active_grid_x,
                                 active_grid_y,
@@ -120,7 +121,8 @@ void Draw::grid(int GRID_SIZE,
                                 door_x,
                                 door_y,
                                 color_code,
-                                BOMB_LEVEL);
+                                BOMB_LEVEL,
+                                poisoned_cordinates);
 
     else
     {
@@ -152,7 +154,8 @@ void Draw::grid(int GRID_SIZE,
                   name_index,
                   BOMB_RANGE,
                   BOMB_TIMER,
-                  number_of_bombs);
+                  number_of_bombs,
+                  poisoned_cordinates);
       } 
       
       else  bottom_grid(i,
@@ -165,7 +168,8 @@ void Draw::grid(int GRID_SIZE,
                      door_x,
                      door_y,
                      color_code,
-                     portal_corners);
+                     portal_corners,
+                     poisoned_cordinates);
     }
 
     std::cout << '\n';
@@ -238,7 +242,8 @@ void Draw::top_grid(int i,
                      int door_x,
                      int door_y,
                      int color_code,
-                     int BOMB_LEVEL[])
+                     int BOMB_LEVEL[],
+                     std::vector<std::pair<int, int>> poisoned_cordinates)
 {
   std::cout << "\t\t\t\t\t\t\t\t";
 
@@ -249,7 +254,6 @@ void Draw::top_grid(int i,
 
       if (j % 2 == 0)
       {
-      
         if (is_place_mode_active && 
             ((j / 2 == active_grid_x && i / 2 == active_grid_y) || 
             (j / 2 == active_grid_x + 1 && i / 2 == active_grid_y)))
@@ -386,7 +390,8 @@ void Draw::bottom_grid(int i,
                         int door_x,
                         int door_y,
                         int color_code,
-                        std::vector<std::pair<int, int>> portal_corners)
+                        std::vector<std::pair<int, int>> portal_corners,
+                        std::vector<std::pair<int, int>> poisoned_cordinates)
 {
   std::cout << "\t\t\t\t\t\t\t\t";
 
@@ -569,7 +574,8 @@ void Draw::mid_grid(int i,
                      int name_index,
                      int BOMB_RANGE[],
                      float BOMB_TIMER[],
-                     int number_of_bombs)
+                     int number_of_bombs,
+                     std::vector<std::pair<int, int>> poisoned_cordinates)
 {
   int index = name_index - 1;
   for (int j = 0; j <= 2 * GRID_SIZE; j++)

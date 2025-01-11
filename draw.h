@@ -34,7 +34,8 @@ public:
              float BOMB_TIMER[],
              int number_of_bombs,
              std::chrono::steady_clock::time_point start_time,
-             std::vector<std::pair<int, int>> portal_corners);
+             std::vector<std::pair<int, int>> portal_corners,
+             std::vector<std::pair<int, int>> poisoned_cordinates);
   
   static bool is_bomb_placed(int x,
                               int y,
@@ -66,7 +67,8 @@ private:
                  int door_x,
                  int door_y,
                  int color_code,
-                 int BOMB_LEVEL[]);
+                 int BOMB_LEVEL[],
+                 std::vector<std::pair<int, int>> poisoned_cordinates);
 
   void render_bomb_names(int& name_index,
                           int selection_bomb,
@@ -85,7 +87,8 @@ private:
                     int door_x,
                     int door_y,
                     int color_code,
-                    std::vector<std::pair<int, int>> portal_corners);
+                    std::vector<std::pair<int, int>> portal_corners,
+                    std::vector<std::pair<int, int>> poisoned_cordinates);
                     
   void mid_grid(int i,
                   int selection_bomb,
@@ -103,7 +106,8 @@ private:
                   int name_index,
                   int bomb_RANGE[],
                   float BOMB_TIMER[],
-                  int number_of_bombs);
+                  int number_of_bombs,
+                 std::vector<std::pair<int, int>> poisoned_cordinates);
 };
 
 #endif
