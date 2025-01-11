@@ -14,8 +14,9 @@ public:
 
   void lose_game();
   
-  void show_timer(int min,
-                   int sec);
+  void show_timer_score(int min,
+                             int sec, 
+                             int score);
   
   void grid(int GRID_SIZE,
              std::string bomb_names[],
@@ -33,6 +34,7 @@ public:
              int BOMB_RANGE[],
              float BOMB_TIMER[],
              int number_of_bombs,
+             int score,
              std::chrono::steady_clock::time_point start_time,
              std::vector<std::pair<int, int>> portal_corners,
              std::vector<std::pair<int, int>> poisoned_cordinates);

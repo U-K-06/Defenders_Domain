@@ -92,6 +92,7 @@ void Draw::grid(int GRID_SIZE,
                   int BOMB_RANGE[],
                   float BOMB_TIMER[],
                   int number_of_bombs,
+                  int score,
                   std::chrono::steady_clock::time_point start_time,
                   std::vector<std::pair<int, int>> portal_corners,
                   std::vector<std::pair<int, int>> poisoned_cordinates)
@@ -105,7 +106,7 @@ void Draw::grid(int GRID_SIZE,
   int minutes = elapsed_time / 60;
   int seconds = elapsed_time % 60;
 
-  show_timer(minutes, seconds);
+  show_timer_score(minutes, seconds, score);
 
   std::cout << "\n";
   
@@ -338,9 +339,15 @@ void Draw::top_grid(int i,
   }
 }
 
-void Draw::show_timer(int min,
-                       int sec){
-    std::cout<<"\t\t\t\t\t\t\t\t\t\t\t\t";
+void Draw::show_timer_score(int min,
+                             int sec, 
+                             int score)
+{
+    std::cout<< "\t\t\t\t\t\t\t\t"
+             << std::setfill('0') 
+             << std::setw(5)
+             << score
+             << "\t\t\t\t\t\t";
     std::cout<< (min < 10 ? "0" : "")
              << min
              << ":"

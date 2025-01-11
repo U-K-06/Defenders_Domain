@@ -1,8 +1,6 @@
 /*
 BETA VERSION:
-  TODO: COMPLETE IMPLEMENTATION OF SHADOW BOMB -> ME
   TODO: ADD SCORE COUNTER -> ME
-  FIXME: SIZE IS NOT GETTING RESET ON GAME CLOSE -> i have a solution make it run maybe!
   FIXME: MAKE ENEMY RE-REDER BEFORE UPDATING VECTOR BY MAKING A COPY AND USING DIFFERENT VECTOR FOR RENDERING AND CHECKING GAME OVER -> ME
   FIXME: FIX UI FOR THE BUFFS -> UTK
 FULL RELEASE:
@@ -186,7 +184,8 @@ void BombPositionDataClass::explode(std::vector<Enemy> &enemies,
                                     int GRID_SIZE,
                                     std::string poison_color,
                                     int number_of_bombs,
-                                    std::vector<BombPositionDataClass> bombs)
+                                    std::vector<BombPositionDataClass> bombs,
+                                    int &score)
 {
   for (auto it = enemies.begin(); it != enemies.end();)
   {
@@ -198,21 +197,27 @@ void BombPositionDataClass::explode(std::vector<Enemy> &enemies,
       {
       case 2:
         poison_explode(enemies, range, GRID_SIZE, it, poison_color);
+        score += 5;
         break;
       case 3:
         water_explode(enemies, range, it, door_x, door_y);
+        score += 20;
         break;
       case 4:
         ice_explode(enemies, range, it);
+        score += 15;
         break;
       case 5:
         wind_explode(enemies, range, it, door_x, door_y);
+        score += 40;
         break;
       case 6:
         shadow_explode(enemies, number_of_bombs, door_x, door_y, GRID_SIZE, poison_color, it, bombs);
+        score += 10;
         break;
       default:
         normal_explode(enemies, range, it);
+        score += 100;
       }
     }
     else
@@ -222,8 +227,6 @@ void BombPositionDataClass::explode(std::vector<Enemy> &enemies,
 
 /*                       END  ->  BOMB POSITION DATA CLASS                                */
 
-
-// std::string bomb_names[] = {"Electro bomb", "Fire bomb", "Poison bomb", "Water bomb", "Ice bomb", "Wind bomb" };
 std::string bomb_names[] = {"Electro bomb", "Fire bomb", "Poison bomb", "Water bomb", "Ice bomb", "Wind bomb", "Shadow bomb"};
 
 std::string colors[] = {
@@ -240,6 +243,8 @@ int placed_bombs_count = 0;
 
 std::vector<BombPositionDataClass> placed_bombs;
 std::vector<std::pair<int, int>> portal_corners;
+
+static int score = 0;
 
 Draw draw;
 
@@ -371,6 +376,7 @@ int Game::Run()
               BOMB_RANGE,
               BOMB_TIMER,
               number_of_bombs,
+              score,
               timer_start_time,
               portal_corners,
               poisoned_cordinates);
@@ -418,8 +424,6 @@ int Game::Run()
                       << ", "
                       << door_y;
             draw.lose_game();
-            simulateKeyPress(VK_OEM_PLUS, true);
-            simulateKeyPress(VK_OEM_PLUS, true);
             exit(0);
           }
 
@@ -479,7 +483,8 @@ int Game::Run()
                     GRID_SIZE,
                     colors[3],
                     number_of_bombs,
-                    bombPosition);
+                    bombPosition,
+                    score);
         it = bombPosition.erase(it);
       }
       else
@@ -823,22 +828,18 @@ void Game::spawn_shadow_entity(int GRID_SIZE,
     case 0:
       new_dx -= sign_x;
       new_dy += sign_y;
-      std::cout << new_dx << " " << new_dy << std::endl;
       break;
     case 1:
       new_dx -= sign_x;
       new_dy -= sign_y;
-      std::cout << new_dx << " " << new_dy << std::endl;
       break;
     case 2:
       new_dy += sign_x;
       new_dx += sign_y;
-      std::cout << new_dx << " " << new_dy << std::endl;
       break;
     case 3:
       new_dx += sign_x;
       new_dy -= sign_y;
-      std::cout << new_dx << " " << new_dy << std::endl;
       break;
 
       if (new_dx >= 0 && new_dx < GRID_SIZE && new_dy >= 0 && new_dy < GRID_SIZE) {

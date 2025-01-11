@@ -102,7 +102,8 @@ public:
                 int GRID_SIZE,
                 std::string poison_color,
                 int number_of_bombs,
-                std::vector<BombPositionDataClass> bombs);
+                std::vector<BombPositionDataClass> bombs,
+                int &score);
 
   bool operator==(const BombPositionDataClass &other) const {
      return index == other.index && x == other.x && y == other.y; 
@@ -149,6 +150,7 @@ public:
 private:
   std::vector<BombPositionDataClass> placed_bombs_list;
   std::vector<Enemy> enemies;
+  std::vector<Enemy> enemies_after;
   int enemy_type();
   std::string enemy_color(int choice);
   bool isBombPlacedAt(int x, int y) const;
