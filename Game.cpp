@@ -354,7 +354,6 @@ int Game::Run()
       }
 
       enemies.push_back(new_enemy);
-      enemies_after.push_back(new_enemy);
 
       timeSinceLastSpawn = 0.0f;
     }
@@ -382,7 +381,7 @@ int Game::Run()
               portal_corners,
               poisoned_cordinates);
 
-    for (Enemy &enemy : enemies_after)
+    for (Enemy &enemy : enemies)
     {
       auto current_time = std::chrono::steady_clock::now();
       float elapsed_time = std::chrono::duration<float>(current_time - enemy.last_move_time).count();

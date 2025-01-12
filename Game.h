@@ -150,7 +150,6 @@ public:
 private:
   std::vector<BombPositionDataClass> placed_bombs_list;
   std::vector<Enemy> enemies;
-  std::vector<Enemy> enemies_after;
   int enemy_type();
   std::string enemy_color(int choice);
   bool isBombPlacedAt(int x, int y) const;
