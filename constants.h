@@ -80,9 +80,9 @@ namespace GameConstants {
 
     )";
 
-    constexpr const float INITIAL_SPAWN_INTERVAL                                                          = 2.0f;
-    constexpr const float MIN_SPAWN_INTERVAL                                                              = 0.5f;
-    constexpr const float SPAWN_INTERVAL_DECAY_RATE                                                       = 0.1f;
+    constexpr const float INITIAL_SPAWN_INTERVAL                                                          = 1.2f;
+    constexpr const float MIN_SPAWN_INTERVAL                                                              = 0.2f;
+    constexpr const float SPAWN_INTERVAL_DECAY_RATE                                                       = 0.2f;
     constexpr const float TIME_TO_DECREASE_SPAWN_INTERVAL                                                 = 30.0f;
 
     constexpr const int MAX_ENEMIES                                                                       = 90;
