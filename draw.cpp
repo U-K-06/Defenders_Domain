@@ -453,7 +453,7 @@ void Draw::bottom_grid(int i,
           }
           else
           {
-           (std::find(portal_corners.begin(), portal_corners.end(), std::make_pair(j / 2, i / 2)) != portal_corners.end()) ? std::cout << "\033[32m" << GameConstants::BORDER_CORNER << GameConstants::RESET : 
+          //  (std::find(portal_corners.begin(), portal_corners.end(), std::make_pair(j / 2, i / 2)) != portal_corners.end()) ? std::cout << "\033[32m" << GameConstants::BORDER_CORNER << GameConstants::RESET : 
           std::cout << GameConstants::BORDER_CORNER;
           }
         }
