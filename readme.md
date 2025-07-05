@@ -55,10 +55,6 @@ The project contains the following files and directories:
       <td><strong>Spacebar</strong></td>
       <td>Activate or toggle the bomb placement mode. When active, you can place bombs on the grid.</td>
     </tr>
-    <tr>
-      <td><strong>Escape</strong></td>
-      <td>Pause the game or open the menu (if implemented).</td>
-    </tr>
   </tbody>
 </table>
 
